@@ -20,6 +20,15 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+
+        //delete this
+        startActivity(new Intent(this,Enquiries.class));
+        finish();
+
+
+
         loginButton=(CircularProgressButton)findViewById(R.id.btnWithText);
         final EditText usernameInput=(EditText)findViewById(R.id.input_username);
         final EditText passwordInput=(EditText)findViewById(R.id.input_password);

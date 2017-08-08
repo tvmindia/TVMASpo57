@@ -7,11 +7,12 @@
     <string name="failed_server">Failed to get data from server.</string>
     <string name="welcome">Welcome %1$s</string>
     <string name="no_items">No items</string>
-   <string name="give_valid">Give valid information</string>
+    <string name="give_valid">Give valid information</string>
     <string name="enquiries">Enquiries</string>
     <string name="proforma_invoices">Proforma Invoices</string>
     <string name="quotations">Quotations</string>
     <string name="days90">Last 90 days</string>
     <string name="days180">Last 180 days</string>
     <string name="days365">Last 365 days</string>
+    <string name="title_activity_enquiries">Enquiries</string>
 </resources>
