@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,7 +41,7 @@ public class Enquiries extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    Spinner listDuration;
+    Spinner listDurationSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,9 +76,9 @@ public class Enquiries extends AppCompatActivity {
         statisticsDuration.add(getResources().getString(R.string.days365));
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner_small_white, statisticsDuration);
         dataAdapter.setDropDownViewResource(R.layout.item_spinner);
-        listDuration =(Spinner)findViewById(R.id.list_duration);
-        listDuration.setAdapter(dataAdapter);
-        listDuration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listDurationSpinner =(Spinner)findViewById(R.id.list_duration);
+        listDurationSpinner.setAdapter(dataAdapter);
+        listDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // getChartData();
@@ -90,11 +91,34 @@ public class Enquiries extends AppCompatActivity {
         });
     }
 
-
+    SearchView searchView;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
+        //Searching-------------------
+        searchView=(SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                listDurationSpinner.setVisibility(View.GONE);
+               /* if(adapter!=null){//for searching
+                    adapter.getFilter(1).filter(searchView.getQuery().toString().trim());
+                }*/
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                listDurationSpinner.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -104,9 +128,6 @@ public class Enquiries extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-
-
         return super.onOptionsItemSelected(item);
     }
 
