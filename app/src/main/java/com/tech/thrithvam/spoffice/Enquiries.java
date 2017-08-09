@@ -21,7 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Enquiries extends AppCompatActivity {
 
@@ -69,7 +68,7 @@ public class Enquiries extends AppCompatActivity {
         });
 
         //Spinner
-        List<String> statisticsDuration = new ArrayList<String>();
+        ArrayList<String> statisticsDuration = new ArrayList<String>();
         statisticsDuration.add(getResources().getString(R.string.days90));
         statisticsDuration.add(getResources().getString(R.string.days180));
         statisticsDuration.add(getResources().getString(R.string.days365));

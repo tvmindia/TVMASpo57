@@ -15,4 +15,5 @@
     <string name="days180">Last 180 days</string>
     <string name="days365">Last 365 days</string>
     <string name="title_activity_enquiries">Enquiries</string>
+    <string name="select_date">Select date</string>
 </resources>

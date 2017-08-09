@@ -27,9 +27,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Enquiries"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_enquiries"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EnquiryInput"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/enquiries"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
