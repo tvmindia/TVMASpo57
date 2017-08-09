@@ -2,12 +2,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="7dp"
     tools:context="com.tech.thrithvam.spoffice.Enquiries$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/section_label"
+    <com.wang.avi.AVLoadingIndicatorView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        app:indicatorName="BallScaleMultipleIndicator"
+        android:layout_gravity="center"
+        app:indicatorColor="@color/colorAccent"
+        android:id="@+id/loading_indicator"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/enquiry_list"
+        android:divider="@color/secondary_text"
+        android:dividerHeight="0.5dp"
+        android:clipToPadding="false"
+        android:overScrollFooter="@android:color/transparent"
+        android:padding="5dp"
+        android:footerDividersEnabled="false"
+        android:scrollbars="none"
+        />
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:textColor="@color/secondary_text"
+    android:text="@string/no_items"
+    android:visibility="gone"
+    android:id="@+id/no_items"/>
 </RelativeLayout>
