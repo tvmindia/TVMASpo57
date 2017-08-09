@@ -1,23 +1,27 @@
 package com.tech.thrithvam.spoffice;
 
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Enquiries extends AppCompatActivity {
 
@@ -36,6 +40,7 @@ public class Enquiries extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    Spinner listDuration;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +68,33 @@ public class Enquiries extends AppCompatActivity {
             }
         });
 
+        //Spinner
+        List<String> statisticsDuration = new ArrayList<String>();
+        statisticsDuration.add(getResources().getString(R.string.days90));
+        statisticsDuration.add(getResources().getString(R.string.days180));
+        statisticsDuration.add(getResources().getString(R.string.days365));
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner_small_white, statisticsDuration);
+        dataAdapter.setDropDownViewResource(R.layout.item_spinner);
+        listDuration =(Spinner)findViewById(R.id.list_duration);
+        listDuration.setAdapter(dataAdapter);
+        listDuration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // getChartData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home_search, menu);
+        getMenuInflater().inflate(R.menu.menu_search, menu);
         return true;
     }
 
@@ -147,11 +172,11 @@ public class Enquiries extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Open";
                 case 1:
-                    return "SECTION 2";
+                    return "Converted";
                 case 2:
-                    return "SECTION 3";
+                    return "Not Converted";
             }
             return null;
         }

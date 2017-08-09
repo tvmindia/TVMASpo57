@@ -26,7 +26,7 @@ public class HomeScreen extends AppCompatActivity {
         String userName=sharedpreferences.getString("UserName","");
         ((TextView)findViewById(R.id.welcome)).setText(getResources().getString(R.string.welcome,userName));
 
-        //chart Spinner
+        //Spinner
         List<String> statisticsDuration = new ArrayList<String>();
         statisticsDuration.add(getResources().getString(R.string.days90));
         statisticsDuration.add(getResources().getString(R.string.days180));

@@ -114,19 +114,19 @@
                         android:layout_centerHorizontal="true"
                         android:id="@+id/purchase_icon"
                         android:layout_margin="5dp"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/quotations"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="14sp"
+                        android:layout_below="@id/purchase_icon"
+                        android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:gravity="center"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@id/purchase_icon"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        />
+                        android:text="@string/quotations"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp" />
                 </RelativeLayout>
                 <View
                     android:layout_width="1dp"
