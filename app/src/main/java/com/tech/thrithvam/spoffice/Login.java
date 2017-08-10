@@ -29,7 +29,7 @@ public class Login extends AppCompatActivity {
 
 
 
-        loginButton=(CircularProgressButton)findViewById(R.id.btnWithText);
+        loginButton=(CircularProgressButton)findViewById(R.id.login_button);
         final EditText usernameInput=(EditText)findViewById(R.id.input_username);
         final EditText passwordInput=(EditText)findViewById(R.id.input_password);
         loginButton.setOnClickListener(new View.OnClickListener() {

@@ -16,4 +16,9 @@
     <string name="days365">Last 365 days</string>
     <string name="title_activity_enquiries">Enquiries</string>
     <string name="select_date">Select date</string>
+    <string name="add_followup_q">Do you want to add a followup to this enquiry?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="enquiry">Enquiry</string>
+    <string name="follow_up">FollowUp</string>
 </resources>

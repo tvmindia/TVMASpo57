@@ -23,17 +23,19 @@
         </activity>
         <activity
             android:name=".HomeScreen"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".Enquiries"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_enquiries"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EnquiryInput"
+        <activity
+            android:name=".EnquiryInput"
             android:configChanges="orientation|screenSize"
-            android:label="@string/enquiries"
-            android:screenOrientation="portrait" />
+            android:label="@string/enquiry"/>
+        <activity android:name=".FollowUpInput"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/follow_up"/>
     </application>
 
 </manifest>
