@@ -6,5 +6,100 @@
     android:layout_height="match_parent"
     tools:context="com.tech.thrithvam.spoffice.FollowUpInput"
     android:background="@drawable/primary_gradient">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true"
+        android:animateLayoutChanges="true"
+        android:id="@+id/input_card">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Follow Up of"
+                android:textSize="12sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Enquiry No"
+                android:textColor="@color/primary_text"
+                android:textSize="14sp"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/select_date"
+                android:textSize="16sp"
+                android:textColor="@color/colorAccent"
+                android:onClick="getDates"
+                android:layout_toLeftOf="@+id/select_time"
+                android:layout_toStartOf="@+id/select_time" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Time"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:textSize="16sp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/select_time" />
+            </RelativeLayout>
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:hint="Description"
+                    android:textColor="@color/primary_text"
+                    android:id="@+id/description"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:paddingRight="5dp"
+                android:textColor="@color/primary_text"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:id="@+id/status_spinner"
+                android:textColor="@color/primary_text"/>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <com.dd.CircularProgressButton
+        android:id="@+id/save_button"
+        android:layout_width="150dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/input_card"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        app:cpb_selectorIdle="@drawable/button_colors"
+        app:cpb_colorIndicator="@color/colorPrimary"
+        app:cpb_colorProgress="@android:color/transparent"
+        app:cpb_colorIndicatorBackground="@color/cpb_grey"
+        app:cpb_textComplete="Saved"
+        app:cpb_textError="Error Occurred"
+        app:cpb_textIdle="Save"
+        android:padding="5dp"
+        app:cpb_cornerRadius="4dp"
+        app:cpb_paddingProgress="5dp"/>
 </RelativeLayout>
