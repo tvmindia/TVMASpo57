@@ -24,8 +24,8 @@ public class Login extends AppCompatActivity {
 
 
         //delete this
-        startActivity(new Intent(this,EnquiryInput.class));
-        finish();
+     /*   startActivity(new Intent(this,EnquiryInput.class));
+        finish();*/
 
 
 

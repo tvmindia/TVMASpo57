@@ -1,6 +1,7 @@
 package com.tech.thrithvam.spoffice;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -49,6 +50,12 @@ public class HomeScreen extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        (findViewById(R.id.statistics_card)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeScreen.this,Enquiries.class));;
             }
         });
     }
