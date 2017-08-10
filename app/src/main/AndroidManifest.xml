@@ -32,10 +32,15 @@
         <activity
             android:name=".EnquiryInput"
             android:configChanges="orientation|screenSize"
-            android:label="@string/enquiry"/>
-        <activity android:name=".FollowUpInput"
+            android:label="@string/enquiry" />
+        <activity
+            android:name=".FollowUpInput"
             android:configChanges="orientation|screenSize"
-            android:label="@string/follow_up"/>
+            android:label="@string/follow_up" />
+        <activity
+            android:name=".FollowUp"
+            android:label="@string/title_activity_follow_up"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

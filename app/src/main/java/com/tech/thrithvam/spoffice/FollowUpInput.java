@@ -22,6 +22,7 @@ public class FollowUpInput extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow_up_input);
     }
+
     public void getDates(View view){
         final TextView selectedDate=(TextView)view;
 
