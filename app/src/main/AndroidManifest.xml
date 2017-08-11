@@ -41,9 +41,21 @@
             android:name=".FollowUp"
             android:label="@string/title_activity_follow_up"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Quotations"
+        <activity
+            android:name=".Quotations"
             android:configChanges="orientation|screenSize"
             android:label="Quotations" />
+        <activity
+            android:name=".ProformaInvoices"
+            android:configChanges="orientation|screenSize"
+            android:label="Proforma Invoices" />
+        <activity
+            android:name=".CustomerOrders"
+            android:configChanges="orientation|screenSize"
+            android:label="Customer Orders" />
+        <activity android:name=".SupplierOrders"
+            android:configChanges="orientation|screenSize"
+            android:label="Supplier Orders" />
     </application>
 
 </manifest>

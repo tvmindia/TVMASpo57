@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tech.thrithvam.spoffice.ProformaInvoices"
+    android:background="@drawable/primary_gradient">
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/proforma_list"
+        android:divider="@null"
+        android:clipToPadding="false"
+        android:overScrollFooter="@android:color/transparent"
+        android:padding="5dp"
+        android:footerDividersEnabled="false"
+        android:scrollbars="none"
+        />
+</RelativeLayout>
