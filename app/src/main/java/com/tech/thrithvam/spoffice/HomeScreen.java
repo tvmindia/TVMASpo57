@@ -58,5 +58,13 @@ public class HomeScreen extends AppCompatActivity {
                 startActivity(new Intent(HomeScreen.this,Enquiries.class));;
             }
         });
+
+        //add enquiry
+        (findViewById(R.id.add_enquiry)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeScreen.this,EnquiryInput.class));
+            }
+        });
     }
 }
