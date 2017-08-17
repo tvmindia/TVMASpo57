@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.tech.thrithvam.spoffice.EnquiryInput"
     android:background="@drawable/primary_gradient">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,19 +46,48 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:hint="Contact Name"
+                    android:hint="@string/contact_name"
                     android:textColor="@color/primary_text"
                     android:id="@+id/contact_name"
+                    android:inputType="textPersonName"
                     android:maxLength="100"/>
             </LinearLayout>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:hint="Client Name"
+                android:hint="@string/client_name"
                 android:textColor="@color/primary_text"
                 android:id="@+id/client_name"
-                android:maxLength="100"/>
+                android:maxLength="150"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:hint="@string/mobile"
+                android:textColor="@color/primary_text"
+                android:id="@+id/mobile"
+                android:inputType="phone"
+                android:maxLength="50"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:hint="@string/email"
+                android:textColor="@color/primary_text"
+                android:id="@+id/email"
+                android:inputType="textEmailAddress"
+                android:maxLength="150"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:hint="@string/notes"
+                android:textColor="@color/primary_text"
+                android:id="@+id/notes"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:maxLength="5000"/>
         </LinearLayout>
         </android.support.v7.widget.CardView>
     <com.dd.CircularProgressButton
@@ -73,4 +108,6 @@
         android:padding="5dp"
         app:cpb_cornerRadius="4dp"
         app:cpb_paddingProgress="5dp"/>
+            </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
