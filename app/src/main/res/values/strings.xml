@@ -29,4 +29,6 @@
     <string name="client_name">Client Name</string>
     <string name="contact_name">Contact Name</string>
     <string name="notes">Notes</string>
+    <string name="open">Open</string>
+    <string name="closed">Closed</string>
 </resources>

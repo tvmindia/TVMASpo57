@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="Enquiry No"
+                android:id="@+id/enquiry_no"
                 android:textColor="@color/primary_text"
                 android:textSize="14sp"/>
             <RelativeLayout
@@ -62,6 +63,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:hint="Description"
+                    android:minLines="3"
+                    android:maxLength="5000"
                     android:textColor="@color/primary_text"
                     android:id="@+id/description"/>
         <LinearLayout
@@ -77,7 +80,7 @@
                 android:paddingRight="5dp"
                 android:textColor="@color/primary_text"/>
             <Spinner
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:layout_height="wrap_content"
                 android:id="@+id/status_spinner"

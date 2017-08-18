@@ -39,7 +39,7 @@ public class EnquiryInput extends AppCompatActivity {
         statisticsDuration.add("Mrs.");
         statisticsDuration.add("Miss.");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner_black, statisticsDuration);
-        dataAdapter.setDropDownViewResource(R.layout.item_spinner);
+        dataAdapter.setDropDownViewResource(R.layout.item_spinner_black);
         Spinner contactTitleSpinner =(Spinner)findViewById(R.id.contact_title);
         contactTitleSpinner.setAdapter(dataAdapter);
 

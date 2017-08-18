@@ -8,11 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -23,6 +26,16 @@ public class FollowUpInput extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow_up_input);
+        //Enquiry no
+        ((TextView)findViewById(R.id.enquiry_no)).setText(getIntent().getExtras().getString(Common.ENQUIRYNO));
+        //Status spinner
+        ArrayList<String> followUpStatusList = new ArrayList<String>();
+        followUpStatusList.add(getResources().getString(R.string.open));
+        followUpStatusList.add(getResources().getString(R.string.closed));
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner, followUpStatusList);
+        dataAdapter.setDropDownViewResource(R.layout.item_spinner_black);
+        Spinner followUpStatusSpinner =(Spinner)findViewById(R.id.status_spinner);
+        followUpStatusSpinner.setAdapter(dataAdapter);
     }
 
     public void getDates(View view){
@@ -53,8 +66,6 @@ public class FollowUpInput extends AppCompatActivity {
                 //Setting display text-------
                 SimpleDateFormat formatted = new SimpleDateFormat("hh:mm a", Locale.US);
                 selectedTime.setText(formatted.format(selectedDateTime.getTime()));
-                /*SimpleDateFormat formattedForServer = new SimpleDateFormat("dd-MMM-yyyy HH:mm", Locale.US);
-                dateTimeGlobal=formattedForServer.format(eventDateTime.getTime());*/
             }
         };
         TimePickerDialog timePickerDialog=new TimePickerDialog(FollowUpInput.this,timeSetListener,today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),false);
