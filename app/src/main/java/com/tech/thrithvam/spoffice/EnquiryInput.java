@@ -12,10 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dd.CircularProgressButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,7 +27,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class EnquiryInput extends AppCompatActivity {
-
+    ArrayList<View> inputFields=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,37 +43,67 @@ public class EnquiryInput extends AppCompatActivity {
         Spinner contactTitleSpinner =(Spinner)findViewById(R.id.contact_title);
         contactTitleSpinner.setAdapter(dataAdapter);
 
+        //Input Fields
+        inputFields.add(findViewById(R.id.date));//0
+        inputFields.add(findViewById(R.id.contact_title));//1
+        inputFields.add(findViewById(R.id.contact_name));//2
+        inputFields.add(findViewById(R.id.client_name));//3
+        inputFields.add(findViewById(R.id.mobile));//4
+        inputFields.add(findViewById(R.id.email));//5
+        inputFields.add(findViewById(R.id.notes));//6
+
         //Save enquiry
         final CircularProgressButton saveButton=(CircularProgressButton)findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                usernameInput.clearFocus();
-//                passwordInput.clearFocus();
-//                usernameInput.setEnabled(false);
-//                passwordInput.setEnabled(false);
+                //Validations
+                if(((TextView)inputFields.get(0)).getText().toString().equals(getResources().getString(R.string.select_date))){//if date not selected
+                    Common.toastMessage(EnquiryInput.this,R.string.give_valid);
+                    return;
+                }
+                for(int i=2;i<inputFields.size();i++){
+                    if(((EditText)inputFields.get(i)).getText().toString().length()==0){//if values are not entered
+                        ((EditText)inputFields.get(i)).setError(getResources().getString(R.string.give_valid));
+                        return;
+                    }
+                }
+                //Disabling views
+                for (int i=0;i<inputFields.size();i++){
+                    inputFields.get(i).setEnabled(false);
+                }
                 saveButton.setClickable(false);
-                //Loading
+                //Loading animation
                 saveButton.setIndeterminateProgressMode(true);
                 saveButton.setProgress(50);
-
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
-                String webService="/API/Login/HomeLogin";
-                String postData =  "{\"LoginName\":\"" + "albert" + "\",\"Password\":\""+ "albert@123" + "\"}";
-//                AVLoadingIndicatorView loadingIndicator =(AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
+                String webService="/API/Enquiry/InsertUpdateEnquiry";
+                String postData =  "{\"EnquiryDate\":\""+((TextView)findViewById(R.id.date)).getText().toString()
+                        +"\",\"ContactTitle\":\""+((Spinner)findViewById(R.id.contact_title)).getSelectedItem().toString()
+                        +"\",\"ContactName\":\""+((EditText)findViewById(R.id.contact_name)).getText().toString()
+                        +"\",\"CompanyName\":\""+((EditText)findViewById(R.id.client_name)).getText().toString()
+                        +"\",\"Mobile\":\""+((EditText)findViewById(R.id.mobile)).getText().toString()
+                        +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
+                        +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()+"\"}";
                 String[] dataColumns={};
                 Runnable postThread=new Runnable() {
                     @Override
                     public void run() {
                         saveButton.setProgress(100);
                         //Save success
+                        final String enquiryID,enquiryNo;
+                        try {
+                            JSONObject jsonObject=new JSONObject(common.json);
+                            enquiryID= jsonObject.getString("ID");
+                            enquiryNo= jsonObject.getString("EnquiryNo");
+
                         final Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 new AlertDialog.Builder(EnquiryInput.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
-                                        .setMessage(R.string.add_followup_q)
+                                        .setMessage(getResources().getString(R.string.add_followup_q,enquiryNo))
                                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
@@ -77,38 +111,47 @@ public class EnquiryInput extends AppCompatActivity {
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                                         | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                                         | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                intent.putExtra(Common.ENQUIRYID,"");//enquiry id here
+                                                intent.putExtra(Common.ENQUIRYID,enquiryID);//enquiry id here
+                                                intent.putExtra(Common.ENQUIRYNO,enquiryNo);//enquiry no here
                                                 startActivity(intent);
                                             }
-                                        }).setNegativeButton(R.string.no, null).show();
+                                        }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Intent intent=new Intent(EnquiryInput.this,Enquiries.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                                            | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                     }
+                                                    })
+                                        .setCancelable(false).show();
                             }
                         }, 1500);
+                        } catch (JSONException e) {
+                            Common.toastMessage(EnquiryInput.this,e.toString());
+                            Common.toastMessage(EnquiryInput.this, R.string.failed_try_again);
+                        }
                     }
                 };
                 Runnable postThreadFailed=new Runnable() {
                     @Override
                     public void run() {
+                        for (int i=0;i<inputFields.size();i++){
+                            inputFields.get(i).setEnabled(true);
+                        }
                         Common.toastMessage(EnquiryInput.this,common.msg);
                         Common.toastMessage(EnquiryInput.this, R.string.failed_try_again);
-
                         saveButton.setProgress(-1);
-                        //Setting button to refresh when password/email change
-//                        usernameInput.setEnabled(true);
-//                        passwordInput.setEnabled(true);
-                        saveButton.setClickable(true);
-                 /*       usernameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        //Change button after a while
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
                             @Override
-                            public void onFocusChange(View v, boolean hasFocus) {
-                                loginButton.setProgress(0);
+                            public void run() {
+                                saveButton.setProgress(0);
+                                saveButton.setClickable(true);
                             }
-                        });
-                        passwordInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                            @Override
-                            public void onFocusChange(View v, boolean hasFocus) {
-                                loginButton.setProgress(0);
-                            }
-                        });*/
-
+                        }, 1500);
                     }};
 
                 common.AsynchronousThread(EnquiryInput.this,

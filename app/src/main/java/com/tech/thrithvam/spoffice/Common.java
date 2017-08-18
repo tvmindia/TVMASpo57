@@ -35,7 +35,8 @@ public class Common {
     static final String SALESLIST="sales"
                     ;
     //Intent constants
-    static final String ENQUIRYID="enquiryID";
+    static final String ENQUIRYID="enquiryID",
+                        ENQUIRYNO="enquiryNo";
 
     //To load image from a url------------------------------------------------------
     static void LoadImage(Context context,ImageView imageView, String imageURL, int failImage){

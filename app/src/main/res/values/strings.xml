@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SP Office</string>
-    <string name="url" translatable="false">http://192.168.1.109:321/</string>
+    <string name="url" translatable="false">http://192.168.1.109:963/</string>
     <!--<string name="url" translatable="false">http://jdadmin-001-site3.itempurl.com/</string>-->
     <string name="rupees">₹ %1$s</string>
     <string name="failed_try_again">Failed attempt. Please try again</string>
@@ -16,7 +16,7 @@
     <string name="days365">Last 365 days</string>
     <string name="title_activity_enquiries">Enquiries</string>
     <string name="select_date">Select date</string>
-    <string name="add_followup_q">Do you want to add a followup to this enquiry?</string>
+    <string name="add_followup_q">Do you want to add a followup to this enquiry? [Enquiry No: %1$s]</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="enquiry">Enquiry</string>
