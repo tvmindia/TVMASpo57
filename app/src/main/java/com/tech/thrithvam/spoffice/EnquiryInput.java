@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -60,6 +62,12 @@ public class EnquiryInput extends AppCompatActivity {
                 //Validations
                 if(((TextView)inputFields.get(0)).getText().toString().equals(getResources().getString(R.string.select_date))){//if date not selected
                     Common.toastMessage(EnquiryInput.this,R.string.give_valid);
+                    Animation anim = new AlphaAnimation(0.0f, 1.0f);
+                    anim.setDuration(200);
+                    anim.setStartOffset(20);
+                    anim.setRepeatMode(Animation.REVERSE);
+                    anim.setRepeatCount(3);
+                    inputFields.get(0).startAnimation(anim);
                     return;
                 }
                 for(int i=2;i<inputFields.size();i++){

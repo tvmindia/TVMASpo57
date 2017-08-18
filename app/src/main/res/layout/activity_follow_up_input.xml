@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.tech.thrithvam.spoffice.FollowUpInput"
     android:background="@drawable/primary_gradient">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="Follow Up of"
+                android:text="@string/follow_up_of"
                 android:textSize="12sp"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -41,6 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/select_date"
+                android:id="@+id/select_date"
                 android:textSize="16sp"
                 android:textColor="@color/colorAccent"
                 android:onClick="getDates"
@@ -49,7 +56,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select Time"
+                android:text="@string/select_time"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:textSize="16sp"
@@ -62,7 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:hint="Description"
+                    android:hint="@string/description"
                     android:minLines="3"
                     android:maxLength="5000"
                     android:textColor="@color/primary_text"
@@ -106,4 +113,6 @@
         android:padding="5dp"
         app:cpb_cornerRadius="4dp"
         app:cpb_paddingProgress="5dp"/>
+            </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

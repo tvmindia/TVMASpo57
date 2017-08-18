@@ -31,4 +31,6 @@
     <string name="notes">Notes</string>
     <string name="open">Open</string>
     <string name="closed">Closed</string>
+    <string name="description">Description</string>
+    <string name="follow_up_of">Follow Up of</string>
 </resources>
