@@ -36,4 +36,5 @@
     <string name="email_sent_colon">Email sent: %1$s</string>
     <string name="customer_orders">Customer Orders</string>
     <string name="supplier_orders">Supplier Orders</string>
+    <string name="title_activity_quotations_list">Quotations</string>
 </resources>

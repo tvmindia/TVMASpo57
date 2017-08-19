@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,9 +16,9 @@ import android.widget.Spinner;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Quotations extends AppCompatActivity {
-
+public class QuotationsList extends AppCompatActivity {
     ArrayList<AsyncTask> asyncTasks=new ArrayList<>();
     CustomAdapter adapter;
     Spinner listDurationSpinner;
@@ -25,21 +26,23 @@ public class Quotations extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quotations);
+        setContentView(R.layout.activity_quotations_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         quotationsList=(ListView)findViewById(R.id.quotation_list);
         //Spinner
         ArrayList<String> statisticsDuration = new ArrayList<String>();
         statisticsDuration.add(getResources().getString(R.string.days90));
         statisticsDuration.add(getResources().getString(R.string.days180));
         statisticsDuration.add(getResources().getString(R.string.days365));
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner_black, statisticsDuration);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner_small_white, statisticsDuration);
         dataAdapter.setDropDownViewResource(R.layout.item_spinner);
         listDurationSpinner =(Spinner)findViewById(R.id.list_duration);
         listDurationSpinner.setAdapter(dataAdapter);
         listDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 getQuotations();
+                getQuotations();
             }
 
             @Override
@@ -81,7 +84,7 @@ public class Quotations extends AppCompatActivity {
                     (findViewById(R.id.no_items)).setVisibility(View.VISIBLE);
                     return;
                 }
-                adapter=new CustomAdapter(Quotations.this,common.dataArrayList,Common.QUOTATIONLIST);
+                adapter=new CustomAdapter(QuotationsList.this,common.dataArrayList,Common.QUOTATIONLIST);
                 quotationsList.setAdapter(adapter);
                 quotationsList.setVisibility(View.VISIBLE);
             }
@@ -89,11 +92,11 @@ public class Quotations extends AppCompatActivity {
         Runnable postThreadFailed = new Runnable() {
             @Override
             public void run() {
-                Common.toastMessage(Quotations.this, R.string.failed_server);
+                Common.toastMessage(QuotationsList.this, R.string.failed_server);
             }
         };
 
-        common.AsynchronousThread(Quotations.this,
+        common.AsynchronousThread(QuotationsList.this,
                 webService,
                 postData,
                 loadingIndicator,
@@ -118,9 +121,9 @@ public class Quotations extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 listDurationSpinner.setVisibility(View.GONE);
-               /* if(adapter!=null){//for searching
-                    adapter.getFilter(1).filter(searchView.getQuery().toString().trim());
-                }*/
+                if(adapter!=null){//for searching
+                    adapter.getFilter(Arrays.asList(1,2,3,5)).filter(searchView.getQuery().toString().trim());
+                }
                 return false;
             }
         });

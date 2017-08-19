@@ -70,7 +70,7 @@ public class HomeScreen extends AppCompatActivity {
         });
     }
     public void quotationsClick(View view){
-        startActivity(new Intent(HomeScreen.this,Quotations.class));
+        startActivity(new Intent(HomeScreen.this,QuotationsList.class));
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

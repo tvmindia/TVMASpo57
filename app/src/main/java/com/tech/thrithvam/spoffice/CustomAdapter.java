@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 
 public class CustomAdapter extends BaseAdapter {
@@ -76,9 +78,9 @@ public class CustomAdapter extends BaseAdapter {
                 holder.quotationNo.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
                 holder.date.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
                 holder.customerName.setText((filteredObjects.get(position)[3].equals("null")?"-":filteredObjects.get(position)[3]));
-                holder.amount.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,filteredObjects.get(position)[4])));
+                holder.amount.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[4])))));
                 holder.status.setText((filteredObjects.get(position)[5].equals("null")?"-":filteredObjects.get(position)[5]));
-                if(filteredObjects.get(position)[6].equals("null")){
+                if(!filteredObjects.get(position)[6].equals("null")){
                     if(Boolean.parseBoolean(filteredObjects.get(position)[6])) {
                         holder.emailSent.setText(adapterContext.getResources().getString(R.string.email_sent_colon,adapterContext.getResources().getString(R.string.yes)));
                     }
@@ -99,8 +101,8 @@ public class CustomAdapter extends BaseAdapter {
     //Filtering--------------------------------------
     private ItemFilter mFilter = new ItemFilter();
     private ArrayList<String[]> filteredObjects;
-    private int dataItemPosition;
-    Filter getFilter(int dataItem) {
+    private List<Integer> dataItemPosition;
+    Filter getFilter(List<Integer> dataItem) {
         dataItemPosition=dataItem;
         return mFilter;
     }
@@ -113,8 +115,11 @@ public class CustomAdapter extends BaseAdapter {
             final ArrayList<String[]> filteredList = new ArrayList<String[]>(count);
 
             for (int i = 0; i < count; i++) {
-                if (objects.get(i)[dataItemPosition].toLowerCase().contains(filterString)) {
-                    filteredList.add(objects.get(i));
+                for(int j=0;j<dataItemPosition.size();j++) {
+                    if (objects.get(i)[dataItemPosition.get(j)].toLowerCase().contains(filterString)) {
+                        filteredList.add(objects.get(i));
+                        break;//found at least one item
+                    }
                 }
             }
 
