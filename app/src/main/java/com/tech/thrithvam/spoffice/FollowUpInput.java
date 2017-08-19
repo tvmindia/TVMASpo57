@@ -101,7 +101,7 @@ public class FollowUpInput extends AppCompatActivity {
                         +"\",\"FollowUpTime\":\""+((TextView)findViewById(R.id.select_time)).getText().toString()
                         +"\",\"Status\":\""+((Spinner)findViewById(R.id.status_spinner)).getSelectedItem().toString()
                         +"\",\"ReminderType\":\""+"MNT"//Mobile notification
-                        +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.description)).getText().toString()
+                        +"\",\"Subject\":\""+((EditText)findViewById(R.id.description)).getText().toString()
                         +"\"}";
                 String[] dataColumns={};
                 Runnable postThread=new Runnable() {
