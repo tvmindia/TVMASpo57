@@ -69,6 +69,9 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
     }
+    public void quotationsClick(View view){
+        startActivity(new Intent(HomeScreen.this,Quotations.class));
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_logout, menu);

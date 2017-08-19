@@ -33,4 +33,7 @@
     <string name="closed">Closed</string>
     <string name="description">Description</string>
     <string name="follow_up_of">Follow Up of</string>
+    <string name="email_sent_colon">Email sent: %1$s</string>
+    <string name="customer_orders">Customer Orders</string>
+    <string name="supplier_orders">Supplier Orders</string>
 </resources>

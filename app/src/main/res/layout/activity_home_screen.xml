@@ -117,7 +117,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="InvoicePurchaseClick">
+                    android:onClick="quotationsClick">
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -150,7 +150,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="ExpenseClick">
+                    android:onClick="proformaInvoices">
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -197,7 +197,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="SuppliersClick">
+                    android:onClick="customerOrdersClick">
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -210,7 +210,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Customer Orders"
+                        android:text="@string/customer_orders"
                         android:textColor="@color/colorAccent"
                         android:textSize="14sp"
                         android:layout_centerVertical="true"
@@ -229,7 +229,8 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:onClick="supplierOrdersClick">
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -242,7 +243,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Supplier Orders"
+                        android:text="@string/supplier_orders"
                         android:textColor="@color/colorAccent"
                         android:textSize="14sp"
                         android:layout_centerVertical="true"
