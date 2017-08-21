@@ -72,6 +72,9 @@ public class HomeScreen extends AppCompatActivity {
     public void quotationsClick(View view){
         startActivity(new Intent(HomeScreen.this,QuotationsList.class));
     }
+    public void proformaInvoicesClick(View view){
+        startActivity(new Intent(HomeScreen.this,ProformaList.class));
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_logout, menu);

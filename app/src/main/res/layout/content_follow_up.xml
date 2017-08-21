@@ -19,4 +19,25 @@
         android:footerDividersEnabled="false"
         android:scrollbars="none"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/secondary_text"
+        android:text="@string/no_items"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/no_items"/>
+    <com.wang.avi.AVLoadingIndicatorView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:indicatorName="BallScaleMultipleIndicator"
+        android:layout_gravity="center"
+        app:indicatorColor="@android:color/white"
+        android:id="@+id/loading_indicator"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dp"
+        />
 </RelativeLayout>

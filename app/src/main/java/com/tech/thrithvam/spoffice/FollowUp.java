@@ -1,6 +1,7 @@
 package com.tech.thrithvam.spoffice;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +9,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
+
+import com.wang.avi.AVLoadingIndicatorView;
+
+import java.util.ArrayList;
 
 public class FollowUp extends AppCompatActivity {
     String enquiryID;
+    CustomAdapter adapter;
+    ListView quotationsList;
+    ArrayList<AsyncTask> asyncTasks=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +28,8 @@ public class FollowUp extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         enquiryID=getIntent().getExtras().getString(Common.ENQUIRYID);
+        quotationsList=(ListView)findViewById(R.id.follow_up_list);
+        getFollowUps();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,6 +39,48 @@ public class FollowUp extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    void getFollowUps(){
+        (findViewById(R.id.no_items)).setVisibility(View.GONE);
+        //Threading------------------------------------------------------------------------------------------------------
+        final Common common = new Common();
+        String webService = "API/FollowUp/GetFollowUpDetailsForMobile";
+        String postData = "{\"EnquiryID\":\""+enquiryID+"\"}";
+        AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
+        String[] dataColumns = {"ID",//0
+                "FollowUpDate",//1
+                "FollowUpTime",//2
+                "Subject",//3
+                "Status",//4
+        };
+        Runnable postThread = new Runnable() {
+            @Override
+            public void run() {
+                if(common.dataArrayList.size()==0){
+                    (findViewById(R.id.no_items)).setVisibility(View.VISIBLE);
+                    return;
+                }
+                adapter=new CustomAdapter(FollowUp.this,common.dataArrayList,Common.FOLLOWUPLIST);
+                quotationsList.setAdapter(adapter);
+                quotationsList.setVisibility(View.VISIBLE);
+            }
+        };
+        Runnable postThreadFailed = new Runnable() {
+            @Override
+            public void run() {
+                Common.toastMessage(FollowUp.this, R.string.failed_server);
+            }
+        };
+
+        common.AsynchronousThread(FollowUp.this,
+                webService,
+                postData,
+                loadingIndicator,
+                dataColumns,
+                postThread,
+                postThreadFailed);
+        asyncTasks.add(common.asyncTask);
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,5 +102,11 @@ public class FollowUp extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    @Override
+    public void onBackPressed() {
+        for(int i=0;i<asyncTasks.size();i++){
+            asyncTasks.get(i).cancel(true);
+        }
+        super.onBackPressed();
+    }
 }

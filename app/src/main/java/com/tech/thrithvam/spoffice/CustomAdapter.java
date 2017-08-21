@@ -57,6 +57,11 @@ public class CustomAdapter extends BaseAdapter {
         //Enquiries---------------
         TextView enquiryNo,contactTitle,contactPerson,mobile;
         ImageView followUpIcon;
+        //Follow Up-------------
+        TextView time,description;
+        ImageView editIcon;
+        //Proforma invoices------
+        TextView invoiceNo;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -121,6 +126,46 @@ public class CustomAdapter extends BaseAdapter {
                 holder.mobile.setText((filteredObjects.get(position)[6].equals("null")?"-":filteredObjects.get(position)[6]));
                 holder.mobile.setTag((filteredObjects.get(position)[6].equals("null")?"":filteredObjects.get(position)[6]));
                 holder.followUpIcon.setTag((filteredObjects.get(position)[0].equals("null")?"":filteredObjects.get(position)[0]));
+                break;
+            //--------------------------for follow up list items------------------
+            case Common.FOLLOWUPLIST:
+                if (convertView == null) {
+                    holder = new Holder();
+                    convertView = inflater.inflate(R.layout.item_follow_up, null);
+                    holder.date = (TextView) convertView.findViewById(R.id.date);
+                    holder.time = (TextView) convertView.findViewById(R.id.time);
+                    holder.description = (TextView) convertView.findViewById(R.id.description);
+                    holder.status = (TextView) convertView.findViewById(R.id.status);
+                    holder.editIcon=(ImageView)convertView.findViewById(R.id.edit_icon);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (Holder) convertView.getTag();
+                }
+                //Label loading--------------------
+                holder.date.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
+                holder.time.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
+                holder.description.setText((filteredObjects.get(position)[3].equals("null")?"":filteredObjects.get(position)[3]));
+                holder.status.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.status_colon,filteredObjects.get(position)[4])));
+                holder.editIcon.setTag((filteredObjects.get(position)[0].equals("null")?"":filteredObjects.get(position)[0]));
+                break;
+            //--------------------------for proforma invoices list items------------------
+            case Common.PROFORMALIST:
+                if (convertView == null) {
+                    holder = new Holder();
+                    convertView = inflater.inflate(R.layout.item_proforma, null);
+                    holder.customerName = (TextView) convertView.findViewById(R.id.customer_name);
+                    holder.invoiceNo = (TextView) convertView.findViewById(R.id.invoice_no);
+                    holder.date = (TextView) convertView.findViewById(R.id.date);
+                    holder.amount = (TextView) convertView.findViewById(R.id.amount);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (Holder) convertView.getTag();
+                }
+                //Label loading--------------------
+                holder.customerName.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
+                holder.invoiceNo.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
+                holder.date.setText((filteredObjects.get(position)[3].equals("null")?"":filteredObjects.get(position)[3]));
+                holder.amount.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[4])))));
                 break;
             default:
                 break;

@@ -33,7 +33,9 @@ public class Common {
     static final int SALES=123;
     //Custom adapter constants
     static final String QUOTATIONLIST="quotations",
-                        ENQUIRYLIST="enquiries"
+                        ENQUIRYLIST="enquiries",
+                        FOLLOWUPLIST="followups",
+                        PROFORMALIST="proformainvoices"
                     ;
     //Intent constants
     static final String ENQUIRYID="enquiryID",
