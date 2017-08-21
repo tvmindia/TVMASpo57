@@ -1,6 +1,7 @@
 package com.tech.thrithvam.spoffice;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -18,7 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 
@@ -39,7 +44,8 @@ public class Enquiries extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    Spinner listDurationSpinner;
+    static Spinner listDurationSpinner;
+    static ArrayList<AsyncTask> asyncTasks=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +60,7 @@ public class Enquiries extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -86,6 +93,12 @@ public class Enquiries extends AppCompatActivity {
 
             }
         });
+    }
+    public void followUpClick(View view){
+        if(view.getTag().toString().equals("")) return;
+        Intent intent = new Intent(Enquiries.this, FollowUp.class);
+        intent.putExtra(Common.ENQUIRYID,view.getTag().toString());
+        startActivity(intent);
     }
 
     SearchView searchView;
@@ -156,11 +169,80 @@ public class Enquiries extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_enquiries, container, false);
-
+            final View rootView = inflater.inflate(R.layout.fragment_enquiries, container, false);
+            if( getArguments().getInt(ARG_SECTION_NUMBER)==1) {//Open
+                Common.toastMessage(getContext(),"Open");
+                getEnquiries("OE",rootView);
+            }
+            else if( getArguments().getInt(ARG_SECTION_NUMBER)==2) {//Converted
+                Common.toastMessage(getContext(),"Converted");
+                getEnquiries("CE",rootView);
+            }
+            else if( getArguments().getInt(ARG_SECTION_NUMBER)==3) {//NotConverted
+                Common.toastMessage(getContext(),"Not Converted");
+                getEnquiries("NCE",rootView);
+            }
             return rootView;
         }
+        public void getEnquiries(String enquiryStatusCode,View rootView){
+            final ListView invoiceList=(ListView)rootView.findViewById(R.id.enquiry_list);
+            final TextView noItems=(TextView)rootView.findViewById(R.id.no_items);
+            noItems.setVisibility(View.GONE);
+            invoiceList.setVisibility(View.GONE);
+            int duration=0;
+            if(listDurationSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.days90))){
+                duration = 90;
+            }
+            else if(listDurationSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.days180))){
+                duration=180;
+            }
+            else if(listDurationSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.days365))){
+                duration=180;
+            }
+            //Threading------------------------------------------------------------------------------------------------------
+            final Common common = new Common();
+            String webService = "API/Enquiry/GetEnquiryListForMobile";
+            String postData = "{\"duration\":\""+duration+"\",\"EnquiryStatus\":\""+enquiryStatusCode+"\"}";
+            AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) rootView.findViewById(R.id.loading_indicator);
+            String[] dataColumns = {"ID",//0
+                    "EnquiryNo",//1
+                    "EnquiryDate",//2
+                    "ContactTitle",//3
+                    "ContactName",//4
+                    "CompanyName",//5
+                    "Mobile"//6
+            };
+            Runnable postThread = new Runnable() {
+                @Override
+                public void run() {
+                    if(common.dataArrayList.size()==0){
+                        noItems.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                    CustomAdapter adapter=new CustomAdapter(getContext(),common.dataArrayList,Common.ENQUIRYLIST);
+                    invoiceList.setAdapter(adapter);
+                    invoiceList.setVisibility(View.VISIBLE);
+                }
+            };
+            Runnable postThreadFailed = new Runnable() {
+                @Override
+                public void run() {
+                    Common.toastMessage(getContext(), R.string.failed_server+ common.msg);
+                }
+            };
+
+            common.AsynchronousThread(getContext(),
+                    webService,
+                    postData,
+                    loadingIndicator,
+                    dataColumns,
+                    postThread,
+                    postThreadFailed);
+            asyncTasks.add(common.asyncTask);
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
     }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -197,5 +279,12 @@ public class Enquiries extends AppCompatActivity {
             }
             return null;
         }
+    }
+    @Override
+    public void onBackPressed() {
+        for(int i=0;i<asyncTasks.size();i++){
+            asyncTasks.get(i).cancel(true);
+        }
+        super.onBackPressed();
     }
 }

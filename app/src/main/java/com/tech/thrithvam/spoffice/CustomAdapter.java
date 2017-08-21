@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -53,13 +54,16 @@ public class CustomAdapter extends BaseAdapter {
     private class Holder {
         //Quotations--------------
         TextView quotationNo,date,customerName,amount,status,emailSent;
+        //Enquiries---------------
+        TextView enquiryNo,contactTitle,contactPerson,mobile;
+        ImageView followUpIcon;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder;
         final int fPos=position;
         switch (calledFrom) {
-            //--------------------------for customer list items------------------
+            //--------------------------for quotation list items------------------
             case Common.QUOTATIONLIST:
                 if (convertView == null) {
                     holder = new Holder();
@@ -91,6 +95,31 @@ public class CustomAdapter extends BaseAdapter {
                 else {
                     holder.emailSent.setText("-");
                 }
+                break;
+            //--------------------------for enquiry list items------------------
+            case Common.ENQUIRYLIST:
+                if (convertView == null) {
+                    holder = new Holder();
+                    convertView = inflater.inflate(R.layout.item_enquiry, null);
+                    holder.enquiryNo = (TextView) convertView.findViewById(R.id.enquiry_no);
+                    holder.date = (TextView) convertView.findViewById(R.id.date);
+                    holder.contactTitle = (TextView) convertView.findViewById(R.id.contact_title);
+                    holder.contactPerson = (TextView) convertView.findViewById(R.id.contact_person_name);
+                    holder.customerName = (TextView) convertView.findViewById(R.id.company_name);
+                    holder.mobile = (TextView) convertView.findViewById(R.id.mobile);
+                    holder.followUpIcon=(ImageView)convertView.findViewById(R.id.follow_up_icon);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (Holder) convertView.getTag();
+                }
+                //Label loading--------------------
+                holder.enquiryNo.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
+                holder.date.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
+                holder.contactTitle.setText((filteredObjects.get(position)[3].equals("null")?"":filteredObjects.get(position)[3]));
+                holder.contactPerson.setText((filteredObjects.get(position)[4].equals("null")?"-":filteredObjects.get(position)[4]));
+                holder.customerName.setText((filteredObjects.get(position)[5].equals("null")?"-":filteredObjects.get(position)[5]));
+                holder.mobile.setText((filteredObjects.get(position)[6].equals("null")?"-":filteredObjects.get(position)[6]));
+                holder.followUpIcon.setTag((filteredObjects.get(position)[0].equals("null")?"":filteredObjects.get(position)[0]));
                 break;
             default:
                 break;
