@@ -54,18 +54,9 @@ public class Enquiries extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-
+        //New enquiry button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +77,18 @@ public class Enquiries extends AppCompatActivity {
         listDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // getChartData();
+
+                // Create the adapter that will return a fragment for each of the three
+                // primary sections of the activity.
+                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+                // Set up the ViewPager with the sections adapter.
+                mViewPager = (ViewPager) findViewById(R.id.container);
+                mViewPager.setAdapter(mSectionsPagerAdapter);
+                mViewPager.setOffscreenPageLimit(3);
+
+                final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+                tabLayout.setupWithViewPager(mViewPager);
             }
 
             @Override
@@ -178,15 +180,12 @@ public class Enquiries extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_enquiries, container, false);
             if( getArguments().getInt(ARG_SECTION_NUMBER)==1) {//Open
-                Common.toastMessage(getContext(),"Open");
                 getEnquiries("OE",rootView);
             }
             else if( getArguments().getInt(ARG_SECTION_NUMBER)==2) {//Converted
-                Common.toastMessage(getContext(),"Converted");
                 getEnquiries("CE",rootView);
             }
             else if( getArguments().getInt(ARG_SECTION_NUMBER)==3) {//NotConverted
-                Common.toastMessage(getContext(),"Not Converted");
                 getEnquiries("NCE",rootView);
             }
             return rootView;
@@ -204,7 +203,7 @@ public class Enquiries extends AppCompatActivity {
                 duration=180;
             }
             else if(listDurationSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.days365))){
-                duration=180;
+                duration=365;
             }
             //Threading------------------------------------------------------------------------------------------------------
             final Common common = new Common();
@@ -219,6 +218,7 @@ public class Enquiries extends AppCompatActivity {
                     "CompanyName",//5
                     "Mobile"//6
             };
+            Common.toastMessage(getContext(),postData);
             Runnable postThread = new Runnable() {
                 @Override
                 public void run() {

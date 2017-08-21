@@ -62,7 +62,7 @@ public class QuotationsList extends AppCompatActivity {
             duration=180;
         }
         else if(listDurationSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.days365))){
-            duration=180;
+            duration=365;
         }
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
