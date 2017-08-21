@@ -1,6 +1,7 @@
 package com.tech.thrithvam.spoffice;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -99,6 +100,12 @@ public class Enquiries extends AppCompatActivity {
         Intent intent = new Intent(Enquiries.this, FollowUp.class);
         intent.putExtra(Common.ENQUIRYID,view.getTag().toString());
         startActivity(intent);
+    }
+    public void callClick(View view){
+        if(view.getTag().toString().equals("")) return;
+        Uri number = Uri.parse("tel:" + view.getTag().toString());
+        Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+        startActivity(callIntent);
     }
 
     SearchView searchView;

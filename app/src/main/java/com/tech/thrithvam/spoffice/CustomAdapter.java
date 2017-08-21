@@ -119,6 +119,7 @@ public class CustomAdapter extends BaseAdapter {
                 holder.contactPerson.setText((filteredObjects.get(position)[4].equals("null")?"-":filteredObjects.get(position)[4]));
                 holder.customerName.setText((filteredObjects.get(position)[5].equals("null")?"-":filteredObjects.get(position)[5]));
                 holder.mobile.setText((filteredObjects.get(position)[6].equals("null")?"-":filteredObjects.get(position)[6]));
+                holder.mobile.setTag((filteredObjects.get(position)[6].equals("null")?"":filteredObjects.get(position)[6]));
                 holder.followUpIcon.setTag((filteredObjects.get(position)[0].equals("null")?"":filteredObjects.get(position)[0]));
                 break;
             default:

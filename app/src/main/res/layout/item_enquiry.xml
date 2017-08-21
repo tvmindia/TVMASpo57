@@ -80,7 +80,8 @@
                 android:textSize="14sp"
                 android:padding="1dp"
                 android:id="@+id/mobile"
-                android:layout_below="@+id/company_name"/>
+                android:layout_below="@+id/company_name"
+                android:onClick="callClick"/>
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"

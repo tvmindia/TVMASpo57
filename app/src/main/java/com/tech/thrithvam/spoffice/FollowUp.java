@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 public class FollowUp extends AppCompatActivity {
-
+    String enquiryID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,12 +18,13 @@ public class FollowUp extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        enquiryID=getIntent().getExtras().getString(Common.ENQUIRYID);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(FollowUp.this,FollowUpInput.class);
-                intent.putExtra(Common.ENQUIRYID,"");//enquiry id here
+                intent.putExtra(Common.ENQUIRYID,enquiryID);
                 startActivity(intent);
             }
         });
