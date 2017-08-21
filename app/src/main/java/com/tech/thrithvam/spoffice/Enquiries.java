@@ -218,7 +218,6 @@ public class Enquiries extends AppCompatActivity {
                     "CompanyName",//5
                     "Mobile"//6
             };
-            Common.toastMessage(getContext(),postData);
             Runnable postThread = new Runnable() {
                 @Override
                 public void run() {
