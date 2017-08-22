@@ -23,9 +23,9 @@ public class Login extends AppCompatActivity {
 
 
 
-        //delete this
+      /*  //delete this
         startActivity(new Intent(this,HomeScreen.class));
-        finish();
+        finish();*/
 
 
 
@@ -79,7 +79,6 @@ public class Login extends AppCompatActivity {
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             editor.putString("UserName", userName);
                             editor.apply();
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
