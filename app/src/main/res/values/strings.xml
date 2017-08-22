@@ -40,4 +40,5 @@
     <string name="status_colon">Status: %1$s</string>
     <string name="title_activity_proforma_list">ProformaList</string>
     <string name="title_activity_customer_orders_list">CustomerOrdersList</string>
+    <string name="title_activity_supplier_orders_list">SupplierOrdersList</string>
 </resources>

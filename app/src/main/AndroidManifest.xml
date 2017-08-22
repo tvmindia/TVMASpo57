@@ -43,10 +43,6 @@
             android:label="@string/title_activity_follow_up"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SupplierOrders"
-            android:configChanges="orientation|screenSize"
-            android:label="Supplier Orders" />
-        <activity
             android:name=".QuotationsList"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_quotations_list"
@@ -58,9 +54,14 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CustomerOrdersList"
-            android:label="@string/title_activity_customer_orders_list"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/title_activity_customer_orders_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SupplierOrdersList"
+            android:label="@string/title_activity_supplier_orders_list"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>

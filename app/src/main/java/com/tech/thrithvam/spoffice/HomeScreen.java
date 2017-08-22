@@ -78,6 +78,9 @@ public class HomeScreen extends AppCompatActivity {
     public void customerOrdersClick(View view){
         startActivity(new Intent(HomeScreen.this,CustomerOrdersList.class));
     }
+    public void supplierOrdersClick(View view){
+        startActivity(new Intent(HomeScreen.this,SupplierOrdersList.class));
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_logout, menu);

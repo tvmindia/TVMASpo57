@@ -64,6 +64,8 @@ public class CustomAdapter extends BaseAdapter {
         TextView invoiceNo;
         //Customer Orders----------
         TextView purchaseOrderNo;
+        //Supplier Orders----------
+        TextView supplierName;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -185,6 +187,27 @@ public class CustomAdapter extends BaseAdapter {
                 }
                 //Label loading--------------------
                 holder.customerName.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
+                holder.purchaseOrderNo.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
+                holder.date.setText((filteredObjects.get(position)[3].equals("null")?"":filteredObjects.get(position)[3]));
+                holder.amount.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[4])))));
+                holder.status.setText((filteredObjects.get(position)[5].equals("null")?"-":adapterContext.getResources().getString(R.string.status_colon,filteredObjects.get(position)[5])));
+                break;
+            //--------------------------for supplier orders list items------------------
+            case Common.SUPPLIERORDERSLIST:
+                if (convertView == null) {
+                    holder = new Holder();
+                    convertView = inflater.inflate(R.layout.item_supplier_order, null);
+                    holder.supplierName = (TextView) convertView.findViewById(R.id.supplier_name);
+                    holder.purchaseOrderNo = (TextView) convertView.findViewById(R.id.po_no);
+                    holder.date = (TextView) convertView.findViewById(R.id.date);
+                    holder.amount = (TextView) convertView.findViewById(R.id.amount);
+                    holder.status=(TextView) convertView.findViewById(R.id.status);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (Holder) convertView.getTag();
+                }
+                //Label loading--------------------
+                holder.supplierName.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
                 holder.purchaseOrderNo.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
                 holder.date.setText((filteredObjects.get(position)[3].equals("null")?"":filteredObjects.get(position)[3]));
                 holder.amount.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[4])))));

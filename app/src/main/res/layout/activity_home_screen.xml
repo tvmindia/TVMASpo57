@@ -205,7 +205,7 @@
                         android:scaleType="fitCenter"
                         android:tint="@color/colorAccent"
                         android:layout_centerHorizontal="true"
-                        android:id="@+id/supplier_icon"
+                        android:id="@+id/customer_icon"
                         android:layout_margin="5dp"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -215,7 +215,7 @@
                         android:textSize="14sp"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_below="@id/supplier_icon"
+                        android:layout_below="@id/customer_icon"
                         android:gravity="center"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
@@ -238,7 +238,7 @@
                         android:scaleType="fitCenter"
                         android:tint="@color/colorAccent"
                         android:layout_centerHorizontal="true"
-                        android:id="@+id/extra_icon"
+                        android:id="@+id/supplier_icon"
                         android:layout_margin="5dp"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -248,7 +248,7 @@
                         android:textSize="14sp"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_below="@id/extra_icon"
+                        android:layout_below="@id/supplier_icon"
                         android:gravity="center"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
