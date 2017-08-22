@@ -35,7 +35,8 @@ public class Common {
     static final String QUOTATIONLIST="quotations",
                         ENQUIRYLIST="enquiries",
                         FOLLOWUPLIST="followups",
-                        PROFORMALIST="proformainvoices"
+                        PROFORMALIST="proformainvoices",
+                        CUSTOMERORDERSLIST="customerorders"
                     ;
     //Intent constants
     static final String ENQUIRYID="enquiryID",
