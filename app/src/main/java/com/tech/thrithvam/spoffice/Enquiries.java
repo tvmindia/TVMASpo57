@@ -233,7 +233,7 @@ public class Enquiries extends AppCompatActivity {
             Runnable postThreadFailed = new Runnable() {
                 @Override
                 public void run() {
-                    Common.toastMessage(getContext(), R.string.failed_server+ common.msg);
+                    Common.toastMessage(getContext(), R.string.failed_server);
                 }
             };
 

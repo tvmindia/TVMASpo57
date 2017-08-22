@@ -2,7 +2,9 @@ package com.tech.thrithvam.spoffice;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -93,6 +95,8 @@ public class FollowUpInput extends AppCompatActivity {
                 //Loading animation
                 saveButton.setIndeterminateProgressMode(true);
                 saveButton.setProgress(50);
+                SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+                String userName=sharedpreferences.getString("UserName","<error_in_getting_username_from_mobile");
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
                 String webService="API/FollowUp/InsertUpdateFollowUp";
@@ -102,7 +106,8 @@ public class FollowUpInput extends AppCompatActivity {
                         +"\",\"Status\":\""+((Spinner)findViewById(R.id.status_spinner)).getSelectedItem().toString()
                         +"\",\"ReminderType\":\""+"MNT"//Mobile notification
                         +"\",\"Subject\":\""+((EditText)findViewById(R.id.description)).getText().toString()
-                        +"\"}";
+                        +"\",\"commonObj\":{\"CreatedBy\":\""+userName+"\"}"
+                        +"}";
                 String[] dataColumns={};
                 Runnable postThread=new Runnable() {
                     @Override

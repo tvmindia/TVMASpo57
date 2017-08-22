@@ -1,8 +1,10 @@
 package com.tech.thrithvam.spoffice;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -84,6 +86,8 @@ public class EnquiryInput extends AppCompatActivity {
                 //Loading animation
                 saveButton.setIndeterminateProgressMode(true);
                 saveButton.setProgress(50);
+                SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+                String userName=sharedpreferences.getString("UserName","<error_in_getting_username_from_mobile");
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
                 String webService="/API/Enquiry/InsertUpdateEnquiry";
@@ -93,7 +97,9 @@ public class EnquiryInput extends AppCompatActivity {
                         +"\",\"CompanyName\":\""+((EditText)findViewById(R.id.client_name)).getText().toString()
                         +"\",\"Mobile\":\""+((EditText)findViewById(R.id.mobile)).getText().toString()
                         +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
-                        +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()+"\"}";
+                        +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
+                        +"\",\"commonObj\":{\"CreatedBy\":\""+userName+"\"}"
+                        +"}";
                 String[] dataColumns={};
                 Runnable postThread=new Runnable() {
                     @Override
