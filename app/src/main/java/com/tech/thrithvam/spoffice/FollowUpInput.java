@@ -33,6 +33,7 @@ public class FollowUpInput extends AppCompatActivity {
     ArrayList<View> inputFields=new ArrayList<>();
     String enquiryID;
     String followUpID;
+    SharedPreferences sharedpreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ public class FollowUpInput extends AppCompatActivity {
         inputFields.add(findViewById(R.id.select_time));//1
         inputFields.add(findViewById(R.id.description));//2
         inputFields.add(findViewById(R.id.status_spinner));//3
-
+        sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
         //If follow editing context
         if(getIntent().hasExtra(Common.FOLLOWUPID)){
             followUpID=getIntent().getExtras().getString(Common.FOLLOWUPID);
@@ -60,8 +61,8 @@ public class FollowUpInput extends AppCompatActivity {
             ((TextView)findViewById(R.id.select_time)).setText(getIntent().getExtras().getString(Common.FOLLOWUP_time));
             ((EditText)findViewById(R.id.description)).setText(getIntent().getExtras().getString(Common.FOLLOWUP_description));
             followUpStatusSpinner.setSelection(dataAdapter.getPosition(getIntent().getExtras().getString(Common.FOLLOWUP_status)));
-            (findViewById(R.id.enquiry_no_label)).setVisibility(View.GONE);
-            (findViewById(R.id.enquiry_no)).setVisibility(View.GONE);
+
+            ((TextView)findViewById(R.id.enquiry_no)).setText(sharedpreferences.getString(Common.ENQUIRYNO,""));
         }
         else {//New followup context
             //Enquiry info
@@ -109,8 +110,7 @@ public class FollowUpInput extends AppCompatActivity {
                 //Loading animation
                 saveButton.setIndeterminateProgressMode(true);
                 saveButton.setProgress(50);
-                SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
-                String userName=sharedpreferences.getString("UserName","<error_in_getting_username_from_mobile");
+                String userName=sharedpreferences.getString(Common.userName,"<error_in_getting_username_from_mobile");
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
                 String webService="API/FollowUp/InsertUpdateFollowUp";
@@ -140,32 +140,45 @@ public class FollowUpInput extends AppCompatActivity {
                     public void run() {
                         saveButton.setProgress(100);
                         //Save success
-                       /* if(followUpID!=null) {
+                        if(followUpID!=null) {//edit
                             final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Intent intent = new Intent(FollowUpInput.this, Enquiries.class);
+                                    Intent intent = new Intent(FollowUpInput.this, FollowUp.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                             | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                             | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    intent.putExtra(Common.ENQUIRYID,sharedpreferences.getString(Common.ENQUIRYID,""));
+                                    intent.putExtra(Common.ENQUIRYNO,sharedpreferences.getString(Common.ENQUIRYNO,""));
                                     startActivity(intent);
                                 }
                             }, 1500);
                         }
-                        else {*/
+                        else {//new insert
                             final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Intent intent = new Intent(FollowUpInput.this, Enquiries.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                            | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
+                                    if(getIntent().getExtras().getString(Common.FROM).equals("followup")){//came from follow up
+                                            Intent intent=new Intent(FollowUpInput.this,FollowUp.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            intent.putExtra(Common.ENQUIRYID,getIntent().getExtras().getString(Common.ENQUIRYID));
+                                            intent.putExtra(Common.ENQUIRYNO,getIntent().getExtras().getString(Common.ENQUIRYNO));
+                                            startActivity(intent);
+                                    }
+                                    else {//Came from new enquiry input
+                                        Intent intent=new Intent(FollowUpInput.this,Enquiries.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
                                 }
                             }, 1500);
-                     /*   }*/
+                        }
                     }
                 };
                 Runnable postThreadFailed=new Runnable() {
@@ -250,12 +263,27 @@ public class FollowUpInput extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        Intent intent=new Intent(FollowUpInput.this,Enquiries.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-       // super.onBackPressed();
+        if(getIntent().getExtras().getString(Common.FROM).equals("followup")){
+            if(followUpID!=null) {//edit mode
+                super.onBackPressed();
+            }
+            else {
+                Intent intent=new Intent(FollowUpInput.this,FollowUp.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra(Common.ENQUIRYID,getIntent().getExtras().getString(Common.ENQUIRYID));
+                intent.putExtra(Common.ENQUIRYNO,getIntent().getExtras().getString(Common.ENQUIRYNO));
+                startActivity(intent);
+            }
+        }
+        else {
+            Intent intent=new Intent(FollowUpInput.this,Enquiries.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

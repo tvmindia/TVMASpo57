@@ -19,13 +19,23 @@ import java.util.ArrayList;
 
 public class HomeScreen extends AppCompatActivity {
     Spinner statisticsType;
+    SharedPreferences sharedpreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
-        String userName=sharedpreferences.getString("UserName","");
+        sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+        String userName=sharedpreferences.getString(Common.userName,"");
+        if(userName.equals("")){//not logged in
+            Intent intent = new Intent(HomeScreen.this, Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
         ((TextView)findViewById(R.id.welcome)).setText(getResources().getString(R.string.welcome,userName));
 
         //Spinner
@@ -91,7 +101,16 @@ public class HomeScreen extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_logout) {
-
+            //Storing for session
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(Common.userName, "");
+            editor.apply();
+            Intent intent = new Intent(HomeScreen.this, Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

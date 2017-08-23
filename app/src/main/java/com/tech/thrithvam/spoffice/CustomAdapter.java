@@ -189,6 +189,7 @@ public class CustomAdapter extends BaseAdapter {
                             editIntent.putExtra(Common.FOLLOWUP_time,filteredObjects.get(fPos)[2].equals("null")?"-":filteredObjects.get(fPos)[2]);
                             editIntent.putExtra(Common.FOLLOWUP_description,filteredObjects.get(fPos)[3].equals("null")?"":filteredObjects.get(fPos)[3]);
                             editIntent.putExtra(Common.FOLLOWUP_status,filteredObjects.get(fPos)[4].equals("null")?"":filteredObjects.get(fPos)[4]);
+                            editIntent.putExtra(Common.FROM,"followup");
                             adapterContext.startActivity(editIntent);
                         }
                     });

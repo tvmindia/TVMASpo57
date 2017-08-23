@@ -1,6 +1,8 @@
 package com.tech.thrithvam.spoffice;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +33,12 @@ public class FollowUp extends AppCompatActivity {
 
         enquiryID=getIntent().getExtras().getString(Common.ENQUIRYID);
         getSupportActionBar().setTitle("FollowUp: "+getIntent().getExtras().getString(Common.ENQUIRYNO));
+        //Storing for session
+        SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(Common.ENQUIRYID, getIntent().getExtras().getString(Common.ENQUIRYID));
+        editor.putString(Common.ENQUIRYNO, getIntent().getExtras().getString(Common.ENQUIRYNO));
+        editor.apply();
 
         quotationsList=(ListView)findViewById(R.id.follow_up_list);
         getFollowUps();
@@ -44,6 +52,8 @@ public class FollowUp extends AppCompatActivity {
                 }
                 Intent intent=new Intent(FollowUp.this,FollowUpInput.class);
                 intent.putExtra(Common.ENQUIRYID,enquiryID);
+                intent.putExtra(Common.ENQUIRYNO,getIntent().getExtras().getString(Common.ENQUIRYNO));
+                intent.putExtra(Common.FROM,"followup");
                 startActivity(intent);
             }
         });
@@ -123,6 +133,15 @@ public class FollowUp extends AppCompatActivity {
         for(int i=0;i<asyncTasks.size();i++){
             asyncTasks.get(i).cancel(true);
         }
-        super.onBackPressed();
+        if(isTaskRoot()){//to avoid closing the app, re routing to enquiries
+            Intent intent=new Intent(this,Enquiries.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 }

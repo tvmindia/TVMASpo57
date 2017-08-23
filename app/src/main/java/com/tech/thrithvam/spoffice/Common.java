@@ -30,6 +30,7 @@ public class Common {
 
     //Constants-----------------------
     static String preferenceName="SPO";
+    static String userName="userName";
     static final int SALES=123;
     //Custom adapter constants
     static final String QUOTATIONLIST="quotations",
@@ -40,7 +41,8 @@ public class Common {
                         SUPPLIERORDERSLIST="supplierorders"
                     ;
     //Intent constants
-    static final String ENQUIRYID="enquiryID",
+    static final String FROM="from",
+                        ENQUIRYID="enquiryID",
                         ENQUIRYNO="enquiryNo",
                         ENQUIRY_date="enquiryDate",
                         ENQUIRY_contactTitle="enquiryContactTitle",

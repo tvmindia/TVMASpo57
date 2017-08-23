@@ -22,12 +22,12 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-
-      /*  //delete this
-        startActivity(new Intent(this,HomeScreen.class));
-        finish();*/
-
-
+        final SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+        if(!sharedpreferences.getString(Common.userName,"").equals("")){//If already login
+            startActivity(new Intent(this,HomeScreen.class));
+            finish();
+            return;
+        }
 
         loginButton=(CircularProgressButton)findViewById(R.id.login_button);
         final EditText usernameInput=(EditText)findViewById(R.id.input_username);
@@ -75,9 +75,8 @@ public class Login extends AppCompatActivity {
                             }, 2000);
 
                             //Storing for session
-                            SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedpreferences.edit();
-                            editor.putString("UserName", userName);
+                            editor.putString(Common.userName, userName);
                             editor.apply();
                         } catch (JSONException e) {
                             e.printStackTrace();

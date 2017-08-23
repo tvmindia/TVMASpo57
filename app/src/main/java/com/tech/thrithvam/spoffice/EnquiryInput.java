@@ -102,7 +102,7 @@ public class EnquiryInput extends AppCompatActivity {
                 saveButton.setIndeterminateProgressMode(true);
                 saveButton.setProgress(50);
                 SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
-                String userName=sharedpreferences.getString("UserName","<error_in_getting_username_from_mobile");
+                String userName=sharedpreferences.getString(Common.userName,"<error_in_getting_username_from_mobile");
 
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
@@ -171,8 +171,9 @@ public class EnquiryInput extends AppCompatActivity {
                                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                                                 | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                                                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                        intent.putExtra(Common.ENQUIRYID, enquiryID);//enquiry id here
-                                                        intent.putExtra(Common.ENQUIRYNO, enquiryNo);//enquiry no here
+                                                        intent.putExtra(Common.ENQUIRYID, enquiryID);
+                                                        intent.putExtra(Common.ENQUIRYNO, enquiryNo);
+                                                        intent.putExtra(Common.FROM,"enquiries");
                                                         startActivity(intent);
                                                     }
                                                 }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
