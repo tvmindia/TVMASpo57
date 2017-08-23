@@ -97,12 +97,6 @@ public class Enquiries extends AppCompatActivity {
             }
         });
     }
-    public void followUpClick(View view){
-        if(view.getTag().toString().equals("")) return;
-        Intent intent = new Intent(Enquiries.this, FollowUp.class);
-        intent.putExtra(Common.ENQUIRYID,view.getTag().toString());
-        startActivity(intent);
-    }
     public void callClick(View view){
         if(view.getTag().toString().equals("")) return;
         Uri number = Uri.parse("tel:" + view.getTag().toString());

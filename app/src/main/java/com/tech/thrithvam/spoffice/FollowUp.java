@@ -28,6 +28,8 @@ public class FollowUp extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         enquiryID=getIntent().getExtras().getString(Common.ENQUIRYID);
+        getSupportActionBar().setTitle("FollowUp: "+getIntent().getExtras().getString(Common.ENQUIRYNO));
+
         quotationsList=(ListView)findViewById(R.id.follow_up_list);
         getFollowUps();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

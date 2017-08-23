@@ -66,7 +66,7 @@ public class SupplierOrdersList extends AppCompatActivity {
         }
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
-        String webService = "API/Supplier/GetAllSuppliersDetailForMobile";
+        String webService = "API/Supplier/GetAllSupplierPODetail";
         String postData = "{\"duration\":\""+duration+"\"}";
         AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
         String[] dataColumns = {"ID",//0

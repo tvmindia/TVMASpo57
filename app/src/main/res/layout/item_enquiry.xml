@@ -84,8 +84,7 @@
                 android:layout_below="@+id/contact_person_name"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:id="@+id/follow_up_icon"
-                android:onClick="followUpClick">
+                android:id="@+id/follow_up_icon">
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="35dp"

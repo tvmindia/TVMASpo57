@@ -132,7 +132,15 @@ public class CustomAdapter extends BaseAdapter {
                 holder.customerName.setText((filteredObjects.get(position)[5].equals("null")?"-":filteredObjects.get(position)[5]));
                 holder.mobile.setText((filteredObjects.get(position)[6].equals("null")?"-":filteredObjects.get(position)[6]));
                 holder.mobile.setTag((filteredObjects.get(position)[6].equals("null")?"":filteredObjects.get(position)[6]));
-                holder.followUpIcon.setTag((filteredObjects.get(position)[0].equals("null")?"":filteredObjects.get(position)[0]));
+                holder.followUpIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(adapterContext, FollowUp.class);
+                        intent.putExtra(Common.ENQUIRYID,filteredObjects.get(fPos)[0]);
+                        intent.putExtra(Common.ENQUIRYNO,filteredObjects.get(fPos)[1]);
+                        adapterContext.startActivity(intent);
+                    }
+                });
                 holder.editIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
