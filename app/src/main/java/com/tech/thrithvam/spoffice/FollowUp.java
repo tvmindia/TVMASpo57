@@ -20,6 +20,8 @@ public class FollowUp extends AppCompatActivity {
     CustomAdapter adapter;
     ListView quotationsList;
     ArrayList<AsyncTask> asyncTasks=new ArrayList<>();
+    FloatingActionButton fab;
+    Boolean atLeastOneOpen=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +34,14 @@ public class FollowUp extends AppCompatActivity {
 
         quotationsList=(ListView)findViewById(R.id.follow_up_list);
         getFollowUps();
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(atLeastOneOpen){
+                    Common.toastMessage(FollowUp.this,R.string.close_all_followups);
+                    return;
+                }
                 Intent intent=new Intent(FollowUp.this,FollowUpInput.class);
                 intent.putExtra(Common.ENQUIRYID,enquiryID);
                 startActivity(intent);
@@ -44,6 +50,7 @@ public class FollowUp extends AppCompatActivity {
     }
     void getFollowUps(){
         (findViewById(R.id.no_items)).setVisibility(View.GONE);
+
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
         String webService = "API/FollowUp/GetFollowUpDetailsForMobile";
@@ -60,11 +67,18 @@ public class FollowUp extends AppCompatActivity {
             public void run() {
                 if(common.dataArrayList.size()==0){
                     (findViewById(R.id.no_items)).setVisibility(View.VISIBLE);
+                    atLeastOneOpen=false;
                     return;
                 }
                 adapter=new CustomAdapter(FollowUp.this,common.dataArrayList,Common.FOLLOWUPLIST);
                 quotationsList.setAdapter(adapter);
                 quotationsList.setVisibility(View.VISIBLE);
+                for(int i=0;i<common.dataArrayList.size();i++){
+                    if(common.dataArrayList.get(i)[4].equals("Open")){
+                        atLeastOneOpen=true;
+                        break;
+                    }
+                }
             }
         };
         Runnable postThreadFailed = new Runnable() {
