@@ -70,7 +70,7 @@ public class SupplierOrdersList extends AppCompatActivity {
         String postData = "{\"duration\":\""+duration+"\"}";
         AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
         String[] dataColumns = {"ID",//0
-                "CompanyName",//1
+                "SupplierName",//1
                 "PONo",//2
                 "PODate",//3
                 "Amount",//4

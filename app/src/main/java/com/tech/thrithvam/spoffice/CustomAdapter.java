@@ -177,7 +177,25 @@ public class CustomAdapter extends BaseAdapter {
                 holder.time.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
                 holder.description.setText((filteredObjects.get(position)[3].equals("null")?"":filteredObjects.get(position)[3]));
                 holder.status.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.status_colon,filteredObjects.get(position)[4])));
-                holder.editIcon.setTag((filteredObjects.get(position)[0].equals("null")?"":filteredObjects.get(position)[0]));
+                if(filteredObjects.get(position)[4].equals("Open")){
+                    holder.editIcon.setTag((filteredObjects.get(position)[0].equals("null")?"":filteredObjects.get(position)[0]));
+                    holder.editIcon.setVisibility(View.VISIBLE);
+                    holder.editIcon.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent editIntent=new Intent(adapterContext,FollowUpInput.class);
+                            editIntent.putExtra(Common.FOLLOWUPID,filteredObjects.get(fPos)[0].equals("null")?"":filteredObjects.get(fPos)[0]);
+                            editIntent.putExtra(Common.FOLLOWUP_date,filteredObjects.get(fPos)[1].equals("null")?"-":filteredObjects.get(fPos)[1]);
+                            editIntent.putExtra(Common.FOLLOWUP_time,filteredObjects.get(fPos)[2].equals("null")?"-":filteredObjects.get(fPos)[2]);
+                            editIntent.putExtra(Common.FOLLOWUP_description,filteredObjects.get(fPos)[3].equals("null")?"":filteredObjects.get(fPos)[3]);
+                            editIntent.putExtra(Common.FOLLOWUP_status,filteredObjects.get(fPos)[4].equals("null")?"":filteredObjects.get(fPos)[4]);
+                            adapterContext.startActivity(editIntent);
+                        }
+                    });
+                }
+                else {
+                    holder.editIcon.setVisibility(View.GONE);
+                }
                 break;
             //--------------------------for proforma invoices list items------------------
             case Common.PROFORMALIST:

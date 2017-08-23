@@ -32,13 +32,11 @@ public class FollowUpInput extends AppCompatActivity {
     Calendar today = Calendar.getInstance();
     ArrayList<View> inputFields=new ArrayList<>();
     String enquiryID;
+    String followUpID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow_up_input);
-        //Enquiry info
-        ((TextView)findViewById(R.id.enquiry_no)).setText(getIntent().getExtras().getString(Common.ENQUIRYNO));
-        enquiryID=getIntent().getExtras().getString(Common.ENQUIRYID);
         //Status spinner
         ArrayList<String> followUpStatusList = new ArrayList<String>();
         followUpStatusList.add(getResources().getString(R.string.open));
@@ -54,6 +52,22 @@ public class FollowUpInput extends AppCompatActivity {
         inputFields.add(findViewById(R.id.description));//2
         inputFields.add(findViewById(R.id.status_spinner));//3
 
+        //If follow editing context
+        if(getIntent().hasExtra(Common.FOLLOWUPID)){
+            followUpID=getIntent().getExtras().getString(Common.FOLLOWUPID);
+            getSupportActionBar().setTitle("FollowUp Edit");
+            ((TextView)findViewById(R.id.select_date)).setText(getIntent().getExtras().getString(Common.FOLLOWUP_date));
+            ((TextView)findViewById(R.id.select_time)).setText(getIntent().getExtras().getString(Common.FOLLOWUP_time));
+            ((EditText)findViewById(R.id.description)).setText(getIntent().getExtras().getString(Common.FOLLOWUP_description));
+            followUpStatusSpinner.setSelection(dataAdapter.getPosition(getIntent().getExtras().getString(Common.FOLLOWUP_status)));
+            (findViewById(R.id.enquiry_no_label)).setVisibility(View.GONE);
+            (findViewById(R.id.enquiry_no)).setVisibility(View.GONE);
+        }
+        else {//New followup context
+            //Enquiry info
+            ((TextView)findViewById(R.id.enquiry_no)).setText(getIntent().getExtras().getString(Common.ENQUIRYNO));
+            enquiryID=getIntent().getExtras().getString(Common.ENQUIRYID);
+        }
         //Saving follow up
         final CircularProgressButton saveButton=(CircularProgressButton)findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -100,31 +114,58 @@ public class FollowUpInput extends AppCompatActivity {
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
                 String webService="API/FollowUp/InsertUpdateFollowUp";
-                String postData =  "{\"EnquiryID\":\""+enquiryID
-                        +"\",\"FollowUpDate\":\""+((TextView)findViewById(R.id.select_date)).getText().toString()
-                        +"\",\"FollowUpTime\":\""+((TextView)findViewById(R.id.select_time)).getText().toString()
-                        +"\",\"Status\":\""+((Spinner)findViewById(R.id.status_spinner)).getSelectedItem().toString()
-                        +"\",\"ReminderType\":\""+"MNT"//Mobile notification
-                        +"\",\"Subject\":\""+((EditText)findViewById(R.id.description)).getText().toString()
-                        +"\",\"commonObj\":{\"CreatedBy\":\""+userName+"\"}"
-                        +"}";
+                String postData;
+                if(followUpID!=null) {//edit followup
+                    postData = "{\"ID\":\"" + followUpID
+                            + "\",\"FollowUpDate\":\"" + ((TextView) findViewById(R.id.select_date)).getText().toString()
+                            + "\",\"FollowUpTime\":\"" + ((TextView) findViewById(R.id.select_time)).getText().toString()
+                            + "\",\"Status\":\"" + ((Spinner) findViewById(R.id.status_spinner)).getSelectedItem().toString()
+                            + "\",\"Subject\":\"" + ((EditText) findViewById(R.id.description)).getText().toString()
+                            + "\",\"commonObj\":{\"UpdatedBy\":\"" + userName + "\"}"
+                            + "}";
+                }
+                else {// new followup
+                    postData = "{\"EnquiryID\":\"" + enquiryID
+                            + "\",\"FollowUpDate\":\"" + ((TextView) findViewById(R.id.select_date)).getText().toString()
+                            + "\",\"FollowUpTime\":\"" + ((TextView) findViewById(R.id.select_time)).getText().toString()
+                            + "\",\"Status\":\"" + ((Spinner) findViewById(R.id.status_spinner)).getSelectedItem().toString()
+                            + "\",\"ReminderType\":\"" + "MNT"//Mobile notification
+                            + "\",\"Subject\":\"" + ((EditText) findViewById(R.id.description)).getText().toString()
+                            + "\",\"commonObj\":{\"CreatedBy\":\"" + userName + "\"}"
+                            + "}";
+                }
                 String[] dataColumns={};
                 Runnable postThread=new Runnable() {
                     @Override
                     public void run() {
                         saveButton.setProgress(100);
                         //Save success
+                       /* if(followUpID!=null) {
                             final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Intent intent=new Intent(FollowUpInput.this,Enquiries.class);
+                                    Intent intent = new Intent(FollowUpInput.this, Enquiries.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                             | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                             | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                 }
                             }, 1500);
+                        }
+                        else {*/
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(FollowUpInput.this, Enquiries.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                            | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                }
+                            }, 1500);
+                     /*   }*/
                     }
                 };
                 Runnable postThreadFailed=new Runnable() {

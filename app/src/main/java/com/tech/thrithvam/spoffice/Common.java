@@ -48,7 +48,13 @@ public class Common {
                         ENQUIRY_clientName="enquiryClientName",
                         ENQUIRY_mobile="enquiryMobile",
                         ENQUIRY_email="enquiryEmail",
-                        ENQUIRY_notes="enquiryNotes"
+                        ENQUIRY_notes="enquiryNotes",
+
+                        FOLLOWUPID="followupID",
+                        FOLLOWUP_date="followupDate",
+                        FOLLOWUP_time="followupTime",
+                        FOLLOWUP_description="followupDescription",
+                        FOLLOWUP_status="followupStatus"
                                 ;
 
     //To load image from a url------------------------------------------------------

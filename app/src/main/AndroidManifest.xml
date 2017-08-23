@@ -32,11 +32,13 @@
         <activity
             android:name=".EnquiryInput"
             android:configChanges="orientation|screenSize"
-            android:label="@string/enquiry" />
+            android:label="@string/enquiry"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".FollowUpInput"
             android:configChanges="orientation|screenSize"
-            android:label="@string/follow_up" />
+            android:label="@string/follow_up"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".FollowUp"
             android:configChanges="orientation|screenSize"
