@@ -22,11 +22,11 @@
                 android:id="@+id/enquiry_no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="1dp"
                 android:text="Enquiry number"
                 android:textColor="@color/primary_text"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"/>
             <TextView
                 android:layout_below="@id/enquiry_no"
                 android:layout_width="match_parent"
@@ -35,7 +35,6 @@
                 android:textColor="@color/primary_text"
                 android:textSize="14sp"
                 android:id="@+id/date"
-                android:padding="1dp"
                 android:layout_toLeftOf="@+id/contact_title"
                 android:layout_toStartOf="@+id/contact_title" />
             <TextView
@@ -44,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:text="Contact Title"
                 android:textSize="14sp"
-                android:padding="1dp"
                 android:textColor="@color/primary_text"
                 android:id="@+id/contact_title"
                 android:layout_toLeftOf="@+id/contact_person_name"
@@ -55,7 +53,6 @@
                 android:layout_height="wrap_content"
                 android:text="Contact person name"
                 android:textSize="14sp"
-                android:padding="1dp"
                 android:textColor="@color/primary_text"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
@@ -66,7 +63,6 @@
                 android:textSize="15sp"
                 android:text="Company Name"
                 android:id="@+id/company_name"
-                android:padding="1dp"
                 android:textColor="@color/primary_text"
                 android:layout_below="@id/date"
                 android:typeface="monospace"
@@ -78,24 +74,43 @@
                 android:text="Mobile"
                 android:textColor="@color/colorAccent"
                 android:textSize="14sp"
-                android:padding="1dp"
                 android:id="@+id/mobile"
                 android:layout_below="@+id/company_name"
                 android:onClick="callClick"/>
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:paddingTop="5dp"
-                android:paddingLeft="5dp"
-                android:paddingStart="5dp"
-                android:paddingBottom="5dp"
-                android:src="@drawable/follow_up"
-                android:tint="@color/colorAccent"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_below="@+id/contact_person_name"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:id="@+id/follow_up_icon"
-                android:onClick="followUpClick"/>
+                android:onClick="followUpClick">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="35dp"
+                            android:paddingTop="5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingStart="5dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/follow_up"
+                            android:tint="@color/colorAccent"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/follow_up"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="10sp"/>
+            </LinearLayout>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/edit"
+                android:id="@+id/edit_icon"
+                android:tint="@color/colorAccent"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
         </RelativeLayout>
         </android.support.v7.widget.CardView>
 </LinearLayout>

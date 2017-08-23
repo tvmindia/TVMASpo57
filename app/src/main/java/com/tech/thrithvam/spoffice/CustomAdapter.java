@@ -1,12 +1,14 @@
 package com.tech.thrithvam.spoffice;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -56,7 +58,7 @@ public class CustomAdapter extends BaseAdapter {
         TextView quotationNo,date,customerName,amount,status,emailSent;
         //Enquiries---------------
         TextView enquiryNo,contactTitle,contactPerson,mobile;
-        ImageView followUpIcon;
+        LinearLayout followUpIcon;
         //Follow Up-------------
         TextView time,description;
         ImageView editIcon;
@@ -116,7 +118,8 @@ public class CustomAdapter extends BaseAdapter {
                     holder.contactPerson = (TextView) convertView.findViewById(R.id.contact_person_name);
                     holder.customerName = (TextView) convertView.findViewById(R.id.company_name);
                     holder.mobile = (TextView) convertView.findViewById(R.id.mobile);
-                    holder.followUpIcon=(ImageView)convertView.findViewById(R.id.follow_up_icon);
+                    holder.followUpIcon=(LinearLayout) convertView.findViewById(R.id.follow_up_icon);
+                    holder.editIcon=(ImageView) convertView.findViewById(R.id.edit_icon);
                     convertView.setTag(holder);
                 } else {
                     holder = (Holder) convertView.getTag();
@@ -130,6 +133,22 @@ public class CustomAdapter extends BaseAdapter {
                 holder.mobile.setText((filteredObjects.get(position)[6].equals("null")?"-":filteredObjects.get(position)[6]));
                 holder.mobile.setTag((filteredObjects.get(position)[6].equals("null")?"":filteredObjects.get(position)[6]));
                 holder.followUpIcon.setTag((filteredObjects.get(position)[0].equals("null")?"":filteredObjects.get(position)[0]));
+                holder.editIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent editIntent=new Intent(adapterContext,EnquiryInput.class);
+                        editIntent.putExtra(Common.ENQUIRYID,filteredObjects.get(fPos)[0].equals("null")?"":filteredObjects.get(fPos)[0]);
+                        editIntent.putExtra(Common.ENQUIRYNO,filteredObjects.get(fPos)[1].equals("null")?"":filteredObjects.get(fPos)[1]);
+                        editIntent.putExtra(Common.ENQUIRY_date,filteredObjects.get(fPos)[2].equals("null")?"":filteredObjects.get(fPos)[2]);
+                        editIntent.putExtra(Common.ENQUIRY_contactTitle,filteredObjects.get(fPos)[3].equals("null")?"":filteredObjects.get(fPos)[3]);
+                        editIntent.putExtra(Common.ENQUIRY_contactName,filteredObjects.get(fPos)[4].equals("null")?"":filteredObjects.get(fPos)[4]);
+                        editIntent.putExtra(Common.ENQUIRY_clientName,filteredObjects.get(fPos)[5].equals("null")?"":filteredObjects.get(fPos)[5]);
+                        editIntent.putExtra(Common.ENQUIRY_mobile,filteredObjects.get(fPos)[6].equals("null")?"":filteredObjects.get(fPos)[6]);
+                        editIntent.putExtra(Common.ENQUIRY_email,filteredObjects.get(fPos)[7].equals("null")?"":filteredObjects.get(fPos)[7]);
+                        editIntent.putExtra(Common.ENQUIRY_notes,filteredObjects.get(fPos)[8].equals("null")?"":filteredObjects.get(fPos)[8]);
+                        adapterContext.startActivity(editIntent);
+                    }
+                });
                 break;
             //--------------------------for follow up list items------------------
             case Common.FOLLOWUPLIST:

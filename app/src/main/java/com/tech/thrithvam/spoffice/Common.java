@@ -41,7 +41,15 @@ public class Common {
                     ;
     //Intent constants
     static final String ENQUIRYID="enquiryID",
-                        ENQUIRYNO="enquiryNo";
+                        ENQUIRYNO="enquiryNo",
+                        ENQUIRY_date="enquiryDate",
+                        ENQUIRY_contactTitle="enquiryContactTitle",
+                        ENQUIRY_contactName="enquiryContactName",
+                        ENQUIRY_clientName="enquiryClientName",
+                        ENQUIRY_mobile="enquiryMobile",
+                        ENQUIRY_email="enquiryEmail",
+                        ENQUIRY_notes="enquiryNotes"
+                                ;
 
     //To load image from a url------------------------------------------------------
     static void LoadImage(Context context,ImageView imageView, String imageURL, int failImage){

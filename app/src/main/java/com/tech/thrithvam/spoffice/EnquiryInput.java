@@ -32,20 +32,22 @@ import java.util.Locale;
 
 public class EnquiryInput extends AppCompatActivity {
     ArrayList<View> inputFields=new ArrayList<>();
+    String enquiryID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enquiry_input);
+
         //Spinner
         ArrayList<String> statisticsDuration = new ArrayList<String>();
         statisticsDuration.add("Mr.");
         statisticsDuration.add("Ms.");
         statisticsDuration.add("Mrs.");
         statisticsDuration.add("Miss.");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner_black, statisticsDuration);
-        dataAdapter.setDropDownViewResource(R.layout.item_spinner_black);
+        ArrayAdapter<String> dataAdapterSpinner = new ArrayAdapter<String>(this, R.layout.item_spinner_black, statisticsDuration);
+        dataAdapterSpinner.setDropDownViewResource(R.layout.item_spinner_black);
         Spinner contactTitleSpinner =(Spinner)findViewById(R.id.contact_title);
-        contactTitleSpinner.setAdapter(dataAdapter);
+        contactTitleSpinner.setAdapter(dataAdapterSpinner);
 
         //Input Fields
         inputFields.add(findViewById(R.id.date));//0
@@ -55,6 +57,19 @@ public class EnquiryInput extends AppCompatActivity {
         inputFields.add(findViewById(R.id.mobile));//4
         inputFields.add(findViewById(R.id.email));//5
         inputFields.add(findViewById(R.id.notes));//6
+
+        //If enquiry editing context
+        if(getIntent().hasExtra(Common.ENQUIRYID)){
+            enquiryID=getIntent().getExtras().getString(Common.ENQUIRYID);
+            getSupportActionBar().setTitle("Edit: "+getIntent().getExtras().getString(Common.ENQUIRYNO));
+            ((TextView)findViewById(R.id.date)).setText(getIntent().getExtras().getString(Common.ENQUIRY_date));
+            contactTitleSpinner.setSelection(dataAdapterSpinner.getPosition(getIntent().getExtras().getString(Common.ENQUIRY_contactTitle)));
+            ((EditText)findViewById(R.id.contact_name)).setText(getIntent().getExtras().getString(Common.ENQUIRY_contactName));
+            ((EditText)findViewById(R.id.client_name)).setText(getIntent().getExtras().getString(Common.ENQUIRY_clientName));
+            ((EditText)findViewById(R.id.mobile)).setText(getIntent().getExtras().getString(Common.ENQUIRY_mobile));
+            ((EditText)findViewById(R.id.email)).setText(getIntent().getExtras().getString(Common.ENQUIRY_email));
+            ((EditText)findViewById(R.id.notes)).setText(getIntent().getExtras().getString(Common.ENQUIRY_notes));
+        }
 
         //Save enquiry
         final CircularProgressButton saveButton=(CircularProgressButton)findViewById(R.id.save_button);
@@ -88,63 +103,95 @@ public class EnquiryInput extends AppCompatActivity {
                 saveButton.setProgress(50);
                 SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
                 String userName=sharedpreferences.getString("UserName","<error_in_getting_username_from_mobile");
+
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
                 String webService="/API/Enquiry/InsertUpdateEnquiry";
-                String postData =  "{\"EnquiryDate\":\""+((TextView)findViewById(R.id.date)).getText().toString()
-                        +"\",\"ContactTitle\":\""+((Spinner)findViewById(R.id.contact_title)).getSelectedItem().toString()
-                        +"\",\"ContactName\":\""+((EditText)findViewById(R.id.contact_name)).getText().toString()
-                        +"\",\"CompanyName\":\""+((EditText)findViewById(R.id.client_name)).getText().toString()
-                        +"\",\"Mobile\":\""+((EditText)findViewById(R.id.mobile)).getText().toString()
-                        +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
-                        +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
-                        +"\",\"commonObj\":{\"CreatedBy\":\""+userName+"\"}"
-                        +"}";
+                String postData;
+                if(enquiryID!=null){//update
+                    postData="{\"ID\":\"" + enquiryID
+                            +"\",\"EnquiryDate\":\""+((TextView)findViewById(R.id.date)).getText().toString()
+                            +"\",\"ContactTitle\":\""+((Spinner)findViewById(R.id.contact_title)).getSelectedItem().toString()
+                            +"\",\"ContactName\":\""+((EditText)findViewById(R.id.contact_name)).getText().toString()
+                            +"\",\"CompanyName\":\""+((EditText)findViewById(R.id.client_name)).getText().toString()
+                            +"\",\"Mobile\":\""+((EditText)findViewById(R.id.mobile)).getText().toString()
+                            +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
+                            +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
+                            +"\",\"commonObj\":{\"UpdatedBy\":\""+userName+"\"}"
+                            +"}";
+                }
+                else {//insert
+                    postData="{\"EnquiryDate\":\""+((TextView)findViewById(R.id.date)).getText().toString()
+                            +"\",\"ContactTitle\":\""+((Spinner)findViewById(R.id.contact_title)).getSelectedItem().toString()
+                            +"\",\"ContactName\":\""+((EditText)findViewById(R.id.contact_name)).getText().toString()
+                            +"\",\"CompanyName\":\""+((EditText)findViewById(R.id.client_name)).getText().toString()
+                            +"\",\"Mobile\":\""+((EditText)findViewById(R.id.mobile)).getText().toString()
+                            +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
+                            +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
+                            +"\",\"commonObj\":{\"CreatedBy\":\""+userName+"\"}"
+                            +"}";
+                }
                 String[] dataColumns={};
                 Runnable postThread=new Runnable() {
                     @Override
                     public void run() {
                         saveButton.setProgress(100);
                         //Save success
-                        final String enquiryID,enquiryNo;
-                        try {
-                            JSONObject jsonObject=new JSONObject(common.json);
-                            enquiryID= jsonObject.getString("ID");
-                            enquiryNo= jsonObject.getString("EnquiryNo");
+                        if(enquiryID!=null){//updated enquiry
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(EnquiryInput.this, Enquiries.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                            | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                }, 1500);
+                        }
+                        else {//new enquiry inserted
+                            final String enquiryID, enquiryNo;
+                            try {
+                                JSONObject jsonObject = new JSONObject(common.json);
+                                enquiryID = jsonObject.getString("ID");
+                                enquiryNo = jsonObject.getString("EnquiryNo");
 
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                new AlertDialog.Builder(EnquiryInput.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
-                                        .setMessage(getResources().getString(R.string.add_followup_q,enquiryNo))
-                                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                final Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new AlertDialog.Builder(EnquiryInput.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
+                                                .setMessage(getResources().getString(R.string.add_followup_q, enquiryNo))
+                                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Intent intent = new Intent(EnquiryInput.this, FollowUpInput.class);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        intent.putExtra(Common.ENQUIRYID, enquiryID);//enquiry id here
+                                                        intent.putExtra(Common.ENQUIRYNO, enquiryNo);//enquiry no here
+                                                        startActivity(intent);
+                                                    }
+                                                }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                Intent intent=new Intent(EnquiryInput.this,FollowUpInput.class);
+                                                Intent intent = new Intent(EnquiryInput.this, Enquiries.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                                         | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                                         | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                intent.putExtra(Common.ENQUIRYID,enquiryID);//enquiry id here
-                                                intent.putExtra(Common.ENQUIRYNO,enquiryNo);//enquiry no here
                                                 startActivity(intent);
                                             }
-                                        }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Intent intent=new Intent(EnquiryInput.this,Enquiries.class);
-                                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                                            | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                    startActivity(intent);
-                                                     }
-                                                    })
-                                        .setCancelable(false).show();
+                                        })
+                                                .setCancelable(false).show();
+                                    }
+                                }, 1500);
+                            } catch (JSONException e) {
+                                Common.toastMessage(EnquiryInput.this, e.toString());
+                                Common.toastMessage(EnquiryInput.this, R.string.failed_try_again);
                             }
-                        }, 1500);
-                        } catch (JSONException e) {
-                            Common.toastMessage(EnquiryInput.this,e.toString());
-                            Common.toastMessage(EnquiryInput.this, R.string.failed_try_again);
                         }
                     }
                 };
@@ -178,6 +225,7 @@ public class EnquiryInput extends AppCompatActivity {
                 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             }
         });
+
     }
     public void getDates(View view){
         final TextView requiredDate=(TextView)view;

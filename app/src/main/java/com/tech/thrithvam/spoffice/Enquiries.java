@@ -191,10 +191,10 @@ public class Enquiries extends AppCompatActivity {
             return rootView;
         }
         public void getEnquiries(String enquiryStatusCode,View rootView){
-            final ListView invoiceList=(ListView)rootView.findViewById(R.id.enquiry_list);
+            final ListView enquiriesList=(ListView)rootView.findViewById(R.id.enquiry_list);
             final TextView noItems=(TextView)rootView.findViewById(R.id.no_items);
             noItems.setVisibility(View.GONE);
-            invoiceList.setVisibility(View.GONE);
+            enquiriesList.setVisibility(View.GONE);
             int duration=0;
             if(listDurationSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.days90))){
                 duration = 90;
@@ -216,7 +216,9 @@ public class Enquiries extends AppCompatActivity {
                     "ContactTitle",//3
                     "ContactName",//4
                     "CompanyName",//5
-                    "Mobile"//6
+                    "Mobile",//6
+                    "Email",//7
+                    "GeneralNotes"//8
             };
             Runnable postThread = new Runnable() {
                 @Override
@@ -226,8 +228,8 @@ public class Enquiries extends AppCompatActivity {
                         return;
                     }
                     CustomAdapter adapter=new CustomAdapter(getContext(),common.dataArrayList,Common.ENQUIRYLIST);
-                    invoiceList.setAdapter(adapter);
-                    invoiceList.setVisibility(View.VISIBLE);
+                    enquiriesList.setAdapter(adapter);
+                    enquiriesList.setVisibility(View.VISIBLE);
                 }
             };
             Runnable postThreadFailed = new Runnable() {
