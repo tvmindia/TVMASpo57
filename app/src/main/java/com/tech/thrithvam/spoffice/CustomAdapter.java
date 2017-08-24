@@ -154,6 +154,7 @@ public class CustomAdapter extends BaseAdapter {
                         editIntent.putExtra(Common.ENQUIRY_mobile,filteredObjects.get(fPos)[6].equals("null")?"":filteredObjects.get(fPos)[6]);
                         editIntent.putExtra(Common.ENQUIRY_email,filteredObjects.get(fPos)[7].equals("null")?"":filteredObjects.get(fPos)[7]);
                         editIntent.putExtra(Common.ENQUIRY_notes,filteredObjects.get(fPos)[8].equals("null")?"":filteredObjects.get(fPos)[8]);
+                        editIntent.putExtra(Common.ENQUIRY_status,filteredObjects.get(fPos)[9].equals("null")?"":filteredObjects.get(fPos)[9]);
                         adapterContext.startActivity(editIntent);
                     }
                 });

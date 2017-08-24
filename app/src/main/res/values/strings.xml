@@ -31,6 +31,9 @@
     <string name="notes">Notes</string>
     <string name="open">Open</string>
     <string name="closed">Closed</string>
+    <string name="converted">Converted</string>
+    <string name="not_converted">Not Converted</string>
+
     <string name="description">Description</string>
     <string name="follow_up_of">Follow Up of</string>
     <string name="email_sent_colon">Email sent: %1$s</string>

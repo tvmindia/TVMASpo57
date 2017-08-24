@@ -231,7 +231,8 @@ public class Enquiries extends AppCompatActivity {
                     "CompanyName",//5
                     "Mobile",//6
                     "Email",//7
-                    "GeneralNotes"//8
+                    "GeneralNotes",//8
+                    "EnquiryStatus"//9
             };
             Runnable postThread = new Runnable() {
                 @Override

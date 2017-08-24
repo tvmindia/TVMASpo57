@@ -49,6 +49,16 @@ public class EnquiryInput extends AppCompatActivity {
         Spinner contactTitleSpinner =(Spinner)findViewById(R.id.contact_title);
         contactTitleSpinner.setAdapter(dataAdapterSpinner);
 
+        //Status spinner
+        ArrayList<String> enquiryStatusList = new ArrayList<String>();
+        enquiryStatusList.add(getResources().getString(R.string.open));
+        enquiryStatusList.add(getResources().getString(R.string.converted));
+        enquiryStatusList.add(getResources().getString(R.string.not_converted));
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner, enquiryStatusList);
+        dataAdapter.setDropDownViewResource(R.layout.item_spinner_black);
+        final Spinner enquiryStatusSpinner =(Spinner)findViewById(R.id.status_spinner);
+        enquiryStatusSpinner.setAdapter(dataAdapter);
+
         //Input Fields
         inputFields.add(findViewById(R.id.date));//0
         inputFields.add(findViewById(R.id.contact_title));//1
@@ -69,6 +79,19 @@ public class EnquiryInput extends AppCompatActivity {
             ((EditText)findViewById(R.id.mobile)).setText(getIntent().getExtras().getString(Common.ENQUIRY_mobile));
             ((EditText)findViewById(R.id.email)).setText(getIntent().getExtras().getString(Common.ENQUIRY_email));
             ((EditText)findViewById(R.id.notes)).setText(getIntent().getExtras().getString(Common.ENQUIRY_notes));
+            String status="";
+            if(getIntent().getExtras().getString(Common.ENQUIRY_status).equals("OE")){
+                status=getResources().getString(R.string.open);
+            }
+            else if(getIntent().getExtras().getString(Common.ENQUIRY_status).equals("CE")){
+                status=getResources().getString(R.string.converted);
+            }
+            else if(getIntent().getExtras().getString(Common.ENQUIRY_status).equals("NCE")){
+                status=getResources().getString(R.string.not_converted);
+            }
+            if(dataAdapter.getPosition(status)>=0) {
+                enquiryStatusSpinner.setSelection(dataAdapter.getPosition(status));
+            }
         }
 
         //Save enquiry
@@ -104,6 +127,18 @@ public class EnquiryInput extends AppCompatActivity {
                 SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
                 String userName=sharedpreferences.getString(Common.userName,"<error_in_getting_username_from_mobile");
 
+                //Enquiry status
+                String status="OE";
+                if(enquiryStatusSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.open))){
+                    status = "OE";
+                }
+                else if(enquiryStatusSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.converted))){
+                    status="CE";
+                }
+                else if(enquiryStatusSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.not_converted))){
+                    status="NCE";
+                }
+
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
                 String webService="/API/Enquiry/InsertUpdateEnquiry";
@@ -117,6 +152,7 @@ public class EnquiryInput extends AppCompatActivity {
                             +"\",\"Mobile\":\""+((EditText)findViewById(R.id.mobile)).getText().toString()
                             +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
                             +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
+                            +"\",\"EnquiryStatus\":\""+status
                             +"\",\"commonObj\":{\"UpdatedBy\":\""+userName+"\"}"
                             +"}";
                 }
@@ -128,6 +164,7 @@ public class EnquiryInput extends AppCompatActivity {
                             +"\",\"Mobile\":\""+((EditText)findViewById(R.id.mobile)).getText().toString()
                             +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
                             +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
+                            +"\",\"EnquiryStatus\":\""+status
                             +"\",\"commonObj\":{\"CreatedBy\":\""+userName+"\"}"
                             +"}";
                 }
