@@ -15,6 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class HomeScreen extends AppCompatActivity {
@@ -78,6 +83,62 @@ public class HomeScreen extends AppCompatActivity {
                 startActivity(new Intent(HomeScreen.this,EnquiryInput.class));
             }
         });
+
+        //Enquiry statistics
+        getEnquiryStatistics();
+    }
+    void getEnquiryStatistics(){
+        (findViewById(R.id.statistics_linear)).setVisibility(View.GONE);
+        int duration=0;
+        if(statisticsType.getSelectedItem().toString().equals(getResources().getString(R.string.days90))){
+            duration = 90;
+        }
+        else if(statisticsType.getSelectedItem().toString().equals(getResources().getString(R.string.days180))){
+            duration=180;
+        }
+        else if(statisticsType.getSelectedItem().toString().equals(getResources().getString(R.string.days365))){
+            duration=365;
+        }
+        //Threading------------------------------------------------------------------------------------------------------
+        final Common common = new Common();
+        String webService = "API/DashBoard/StatiticsForMobile";
+        String postData = "{\"duration\":\""+duration+"\"}";
+        AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
+        String[] dataColumns = {};
+        Runnable postThread = new Runnable() {
+            @Override
+            public void run() {
+                (findViewById(R.id.statistics_linear)).setVisibility(View.VISIBLE);
+                try {
+                    JSONObject jsonObject=new JSONObject(common.json);
+                    ((TextView)findViewById(R.id.open_enquiries)).setText(jsonObject.optString("OpenEnquiryCount"));
+                    ((TextView)findViewById(R.id.converted_enquiries)).setText(jsonObject.optString("ConvertedEnquiryCount"));
+                    ((TextView)findViewById(R.id.not_converted_enquiries)).setText(jsonObject.optString("NonConvertedEnquiryCount"));
+                    int total=0;
+                    total=jsonObject.optInt("OpenEnquiryCount")
+                            +jsonObject.optInt("ConvertedEnquiryCount")
+                                +jsonObject.optInt("NonConvertedEnquiryCount");
+                    ((TextView)findViewById(R.id.total)).setText(Integer.toString(total));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Runnable postThreadFailed = new Runnable() {
+            @Override
+            public void run() {
+                Common.toastMessage(HomeScreen.this, R.string.failed_server);
+            }
+        };
+
+        common.AsynchronousThread(HomeScreen.this,
+                webService,
+                postData,
+                loadingIndicator,
+                dataColumns,
+                postThread,
+                postThreadFailed);
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
     public void quotationsClick(View view){
         startActivity(new Intent(HomeScreen.this,QuotationsList.class));
