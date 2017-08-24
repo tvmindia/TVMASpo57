@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Enquiries extends AppCompatActivity {
 
@@ -105,6 +107,7 @@ public class Enquiries extends AppCompatActivity {
     }
 
     SearchView searchView;
+    static ArrayList<ListView> lists=new ArrayList<>();
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -119,9 +122,24 @@ public class Enquiries extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 listDurationSpinner.setVisibility(View.GONE);
-               /* if(adapter!=null){//for searching
-                    adapter.getFilter(1).filter(searchView.getQuery().toString().trim());
-                }*/
+                for(int i=0;i<lists.size();i++) {
+                    final int Fi=i;
+                    CustomAdapter adapter = (CustomAdapter) lists.get(i).getAdapter();
+                    if (adapter != null) {//for searching
+                        adapter.getFilter(Arrays.asList(1, 2, 4, 5, 6,7)).filter(searchView.getQuery().toString().trim(),new Filter.FilterListener() {
+                            public void onFilterComplete(int count) {
+                                if(count>0){
+                                    try {
+                                        TabLayout tabHost = (TabLayout) findViewById(R.id.tabs);
+                                        tabHost.getTabAt(Fi).select();
+                                    }
+                                    catch (Exception e){
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
                 return false;
             }
         });
@@ -186,6 +204,7 @@ public class Enquiries extends AppCompatActivity {
         }
         public void getEnquiries(String enquiryStatusCode,View rootView){
             final ListView enquiriesList=(ListView)rootView.findViewById(R.id.enquiry_list);
+            lists.add(enquiriesList);
             final TextView noItems=(TextView)rootView.findViewById(R.id.no_items);
             noItems.setVisibility(View.GONE);
             enquiriesList.setVisibility(View.GONE);
