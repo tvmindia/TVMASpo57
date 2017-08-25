@@ -61,7 +61,8 @@ public class HomeScreen extends AppCompatActivity {
         statisticsType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               // getChartData();
+                //Enquiry statistics
+                getEnquiryStatistics();
             }
 
             @Override
@@ -84,8 +85,7 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
 
-        //Enquiry statistics
-        getEnquiryStatistics();
+
     }
     void getEnquiryStatistics(){
         (findViewById(R.id.statistics_linear)).setVisibility(View.GONE);
