@@ -31,6 +31,7 @@ public class Common {
     //Constants-----------------------
     static String preferenceName="SPO";
     static String userName="userName";
+    static String roleCSV="roleCSV";
     static final int SALES=123;
     //Custom adapter constants
     static final String QUOTATIONLIST="quotations",

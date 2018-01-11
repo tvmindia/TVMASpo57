@@ -59,24 +59,65 @@ public class Login extends AppCompatActivity {
                         try {
                             jsonObject = new JSONObject(common.json);
                             String userName=jsonObject.optString("UserName");
-
+                            String RoleCSV=jsonObject.optString("RoleCSV");
+                            Common.toastMessage(Login.this,RoleCSV);
                             //Login success
                             final Handler handler = new Handler();
 
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Intent intent = new Intent(Login.this, HomeScreen.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                            | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                }
-                            }, 2000);
+                            switch (RoleCSV){
+                                case "CEO":
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Intent intent = new Intent(Login.this, HomeScreen.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                            }
+                                        }, 2000);
+                                    break;
+                                case "Approver":
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Intent intent = new Intent(Login.this, HomeScreen.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                            }
+                                        }, 2000);
+                                    break;
+                                case "Reception":
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Intent intent = new Intent(Login.this, HomeScreen.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intent);
+                                            }
+                                        }, 2000);
+                                    break;
+                            default:// Manager(without approver)
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(Login.this, HomeScreenNormalUser.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+                                }, 2000);
+                            }
 
                             //Storing for session
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             editor.putString(Common.userName, userName);
+                            editor.putString(Common.roleCSV, RoleCSV);
                             editor.apply();
                         } catch (JSONException e) {
                             e.printStackTrace();
