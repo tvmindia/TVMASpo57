@@ -62,7 +62,7 @@ public class HomeScreenNormalUser extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //Enquiry statistics
-                getEnquiryStatistics();
+              //  getEnquiryStatistics();
             }
 
             @Override

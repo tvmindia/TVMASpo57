@@ -50,4 +50,6 @@
     <string name="pending_requisitions">Pending Requisitions</string>
     <string name="approved_requisitions">Approved Requisitions</string>
     <string name="closed_requisitions">Closed Requisitions</string>
+    <string name="approved">Approved</string>
+    <string name="pending">Pending</string>
 </resources>

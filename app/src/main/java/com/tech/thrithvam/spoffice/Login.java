@@ -60,7 +60,7 @@ public class Login extends AppCompatActivity {
                             jsonObject = new JSONObject(common.json);
                             String userName=jsonObject.optString("UserName");
                             String RoleCSV=jsonObject.optString("RoleCSV");
-                            Common.toastMessage(Login.this,RoleCSV);
+                            //Common.toastMessage(Login.this,RoleCSV);
                             //Login success
                             final Handler handler = new Handler();
 
