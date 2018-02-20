@@ -125,7 +125,7 @@ public class EnquiryInput extends AppCompatActivity {
                 saveButton.setIndeterminateProgressMode(true);
                 saveButton.setProgress(50);
                 SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
-                String userName=sharedpreferences.getString(Common.userName,"<error_in_getting_username_from_mobile");
+                String userName=sharedpreferences.getString(Common.userName,"<error_in_getting_username_from_mobile>");
 
                 //Enquiry status
                 String status="OE";
