@@ -67,6 +67,11 @@
             android:label="@string/title_activity_supplier_orders_list"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".RequisitionList"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/requisitions"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -140,17 +140,11 @@ public class HomeScreenNormalUser extends AppCompatActivity {
                 postThreadFailed);
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
-    public void quotationsClick(View view){
-        startActivity(new Intent(HomeScreenNormalUser.this,QuotationsList.class));
-    }
-    public void proformaInvoicesClick(View view){
-        startActivity(new Intent(HomeScreenNormalUser.this,ProformaList.class));
-    }
-    public void customerOrdersClick(View view){
-        startActivity(new Intent(HomeScreenNormalUser.this,CustomerOrdersList.class));
-    }
-    public void supplierOrdersClick(View view){
-        startActivity(new Intent(HomeScreenNormalUser.this,SupplierOrdersList.class));
+    public void pendingRequisitionsClick(View view){
+        Intent intent=new Intent(HomeScreenNormalUser.this,RequisitionList.class);
+        intent.putExtra(Common.REQUISITIONTYPE,"pending");
+        startActivity(intent);
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

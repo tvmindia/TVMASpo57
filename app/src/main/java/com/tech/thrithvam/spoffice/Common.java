@@ -39,7 +39,8 @@ public class Common {
                         FOLLOWUPLIST="followups",
                         PROFORMALIST="proformainvoices",
                         CUSTOMERORDERSLIST="customerorders",
-                        SUPPLIERORDERSLIST="supplierorders"
+                        SUPPLIERORDERSLIST="supplierorders",
+                        REQUISITIONSLIST="requisitions"
                     ;
     //Intent constants
     static final String FROM="from",
@@ -58,7 +59,8 @@ public class Common {
                         FOLLOWUP_date="followupDate",
                         FOLLOWUP_time="followupTime",
                         FOLLOWUP_description="followupDescription",
-                        FOLLOWUP_status="followupStatus"
+                        FOLLOWUP_status="followupStatus",
+                        REQUISITIONTYPE="requisitionType"
                                 ;
 
     //To load image from a url------------------------------------------------------
@@ -205,7 +207,7 @@ public class Common {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String[] data = new String[dataColumns.length];
                                 for (int j = 0; j < dataColumns.length; j++) {
-                                    data[j] = jsonObject.optString(dataColumns[j]);
+                                    data[j] = jsonObject.optString(dataColumns[j],"null");
                                 }
                                 dataArrayList.add(data);
                             }

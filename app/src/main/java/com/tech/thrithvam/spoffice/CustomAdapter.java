@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -68,6 +71,8 @@ public class CustomAdapter extends BaseAdapter {
         TextView purchaseOrderNo;
         //Supplier Orders----------
         TextView supplierName;
+        //Requisitions-------------
+        TextView requistionNo;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -259,6 +264,32 @@ public class CustomAdapter extends BaseAdapter {
                 holder.date.setText((filteredObjects.get(position)[3].equals("null")?"":filteredObjects.get(position)[3]));
                 holder.amount.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[4])))));
                 holder.status.setText((filteredObjects.get(position)[5].equals("null")?"-":adapterContext.getResources().getString(R.string.status_colon,filteredObjects.get(position)[5])));
+                break;
+            //--------------------------for requisition list items------------------
+            case Common.REQUISITIONSLIST:
+                if (convertView == null) {
+                    holder = new Holder();
+                    convertView = inflater.inflate(R.layout.item_requisition, null);
+                    holder.requistionNo = (TextView) convertView.findViewById(R.id.requisition_no);
+                    holder.date = (TextView) convertView.findViewById(R.id.date);
+                    holder.customerName = (TextView) convertView.findViewById(R.id.company_name);
+                    holder.amount = (TextView) convertView.findViewById(R.id.amount);
+                    holder.status = (TextView) convertView.findViewById(R.id.status);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (Holder) convertView.getTag();
+                }
+                //Label loading--------------------
+                holder.requistionNo.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
+                holder.date.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
+                String companyName="null";
+                try {
+                    companyName=(new JSONObject(filteredObjects.get(position)[4])).getString("Name");
+                } catch (JSONException e) {
+                }
+                holder.customerName.setText((companyName.equals("null")?"-":companyName));
+                holder.amount.setText((filteredObjects.get(position)[5].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[5])))));
+                holder.status.setText((filteredObjects.get(position)[3].equals("null")?"-":filteredObjects.get(position)[3]));
                 break;
             default:
                 break;
