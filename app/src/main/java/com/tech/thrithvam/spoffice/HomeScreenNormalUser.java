@@ -25,13 +25,14 @@ import java.util.ArrayList;
 public class HomeScreenNormalUser extends AppCompatActivity {
     Spinner statisticsType;
     SharedPreferences sharedpreferences;
+    String userName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen_normal_user);
 
         sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
-        String userName=sharedpreferences.getString(Common.userName,"");
+        userName=sharedpreferences.getString(Common.userName,"");
         if(userName.equals("")){//not logged in
             Intent intent = new Intent(HomeScreenNormalUser.this, Login.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -61,8 +62,8 @@ public class HomeScreenNormalUser extends AppCompatActivity {
         statisticsType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Enquiry statistics
-              //  getEnquiryStatistics();
+                //REquisitions statistics
+                getEnquiryStatistics();
             }
 
             @Override
@@ -101,24 +102,37 @@ public class HomeScreenNormalUser extends AppCompatActivity {
         }
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
-        String webService = "API/DashBoard/StatiticsForMobile";
-        String postData = "{\"duration\":\""+duration+"\"}";
+        String webService = "API/Requisition/GetRequisitionCount";
+        String postData = "{\"duration\":\""+duration+"\",\"UserName\":\""+userName+"\"}}";
         AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
         String[] dataColumns = {};
         Runnable postThread = new Runnable() {
             @Override
             public void run() {
                 (findViewById(R.id.statistics_linear)).setVisibility(View.VISIBLE);
+//                Common.toastMessage(HomeScreenNormalUser.this,common.json);
                 try {
                     JSONObject jsonObject=new JSONObject(common.json);
-                    ((TextView)findViewById(R.id.open_enquiries)).setText(jsonObject.optString("OpenEnquiryCount"));
-                    ((TextView)findViewById(R.id.converted_enquiries)).setText(jsonObject.optString("ConvertedEnquiryCount"));
-                    ((TextView)findViewById(R.id.not_converted_enquiries)).setText(jsonObject.optString("NonConvertedEnquiryCount"));
-                    int total=0;
-                    total=jsonObject.optInt("OpenEnquiryCount")
-                            +jsonObject.optInt("ConvertedEnquiryCount")
-                                +jsonObject.optInt("NonConvertedEnquiryCount");
-                    ((TextView)findViewById(R.id.total)).setText(Integer.toString(total));
+                    int allCount,pendingManagerCount,pendingFinalCount,closeCount;
+                    allCount=jsonObject.optInt("AllCount");
+                    pendingManagerCount=jsonObject.optInt("PendingManagerCount");
+                    pendingFinalCount=jsonObject.optInt("PendingFinalCount");
+                    closeCount=jsonObject.optInt("CloseCount");
+
+                    if(allCount<0) allCount =0;
+                    if(pendingManagerCount<0) pendingManagerCount =0;
+                    if(pendingFinalCount<0) pendingFinalCount =0;
+                    if(closeCount<0) closeCount =0;
+
+                    int pending,approved;
+                    pending = pendingManagerCount + pendingFinalCount ;
+                    approved = allCount - pendingManagerCount - pendingFinalCount ;
+
+
+                    ((TextView)findViewById(R.id.pending_requisitions)).setText(Integer.toString(pending));
+                    ((TextView)findViewById(R.id.approved_requisitions)).setText(Integer.toString(approved));
+                    ((TextView)findViewById(R.id.closed_requisitions)).setText(Integer.toString(closeCount));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

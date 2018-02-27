@@ -95,8 +95,8 @@
                         android:textColor="@color/primary_text"
                         android:textSize="14sp"
                         android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/open_enquiries"
-                        android:layout_toStartOf="@+id/open_enquiries"
+                        android:layout_toLeftOf="@+id/pending_requisitions"
+                        android:layout_toStartOf="@+id/pending_requisitions"
                         android:layout_toRightOf="@+id/bullet1"
                         android:layout_toEndOf="@+id/bullet1" />
                     <TextView
@@ -128,8 +128,8 @@
                         android:textColor="@color/primary_text"
                         android:textSize="14sp"
                         android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/converted_enquiries"
-                        android:layout_toStartOf="@+id/converted_enquiries"
+                        android:layout_toLeftOf="@+id/approved_requisitions"
+                        android:layout_toStartOf="@+id/approved_requisitions"
                         android:layout_toRightOf="@+id/bullet2"
                         android:layout_toEndOf="@+id/bullet2" />
                     <TextView
@@ -161,8 +161,8 @@
                         android:textColor="@color/primary_text"
                         android:textSize="14sp"
                         android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/not_converted_enquiries"
-                        android:layout_toStartOf="@+id/not_converted_enquiries"
+                        android:layout_toLeftOf="@+id/closed_requisitions"
+                        android:layout_toStartOf="@+id/closed_requisitions"
                         android:layout_toRightOf="@+id/bullet3"
                         android:layout_toEndOf="@+id/bullet3" />
                     <TextView
@@ -177,7 +177,7 @@
                         android:id="@+id/closed_requisitions"
                         android:layout_margin="10dp"/>
                 </RelativeLayout>
-                <RelativeLayout
+               <!-- <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <View
@@ -208,7 +208,7 @@
                         android:layout_alignParentRight="true"
                         android:id="@+id/total"
                         android:layout_margin="10dp"/>
-                </RelativeLayout>
+                </RelativeLayout>-->
             </LinearLayout>
 
             <android.support.design.widget.FloatingActionButton

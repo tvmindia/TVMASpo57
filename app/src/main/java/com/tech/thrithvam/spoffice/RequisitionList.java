@@ -39,7 +39,6 @@ public class RequisitionList extends AppCompatActivity {
         //getting user name
         SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
         String userName=sharedpreferences.getString(Common.userName,"");
-        userName="suvaneeth";//todo: DELETE THIS LINE
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
         String webService = "/API/Requisition/GetUserRequisitionList";
