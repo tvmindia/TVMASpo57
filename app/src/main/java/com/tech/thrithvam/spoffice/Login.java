@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -21,11 +22,9 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         final SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
         if(!sharedpreferences.getString(Common.userName,"").equals("")){//If already login
-            startActivity(new Intent(this,HomeScreen.class));
-            finish();
+            enrouteUser(sharedpreferences.getString(Common.roleCSV,""),false);
             return;
         }
 
@@ -54,7 +53,6 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void run() {
                         loginButton.setProgress(100);
-
                         JSONObject jsonObject= null;
                         try {
                             jsonObject = new JSONObject(common.json);
@@ -62,65 +60,15 @@ public class Login extends AppCompatActivity {
                             String RoleCSV=jsonObject.optString("RoleCSV");
                             //Common.toastMessage(Login.this,RoleCSV);
                             //Login success
-                            final Handler handler = new Handler();
-
-                            switch (RoleCSV){
-                                case "CEO":
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Intent intent = new Intent(Login.this, HomeScreen.class);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
-                                            }
-                                        }, 2000);
-                                    break;
-                                case "Approver":
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Intent intent = new Intent(Login.this, HomeScreen.class);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
-                                            }
-                                        }, 2000);
-                                    break;
-                                case "Reception":
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Intent intent = new Intent(Login.this, HomeScreen.class);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
-                                            }
-                                        }, 2000);
-                                    break;
-                            default:// Manager(without approver)
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Intent intent = new Intent(Login.this, HomeScreenNormalUser.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                    }
-                                }, 2000);
-                            }
-
-                            //Storing for session
+                            // Storing for session
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             editor.putString(Common.userName, userName);
                             editor.putString(Common.roleCSV, RoleCSV);
                             editor.apply();
+                            enrouteUser(RoleCSV,true);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Common.toastMessage(Login.this,e.getMessage());
                         }
                     }
                 };
@@ -129,7 +77,6 @@ public class Login extends AppCompatActivity {
                     public void run() {
                         Common.toastMessage(Login.this,common.msg);
                         Common.toastMessage(Login.this, R.string.failed_try_again);
-
                         loginButton.setProgress(-1);
                         //Setting button to refresh when password/email change
                         usernameInput.setEnabled(true);
@@ -160,5 +107,37 @@ public class Login extends AppCompatActivity {
                 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             }
         });
+    }
+    void enrouteUser(String RoleCSV,boolean isLogin){
+        final Handler handler = new Handler();
+        final Intent intent;
+        if (RoleCSV.contains("CEO")) {
+            intent = new Intent(Login.this, HomeScreen.class);
+        }
+        else if(RoleCSV.contains("Approver")) {
+            intent = new Intent(Login.this, HomeScreen.class);
+        }
+        else if(RoleCSV.contains("Reception")) {
+            intent = new Intent(Login.this, HomeScreen.class);
+        }
+        else {
+            intent = new Intent(Login.this, HomeScreenNormalUser.class);
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        if(isLogin)//Checking whether user manual logging in or already logged in before
+        {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(intent);
+                    finish();
+                }
+            }, 2000);
+        }
+        else { //no delay is needed
+            startActivity(intent);finish();
+        }
     }
 }
