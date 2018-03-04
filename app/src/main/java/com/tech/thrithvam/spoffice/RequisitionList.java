@@ -48,7 +48,7 @@ public class RequisitionList extends AppCompatActivity {
                 postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"ReqStatus\":\"ALL\"}}";
                 break;
             case "approved":
-                postData = "{\"userObj\":{\"UserName\":\""+"suvaneeth"+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"FinalApproved\":\"True\"}}";
+                postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"FinalApproved\":\"True\"}}";
                 break;
             case "closed":
                 postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"ReqStatus\":\"Closed\"}}";
