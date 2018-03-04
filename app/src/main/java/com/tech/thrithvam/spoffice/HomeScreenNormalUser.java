@@ -158,7 +158,16 @@ public class HomeScreenNormalUser extends AppCompatActivity {
         Intent intent=new Intent(HomeScreenNormalUser.this,RequisitionList.class);
         intent.putExtra(Common.REQUISITIONTYPE,"pending");
         startActivity(intent);
-
+    }
+    public void approvedRequisitionsClick(View view){
+        Intent intent=new Intent(HomeScreenNormalUser.this,RequisitionList.class);
+        intent.putExtra(Common.REQUISITIONTYPE,"approved");
+        startActivity(intent);
+    }
+    public void closedRequisitionsClick(View view){
+        Intent intent=new Intent(HomeScreenNormalUser.this,RequisitionList.class);
+        intent.putExtra(Common.REQUISITIONTYPE,"closed");
+        startActivity(intent);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

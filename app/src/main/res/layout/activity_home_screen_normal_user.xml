@@ -292,7 +292,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="proformaInvoicesClick">
+                    android:onClick="approvedRequisitionsClick">
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -328,7 +328,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="customerOrdersClick">
+                    android:onClick="closedRequisitionsClick">
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"

@@ -41,8 +41,20 @@ public class RequisitionList extends AppCompatActivity {
         String userName=sharedpreferences.getString(Common.userName,"");
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
+        String postData = "";
         String webService = "/API/Requisition/GetUserRequisitionList";
-        String postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"ReqStatus\":\"ALL\"}}";
+        switch (getIntent().getExtras().getString(Common.REQUISITIONTYPE)){// for different screens
+            case "pending":
+                postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"ReqStatus\":\"ALL\"}}";
+                break;
+            case "approved":
+                postData = "{\"userObj\":{\"UserName\":\""+"suvaneeth"+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"FinalApproved\":\"True\"}}";
+                break;
+            case "closed":
+                postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"ReqStatus\":\"Closed\"}}";
+                break;
+            default:
+        }
         AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
         String[] dataColumns = {"ID",//0
                 "ReqNo",//1
