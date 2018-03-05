@@ -60,7 +60,13 @@ public class Common {
                         FOLLOWUP_time="followupTime",
                         FOLLOWUP_description="followupDescription",
                         FOLLOWUP_status="followupStatus",
-                        REQUISITIONTYPE="requisitionType"
+                        REQUISITIONTYPE="requisitionType",
+                        REQID="reqID",
+                        REQNO="reqNo",
+                        REQDATE="ReqDate",
+                        REQSTATUS="ReqStatus",
+                        REQCCOMP="reqCom",
+                        REQVALUE="Value"
                                 ;
 
     //To load image from a url------------------------------------------------------

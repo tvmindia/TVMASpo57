@@ -1,6 +1,7 @@
 package com.tech.thrithvam.spoffice;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,6 +77,23 @@ public class RequisitionList extends AppCompatActivity {
                 adapter=new CustomAdapter(RequisitionList.this,common.dataArrayList,Common.REQUISITIONSLIST);
                 requisitionList.setAdapter(adapter);
                 requisitionList.setVisibility(View.VISIBLE);
+                requisitionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent=new Intent(RequisitionList.this,RequisitionDetails.class);
+                        intent.putExtra(Common.REQID,common.dataArrayList.get(position)[0]);
+                        intent.putExtra(Common.REQNO,common.dataArrayList.get(position)[1]);
+                        intent.putExtra(Common.REQDATE,common.dataArrayList.get(position)[2]);
+                        intent.putExtra(Common.REQSTATUS,common.dataArrayList.get(position)[3]);
+                        String companyName="null";
+                        try {
+                            companyName=(new JSONObject(common.dataArrayList.get(position)[4])).getString("Name");
+                        } catch (JSONException e) {
+                        }
+                        intent.putExtra(Common.REQCCOMP,companyName);
+                        startActivity(intent);
+                    }
+                });
             }
         };
         Runnable postThreadFailed = new Runnable() {
