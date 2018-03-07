@@ -74,8 +74,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".RequisitionDetails"
             android:configChanges="orientation|screenSize"
-            android:label="@string/requisitions"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/requisitions"/>
     </application>
 
 </manifest>

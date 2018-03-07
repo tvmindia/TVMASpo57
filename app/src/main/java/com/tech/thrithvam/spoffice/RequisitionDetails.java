@@ -1,7 +1,9 @@
 package com.tech.thrithvam.spoffice;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -11,24 +13,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dd.CircularProgressButton;
+import com.wang.avi.AVLoadingIndicatorView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class RequisitionDetails extends AppCompatActivity {
     ArrayList<AsyncTask> asyncTasks=new ArrayList<>();
     CircularProgressButton approveButton;
+    View headerDetails;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requisition_details);
-        //getApprovalDetails();
+        getApprovalDetails();
         setTitle("Requisition: "+getIntent().getExtras().getString(Common.REQNO));
         LinearLayout headerView=(LinearLayout)findViewById(R.id.header);
         LayoutInflater inflater=getLayoutInflater();
-        View headerDetails=inflater.inflate(R.layout.item_requisition_header,null);
+        headerDetails=inflater.inflate(R.layout.item_requisition_header,null);
         ((TextView)headerDetails.findViewById(R.id.requisition_no)).setText(
                 getIntent().getExtras().getString(Common.REQNO).equals("null")?"-":
                         getIntent().getExtras().getString(Common.REQNO));
@@ -75,61 +86,63 @@ public class RequisitionDetails extends AppCompatActivity {
         });
         headerView.addView(headerDetails);
     }
-   /* void getApprovalDetails(){
+    void getApprovalDetails(){
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
-        String webService = "/API/Supplier/GetAllSupplierInvoiceAdjustedByPaymentID";
-        String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.APPROVALID)+"\"}";
+        String webService = "/API/Requisition/GetRequisitionDetailByID";
+        //getting user name
+        SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+        String userName=sharedpreferences.getString(Common.userName,"");
+        String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.REQID)+"\",\"userObj\":{\"UserName\":\""+userName+"\"}}";
         AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
         String[] dataColumns = {};
         Runnable postThread = new Runnable() {
             @Override
             public void run() {
                 ArrayList<String[]> dataArrayList=new ArrayList<>();
+                Double total=0.0;
                 try {
-                    JSONArray records=new JSONArray(common.json);
+                    JSONObject records=new JSONObject(common.json);
                     if(records.length()==0){
-                        Common.toastMessage(ApprovalDetails.this,"No details Available");
+                        Common.toastMessage(RequisitionDetails.this,"No details Available");
                         findViewById(R.id.no_items).setVisibility(View.VISIBLE);
                         return;
                     }
-                    for (int i = 0; i < records.length(); i++) {
-                        JSONObject jsonObject1 = records.getJSONObject(i);
-                        JSONObject jsonObject2= jsonObject1.getJSONObject("supplierPaymentsDetailObj");
-                        String[] data = new String[9];
-                        data[0] = jsonObject2.getString("InvoiceNo");
-                        data[1] = jsonObject2.getString("InvoiceAmount");
-                        data[2] = jsonObject2.getString("PrevPayment");
-                        data[3] = jsonObject2.getString("CurrPayment");
-                        data[4] = jsonObject2.getString("BalancePayment");
-                        if(jsonObject2.has("DueDays"))
-                            data[5] = jsonObject2.getString("DueDays");
-                        else
-                            data[5] = "-";
-                        if(jsonObject2.has("PaymentDueDate"))
-                            data[6] = jsonObject2.getString("PaymentDueDate");
-                        else
-                            data[6]="-";
-                        data[7]=jsonObject1.getString("Type");
-                        data[8]=jsonObject1.getJSONObject("CompanyObj").getString("Name");
+
+                    JSONArray jsonObject1= records.getJSONArray("RequisitionDetailList");
+                    for (int i = 0; i < jsonObject1.length(); i++) {
+                        JSONObject jsonObject2 = jsonObject1.getJSONObject(i);
+                        String[] data = new String[5];
+                        data[0] = jsonObject2.getString("ID");
+                        data[1] = jsonObject2.getString("Description");
+                        data[2] = jsonObject2.getString("CurrStock");
+                        data[3] = jsonObject2.getString("RequestedQty");
+                        data[4] = jsonObject2.getString("AppxRate");
                         dataArrayList.add(data);
+                        total+=Double.parseDouble(data[4]);
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(ApprovalDetails.this, "Some error occurred\n"+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RequisitionDetails.this, "Some error occurred\n"+ e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                CustomAdapter adapter=new CustomAdapter(ApprovalDetails.this,dataArrayList,Common.APPROVALDETAILLIST);
-                ListView approvalList=(ListView)findViewById(R.id.approval_detail_list);
-                approvalList.setAdapter(adapter);
+                CustomAdapter adapter=new CustomAdapter(RequisitionDetails.this,dataArrayList,Common.REQUISITIONDETAILLIST);
+                ListView requisitionDetailList=(ListView)findViewById(R.id.requisition_detail_list);
+                requisitionDetailList.setAdapter(adapter);
+                requisitionDetailList.setVisibility(View.VISIBLE);
+
+                TextView totalTextView=(TextView)headerDetails.findViewById(R.id.total);
+                totalTextView.setText(getResources().getString(R.string.total_label,String.format(Locale.US,"%.2f",total)));
+                totalTextView.setVisibility(View.VISIBLE);
+                (headerDetails.findViewById(R.id.approve_button)).setVisibility(View.VISIBLE);
             }
         };
         Runnable postThreadFailed = new Runnable() {
             @Override
             public void run() {
-                Common.toastMessage(ApprovalDetails.this, R.string.failed_server);
+                Common.toastMessage(RequisitionDetails.this, R.string.failed_server);
             }
         };
 
-        common.AsynchronousThread(ApprovalDetails.this,
+        common.AsynchronousThread(RequisitionDetails.this,
                 webService,
                 postData,
                 loadingIndicator,
@@ -139,7 +152,7 @@ public class RequisitionDetails extends AppCompatActivity {
         asyncTasks.add(common.asyncTask);
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
-    void approve(){
+    /*void approve(){
         approveButton.setClickable(false);
         //Loading
         approveButton.setIndeterminateProgressMode(true);

@@ -18,62 +18,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="7dp">
-
-            <TextView
-                android:id="@+id/requisition_no"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="1dp"
-                android:text="RequisitionNo"
-                android:textColor="@color/primary_text"
-                android:textSize="14sp"
-                android:textStyle="bold" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:text="Date"
-                android:id="@+id/date"
+                android:text="Name"
+                android:id="@+id/name"
                 android:padding="1dp"
                 android:textColor="@color/primary_text"
-                android:layout_below="@id/requisition_no"
-                android:layout_toLeftOf="@+id/amount"
-                android:layout_toStartOf="@+id/amount"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="Company Name"
-                android:id="@+id/company_name"
-                android:padding="1dp"
-                android:textColor="@color/primary_text"
-                android:layout_below="@id/date"
                 android:layout_toLeftOf="@+id/amount"
                 android:layout_toStartOf="@+id/amount"
-                android:typeface="monospace"/>
+                android:textStyle="bold"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Amount"
                 android:textSize="16sp"
-                android:padding="1dp"
                 android:textColor="@color/primary_text"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:id="@+id/amount"
-                android:visibility="gone"/>
+                android:layout_centerVertical="true"
+                android:id="@+id/amount" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Requisition Status"
+                android:textSize="12sp"
+                android:text="@string/current_quantity"
+                android:id="@+id/curr_qty"
                 android:textColor="@color/primary_text"
-                android:textSize="14sp"
-                android:padding="1dp"
-                android:id="@+id/status"
-                android:layout_below="@+id/company_name"
+                android:layout_below="@id/name"
+                android:layout_toLeftOf="@+id/amount"
+                android:layout_toStartOf="@+id/amount"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="@string/requested_quantity"
+                android:id="@+id/req_qty"
+                android:textColor="@color/primary_text"
+                android:layout_below="@id/curr_qty"
                 android:layout_toLeftOf="@+id/amount"
                 android:layout_toStartOf="@+id/amount"/>
         </RelativeLayout>
-        </android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
 </LinearLayout>

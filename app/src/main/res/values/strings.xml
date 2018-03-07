@@ -54,4 +54,8 @@
     <string name="pending">Pending</string>
     <string name="approve_q">Are you sure to approve this requisition?</string>
     <string name="cancel">Cancel</string>
+    <string name="current_quantity">Current Quantity: %1$s</string>
+    <string name="requested_quantity">Requested Quantity: %1$s</string>
+    <string name="approx_rate">Approx. Rate</string>
+    <string name="total_label">Total: ₹ %1$s</string>
 </resources>

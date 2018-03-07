@@ -40,7 +40,8 @@ public class Common {
                         PROFORMALIST="proformainvoices",
                         CUSTOMERORDERSLIST="customerorders",
                         SUPPLIERORDERSLIST="supplierorders",
-                        REQUISITIONSLIST="requisitions"
+                        REQUISITIONSLIST="requisitions",
+                        REQUISITIONDETAILLIST="reqisitionDetailList"
                     ;
     //Intent constants
     static final String FROM="from",

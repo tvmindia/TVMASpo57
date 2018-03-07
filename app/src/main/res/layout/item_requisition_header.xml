@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -27,9 +28,7 @@
                 android:id="@+id/date"
                 android:padding="1dp"
                 android:textColor="@color/primary_text"
-                android:layout_below="@id/requisition_no"
-                android:layout_toLeftOf="@+id/amount"
-                android:layout_toStartOf="@+id/amount"/>
+                android:layout_below="@id/requisition_no"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,8 +38,6 @@
                 android:padding="1dp"
                 android:textColor="@color/primary_text"
                 android:layout_below="@id/date"
-                android:layout_toLeftOf="@+id/amount"
-                android:layout_toStartOf="@+id/amount"
                 android:typeface="monospace"/>
        <!--     <TextView
                 android:layout_width="wrap_content"
@@ -61,11 +58,21 @@
                 android:textSize="14sp"
                 android:padding="1dp"
                 android:id="@+id/status"
-                android:layout_below="@+id/company_name"
-                android:layout_toLeftOf="@+id/amount"
-                android:layout_toStartOf="@+id/amount"/>
+                android:layout_below="@+id/company_name"/>
         </RelativeLayout>
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_label"
+        android:textColor="@color/primary_text"
+        android:textSize="14sp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:id="@+id/total"
+        android:layout_gravity="end"
+        android:textStyle="bold"
+        android:visibility="gone"
+        />
     <com.dd.CircularProgressButton
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
@@ -85,5 +92,7 @@
         android:padding="5dp"
         app:cpb_cornerRadius="4dp"
         app:cpb_paddingProgress="5dp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        android:visibility="gone"/>
+
 </LinearLayout>
