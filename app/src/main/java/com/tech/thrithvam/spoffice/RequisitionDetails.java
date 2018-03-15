@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ public class RequisitionDetails extends AppCompatActivity {
     ArrayList<AsyncTask> asyncTasks=new ArrayList<>();
     CircularProgressButton approveButton;
     View headerDetails;
+    String userName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,44 +57,16 @@ public class RequisitionDetails extends AppCompatActivity {
         ((TextView)headerDetails.findViewById(R.id.company_name)).setText(
                 getIntent().getExtras().getString(Common.REQCCOMP).equals("null")?"-":
                         getIntent().getExtras().getString(Common.REQCCOMP));
-        String companyName="";
-        /*if(!getIntent().getExtras().getString(Common.COMPANY_DETAILS).equals("null"))
-        {
-            try {
-                JSONObject jsonObject=new JSONObject(getIntent().getExtras().getString(Common.COMPANY_DETAILS));
-                companyName=jsonObject.getString("CompanyName");
-                ((TextView)headerDetails.findViewById(R.id.company_name)).setText(companyName);
-            } catch (JSONException e) {
-                ((TextView)headerDetails.findViewById(R.id.company_name)).setText("-");
-            }
-        }
-        else {
-            ((TextView)headerDetails.findViewById(R.id.company_name)).setText("");
-        }*/
-        approveButton=(CircularProgressButton)headerDetails.findViewById(R.id.approve_button);
-        approveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(RequisitionDetails.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
-                        .setMessage(getResources().getString(R.string.approve_q))
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                              //  approve();
-                            }
-                        }).setNegativeButton(R.string.cancel, null)
-                        .setCancelable(true).show();
-            }
-        });
+
         headerView.addView(headerDetails);
+        //getting user name
+        SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+        userName=sharedpreferences.getString(Common.userName,"");
     }
     void getApprovalDetails(){
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
         String webService = "/API/Requisition/GetRequisitionDetailByID";
-        //getting user name
-        SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
-        String userName=sharedpreferences.getString(Common.userName,"");
         String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.REQID)+"\",\"userObj\":{\"UserName\":\""+userName+"\"}}";
         AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
         String[] dataColumns = {};
@@ -133,6 +107,27 @@ public class RequisitionDetails extends AppCompatActivity {
                 totalTextView.setText(getResources().getString(R.string.total_label,String.format(Locale.US,"%.2f",total)));
                 totalTextView.setVisibility(View.VISIBLE);
                 (headerDetails.findViewById(R.id.approve_button)).setVisibility(View.VISIBLE);
+                //approve button
+                approveButton = (CircularProgressButton) headerDetails.findViewById(R.id.approve_button);
+                if(getIntent().getExtras().getString(Common.REQUISITIONTYPE).equals("pending")) {
+                    approveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new AlertDialog.Builder(RequisitionDetails.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
+                                    .setMessage(getResources().getString(R.string.approve_q))
+                                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            approve();
+                                        }
+                                    }).setNegativeButton(R.string.cancel, null)
+                                    .setCancelable(true).show();
+                        }
+                    });
+                }
+                else {
+                    approveButton.setVisibility(View.GONE);
+                }
             }
         };
         Runnable postThreadFailed = new Runnable() {
@@ -152,15 +147,15 @@ public class RequisitionDetails extends AppCompatActivity {
         asyncTasks.add(common.asyncTask);
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
-    /*void approve(){
+    void approve(){
         approveButton.setClickable(false);
         //Loading
         approveButton.setIndeterminateProgressMode(true);
         approveButton.setProgress(50);
         //Threading------------------------------------------------------------------------------------------------------
         final Common common=new Common();
-        String webService="/API/Supplier/GetApprovedSupplierPayment";
-        String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.APPROVALID)+"\"}";
+        String webService="/API/Requisition/ApproveRequisition";
+        String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.REQID)+"\",\"userObj\":{\"UserName\":\""+userName+"\"}}";
         String[] dataColumns={};
         Runnable postThread=new Runnable() {
             @Override
@@ -171,7 +166,7 @@ public class RequisitionDetails extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(ApprovalDetails.this, Approvals.class);
+                        Intent intent = new Intent(RequisitionDetails.this, HomeScreenNormalUser.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                 | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -183,18 +178,18 @@ public class RequisitionDetails extends AppCompatActivity {
         Runnable postThreadFailed=new Runnable() {
             @Override
             public void run() {
-                Common.toastMessage(ApprovalDetails.this,common.msg);
-                Common.toastMessage(ApprovalDetails.this, R.string.failed_try_again);
+                Common.toastMessage(RequisitionDetails.this,common.msg);
+                Common.toastMessage(RequisitionDetails.this, R.string.failed_try_again);
                 approveButton.setProgress(-1);
             }};
-        common.AsynchronousThread(ApprovalDetails.this,
+        common.AsynchronousThread(RequisitionDetails.this,
                 webService,
                 postData,
                 null,
                 dataColumns,
                 postThread,
                 postThreadFailed);
-    }*/
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
@@ -205,7 +200,7 @@ public class RequisitionDetails extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_home) {
-            Intent intent=new Intent(this,HomeScreen.class);
+            Intent intent=new Intent(this,HomeScreenNormalUser.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                     | Intent.FLAG_ACTIVITY_CLEAR_TOP
                     | Intent.FLAG_ACTIVITY_CLEAR_TASK);

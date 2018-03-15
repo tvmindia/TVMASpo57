@@ -87,7 +87,7 @@
         app:cpb_colorProgress="@android:color/transparent"
         app:cpb_colorIndicatorBackground="@color/cpb_grey"
         app:cpb_textComplete="Approved"
-        app:cpb_textError="Error Occurred"
+        app:cpb_textError="Error"
         app:cpb_textIdle="Approve"
         android:padding="5dp"
         app:cpb_cornerRadius="4dp"

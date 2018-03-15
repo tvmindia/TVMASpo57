@@ -89,6 +89,7 @@ public class RequisitionList extends AppCompatActivity {
                         } catch (JSONException e) {
                         }
                         intent.putExtra(Common.REQCCOMP,companyName);
+                        intent.putExtra(Common.REQUISITIONTYPE,getIntent().getExtras().getString(Common.REQUISITIONTYPE));//To show approve button if pending in details screen
                         startActivity(intent);
                     }
                 });
