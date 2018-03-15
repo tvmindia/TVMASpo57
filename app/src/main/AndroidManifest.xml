@@ -78,7 +78,8 @@
             android:label="@string/requisitions" />
         <activity android:name=".InsertRequisition"
             android:configChanges="orientation|screenSize"
-            android:label="@string/requisitions"></activity>
+            android:label="@string/requisitions"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>
