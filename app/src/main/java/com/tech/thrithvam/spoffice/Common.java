@@ -61,8 +61,10 @@ public class Common {
                         FOLLOWUP_time="followupTime",
                         FOLLOWUP_description="followupDescription",
                         FOLLOWUP_status="followupStatus",
+
                         REQUISITIONTYPE="requisitionType",
                         REQID="reqID",
+                        REQTITLE="reqTitle",
                         REQNO="reqNo",
                         REQDATE="ReqDate",
                         REQSTATUS="ReqStatus",

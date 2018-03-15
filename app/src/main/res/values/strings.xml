@@ -58,4 +58,9 @@
     <string name="requested_quantity">Requested Quantity: %1$s</string>
     <string name="approx_rate">Approx. Rate</string>
     <string name="total_label">Total: ₹ %1$s</string>
+    <string name="requisition_no_label">Requisition No:</string>
+    <string name="date_label">Date:</string>
+    <string name="company_name_label">Company Name:</string>
+    <string name="requisition_status_label">Requisition Status:</string>
+    <string name="title_label">Title:</string>
 </resources>

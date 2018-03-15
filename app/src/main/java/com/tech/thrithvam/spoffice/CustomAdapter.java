@@ -72,7 +72,7 @@ public class CustomAdapter extends BaseAdapter {
         //Supplier Orders----------
         TextView supplierName;
         //Requisitions-------------
-        TextView requistionNo;
+        TextView requistionNo,title;
         TextView reqItemName,curQty,reqQty;
     }
     @Override
@@ -272,6 +272,7 @@ public class CustomAdapter extends BaseAdapter {
                     holder = new Holder();
                     convertView = inflater.inflate(R.layout.item_requisition, null);
                     holder.requistionNo = (TextView) convertView.findViewById(R.id.requisition_no);
+                    holder.title = (TextView) convertView.findViewById(R.id.requisition_title);
                     holder.date = (TextView) convertView.findViewById(R.id.date);
                     holder.customerName = (TextView) convertView.findViewById(R.id.company_name);
                     holder.amount = (TextView) convertView.findViewById(R.id.amount);
@@ -282,6 +283,7 @@ public class CustomAdapter extends BaseAdapter {
                 }
                 //Label loading--------------------
                 holder.requistionNo.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
+                holder.title.setText((filteredObjects.get(position)[6].equals("null")?"-":filteredObjects.get(position)[6]));
                 holder.date.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
                 String companyName="null";
                 try {

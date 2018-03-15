@@ -82,7 +82,7 @@ public class HomeScreenNormalUser extends AppCompatActivity {
         (findViewById(R.id.add_enquiry)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeScreenNormalUser.this,EnquiryInput.class));
+                startActivity(new Intent(HomeScreenNormalUser.this,InsertRequisition.class));
             }
         });
 

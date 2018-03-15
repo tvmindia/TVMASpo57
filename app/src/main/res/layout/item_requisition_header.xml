@@ -21,6 +21,16 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
             <TextView
+                android:id="@+id/requisition_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:text="Requisition Title"
+                android:textColor="@color/primary_text"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_below="@id/requisition_no"/>
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
@@ -28,7 +38,7 @@
                 android:id="@+id/date"
                 android:padding="1dp"
                 android:textColor="@color/primary_text"
-                android:layout_below="@id/requisition_no"/>
+                android:layout_below="@id/requisition_title"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

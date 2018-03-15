@@ -63,7 +63,8 @@ public class RequisitionList extends AppCompatActivity {
                 "ReqDateFormatted",//2
                 "ReqStatus",//3
                 "CompanyObj",//4
-                "Value"//5
+                "Value",//5
+                "Title"//6
         };
         Runnable postThread = new Runnable() {
             @Override
@@ -83,6 +84,7 @@ public class RequisitionList extends AppCompatActivity {
                         intent.putExtra(Common.REQNO,common.dataArrayList.get(position)[1]);
                         intent.putExtra(Common.REQDATE,common.dataArrayList.get(position)[2]);
                         intent.putExtra(Common.REQSTATUS,common.dataArrayList.get(position)[3]);
+                        intent.putExtra(Common.REQTITLE,common.dataArrayList.get(position)[6]);
                         String companyName="null";
                         try {
                             companyName=(new JSONObject(common.dataArrayList.get(position)[4])).getString("Name");

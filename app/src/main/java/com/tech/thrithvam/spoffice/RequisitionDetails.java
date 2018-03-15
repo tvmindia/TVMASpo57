@@ -45,6 +45,9 @@ public class RequisitionDetails extends AppCompatActivity {
         ((TextView)headerDetails.findViewById(R.id.requisition_no)).setText(
                 getIntent().getExtras().getString(Common.REQNO).equals("null")?"-":
                         getIntent().getExtras().getString(Common.REQNO));
+        ((TextView)headerDetails.findViewById(R.id.requisition_title)).setText(
+                getIntent().getExtras().getString(Common.REQTITLE).equals("null")?"-":
+                        getIntent().getExtras().getString(Common.REQTITLE));
         ((TextView)headerDetails.findViewById(R.id.date)).setText(
                 getIntent().getExtras().getString(Common.REQDATE).equals("null")?"-":
                         getIntent().getExtras().getString(Common.REQDATE));
