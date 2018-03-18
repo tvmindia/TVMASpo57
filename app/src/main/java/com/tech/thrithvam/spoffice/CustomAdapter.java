@@ -73,7 +73,7 @@ public class CustomAdapter extends BaseAdapter {
         TextView supplierName;
         //Requisitions-------------
         TextView requistionNo,title;
-        TextView reqItemName,curQty,reqQty;
+        TextView reqItemName,curQty,reqQty,extDesc;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -303,12 +303,14 @@ public class CustomAdapter extends BaseAdapter {
                     holder.curQty = (TextView) convertView.findViewById(R.id.curr_qty);
                     holder.reqQty = (TextView) convertView.findViewById(R.id.req_qty);
                     holder.amount = (TextView) convertView.findViewById(R.id.amount);
+                    holder.extDesc = (TextView) convertView.findViewById(R.id.ext_des);
                     convertView.setTag(holder);
                 } else {
                     holder = (Holder) convertView.getTag();
                 }
                 //Label loading--------------------
                 holder.reqItemName.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
+                holder.extDesc.setText((filteredObjects.get(position)[5].equals("null")?"-":filteredObjects.get(position)[5]));
                 holder.curQty.setText((filteredObjects.get(position)[2].equals("null")?"-":adapterContext.getResources().getString(R.string.current_quantity,filteredObjects.get(position)[2])));
                 holder.reqQty.setText((filteredObjects.get(position)[3].equals("null")?"-":adapterContext.getResources().getString(R.string.requested_quantity,filteredObjects.get(position)[3])));
                 holder.amount.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[4])))));
