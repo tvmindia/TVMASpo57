@@ -14,10 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dd.CircularProgressButton;
@@ -35,19 +38,21 @@ public class InsertRequisition extends AppCompatActivity {
     ArrayList<View> detailItemViews=new ArrayList<>();
     LinearLayout detailItemListView;
     LayoutInflater inflater;
+    Spinner companySpinner;
+    ArrayList<String[]> companyList=new ArrayList<>();
+    ArrayList<String[]> materialList=new ArrayList<>();
+    ArrayList<String> materialCodes = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_requisition);
+        inflater=getLayoutInflater();
+        (findViewById(R.id.scrollView)).setVisibility(View.INVISIBLE);
+        getCompanies();
         requiredDate=(TextView)findViewById(R.id.date_value);
         SimpleDateFormat formatted = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
         requiredDate.setText(formatted.format(Calendar.getInstance().getTime()));
         detailItemListView=(LinearLayout)findViewById(R.id.requisition_detail_list);
-        //first detail item
-        inflater=getLayoutInflater();
-        View firstItemView=inflater.inflate(R.layout.item_requisition_detail_input,null);
-        detailItemViews.add(firstItemView);
-        detailItemListView.addView(firstItemView);
     }
     public void getDates(View view){
         final Calendar today = Calendar.getInstance();
@@ -66,13 +71,28 @@ public class InsertRequisition extends AppCompatActivity {
         };
         new DatePickerDialog(InsertRequisition.this, dateSetListener, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH)).show();
     }
-    public void addMoreDetail(View view)
-    {
-        View detailItemView=inflater.inflate(R.layout.item_requisition_detail_input,null);
+    public void addMoreDetail(View view){
+        final View detailItemView=inflater.inflate(R.layout.item_requisition_detail_input,null);
         detailItemViews.add(detailItemView);
         detailItemListView.addView(detailItemView);
         view.setVisibility(View.GONE);
         ((ScrollView)findViewById(R.id.scrollView)).fullScroll(View.FOCUS_DOWN);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(InsertRequisition.this, R.layout.item_spinner_black, materialCodes);
+        dataAdapter.setDropDownViewResource(R.layout.item_spinner);
+        final Spinner materialSpinner =(Spinner)detailItemView.findViewById(R.id.material_code_value);
+        materialSpinner.setAdapter(dataAdapter);
+        materialSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView)detailItemView.findViewById(R.id.description)).setText(materialList.get(materialSpinner.getSelectedItemPosition())[2]);
+                ((TextView)detailItemView.findViewById(R.id.amount)).setText(getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(materialList.get(materialSpinner.getSelectedItemPosition())[3]))));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
     public void submitRequisition(View view){
         //Validations
@@ -81,11 +101,11 @@ public class InsertRequisition extends AppCompatActivity {
             title.setError(getResources().getString(R.string.give_valid));
             return;
         }
-        EditText companyName=(EditText)findViewById(R.id.company_name_value);
+        /*EditText companyName=(EditText)findViewById(R.id.company_name_value);
         if(companyName.getText().toString().equals("")){
             companyName.setError(getResources().getString(R.string.give_valid));
             return;
-        }
+        }*/
         TextView date=(TextView)findViewById(R.id.date_value);
         for(int i=0;i<detailItemViews.size();i++){
             //only requested quantity is mandatory in site, so
@@ -111,11 +131,12 @@ public class InsertRequisition extends AppCompatActivity {
         String[] dataColumns={};
         String detailItemsJSON="[";
         for(int i=0;i<detailItemViews.size();i++){
-            detailItemsJSON+="{\"MaterialID\":\"00000000-0000-0000-0000-000000000000\"" +
-                    ",\"Description\":\"Projector\"" +
+            Spinner materialSelection=(Spinner)detailItemViews.get(i).findViewById(R.id.material_code_value);
+            detailItemsJSON+="{\"MaterialID\":\""+materialList.get(materialSelection.getSelectedItemPosition())[0]+"\"" +
+                    //",\"Description\":\""+materialList.get(materialSelection.getSelectedItemPosition())[2]+"\"" +
                     ",\"ExtendedDescription\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.ext_des)).getText().toString()
                     +"\",\"CurrStock\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.curr_qty)).getText().toString()
-                    +"\",\"AppxRate\":\"500.00\""
+                    //+"\",\"AppxRate\":\""+materialList.get(materialSelection.getSelectedItemPosition())[3]+"\""
                     +",\"RequestedQty\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.req_qty)).getText().toString()
                     +"\"},";
         }
@@ -124,7 +145,7 @@ public class InsertRequisition extends AppCompatActivity {
         String postData;
         postData="{\"Title\":\""+title.getText().toString()
                 +"\",\"ReqDateFormatted\":\""+date.getText().toString()
-                +"\",\"ReqForCompany\":\""+companyName.getText().toString()
+                +"\",\"ReqForCompany\":\""+companyList.get(companySpinner.getSelectedItemPosition())[0]//Company code
                 +"\",\"ReqStatus\":\"Open\"" +
                 ",\"RequisitionDetailList\":" +
                  detailItemsJSON
@@ -143,7 +164,7 @@ public class InsertRequisition extends AppCompatActivity {
                 //Save success
                 new AlertDialog.Builder(InsertRequisition.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
                         .setMessage(getResources().getString(R.string.req_inserted,reqNo))
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent=new Intent(InsertRequisition.this,RequisitionList.class);
@@ -179,6 +200,101 @@ public class InsertRequisition extends AppCompatActivity {
                 dataColumns,
                 postThread,
                 postThreadFailed);
+    }
+    void getCompanies(){
+        //Threading------------------------------------------------------------------------------------------------------
+        final Common common = new Common();
+        String webService = "API/Company/GetAllCompanies";
+        String postData = "";
+        String[] dataColumns = {"Code",//0
+        "Name"//1
+        };
+        Runnable postThread = new Runnable() {
+            @Override
+            public void run() {
+                //Spinner
+                ArrayList<String> companyNames = new ArrayList<String>();
+                for (int i=0;i<common.dataArrayList.size();i++){
+                    String[] data=new String[2];
+                    data[0]=common.dataArrayList.get(i)[0];
+                    data[1]=common.dataArrayList.get(i)[1];
+                    companyList.add(data);
+                }
+                for(int i=0;i<companyList.size();i++){
+                    companyNames.add(companyList.get(i)[1]);
+                }
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(InsertRequisition.this, R.layout.item_spinner_black, companyNames);
+                dataAdapter.setDropDownViewResource(R.layout.item_spinner);
+                companySpinner =(Spinner)findViewById(R.id.company_name_value);
+                companySpinner.setAdapter(dataAdapter);
+
+                //getting materials available from server
+                getMaterials();
+            }
+        };
+        Runnable postThreadFailed = new Runnable() {
+            @Override
+            public void run() {
+                Common.toastMessage(InsertRequisition.this, R.string.failed_server);
+                finish();
+            }
+        };
+
+        common.AsynchronousThread(InsertRequisition.this,
+                webService,
+                postData,
+                null,
+                dataColumns,
+                postThread,
+                postThreadFailed);
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }
+    void getMaterials(){
+        //Threading------------------------------------------------------------------------------------------------------
+        final Common common = new Common();
+        String webService = "API/RawMaterial/GetAllRawMaterials";
+        String postData = "";
+        String[] dataColumns = {"ID",//0
+                "MaterialCode",//1
+                "Description",//2
+                "ApproximateRate"//3
+        };
+        Runnable postThread = new Runnable() {
+            @Override
+            public void run() {
+                //Spinner
+                for (int i=0;i<common.dataArrayList.size();i++){
+                    String[] data=new String[4];
+                    data[0]=common.dataArrayList.get(i)[0];
+                    data[1]=common.dataArrayList.get(i)[1];
+                    data[2]=common.dataArrayList.get(i)[2];
+                    data[3]=common.dataArrayList.get(i)[3];
+                    materialList.add(data);
+                }
+                for(int i=0;i<materialList.size();i++){
+                    materialCodes.add(materialList.get(i)[1]);
+                }
+            addMoreDetail(new View(InsertRequisition.this));//this view is dummy
+                (findViewById(R.id.scrollView)).setVisibility(View.VISIBLE);
+                (findViewById(R.id.loading_indicator)).setVisibility(View.GONE);
+            }
+        };
+        Runnable postThreadFailed = new Runnable() {
+            @Override
+            public void run() {
+                Common.toastMessage(InsertRequisition.this, R.string.failed_server);
+                finish();
+            }
+        };
+
+        common.AsynchronousThread(InsertRequisition.this,
+                webService,
+                postData,
+                null,
+                dataColumns,
+                postThread,
+                postThreadFailed);
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

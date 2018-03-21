@@ -44,7 +44,7 @@ public class HomeScreenNormalUser extends AppCompatActivity {
         }
         ((TextView)findViewById(R.id.welcome)).setText(getResources().getString(R.string.welcome,userName));
 
-        //Spinner
+       //Spinner
         ArrayList<String> statisticsDuration = new ArrayList<String>();
         statisticsDuration.add(getResources().getString(R.string.days90));
         statisticsDuration.add(getResources().getString(R.string.days180));
@@ -63,7 +63,7 @@ public class HomeScreenNormalUser extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //REquisitions statistics
-                getEnquiryStatistics();
+                getRequisitionStatistics();
             }
 
             @Override
@@ -71,12 +71,7 @@ public class HomeScreenNormalUser extends AppCompatActivity {
 
             }
         });
-        (findViewById(R.id.statistics_card)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeScreenNormalUser.this,Enquiries.class));;
-            }
-        });
+
 
         //add enquiry
         (findViewById(R.id.add_enquiry)).setOnClickListener(new View.OnClickListener() {
@@ -88,7 +83,7 @@ public class HomeScreenNormalUser extends AppCompatActivity {
 
 
     }
-    void getEnquiryStatistics(){
+    void getRequisitionStatistics(){
         (findViewById(R.id.statistics_linear)).setVisibility(View.GONE);
         int duration=0;
         if(statisticsType.getSelectedItem().toString().equals(getResources().getString(R.string.days90))){

@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context="com.tech.thrithvam.spoffice.InsertRequisition"
     android:background="@drawable/primary_gradient">
+    <com.wang.avi.AVLoadingIndicatorView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:indicatorName="BallScaleMultipleIndicator"
+        android:layout_gravity="center"
+        app:indicatorColor="@android:color/white"
+        android:id="@+id/loading_indicator"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dp"
+        />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -117,16 +128,10 @@
             android:id="@+id/company_name"
             android:padding="1dp"
             android:textColor="@color/primary_text"/>
-        <EditText
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text=""
-            android:id="@+id/company_name_value"
-            android:textColor="@color/primary_text"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"/>
+            android:id="@+id/company_name_value"/>
         </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
