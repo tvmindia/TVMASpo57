@@ -73,7 +73,7 @@ public class CustomAdapter extends BaseAdapter {
         TextView supplierName;
         //Requisitions-------------
         TextView requistionNo,title;
-        TextView reqItemName,curQty,reqQty,extDesc;
+        TextView reqItemName,curQty,reqQty,extDesc,amountCalculation;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -304,6 +304,7 @@ public class CustomAdapter extends BaseAdapter {
                     holder.reqQty = (TextView) convertView.findViewById(R.id.req_qty);
                     holder.amount = (TextView) convertView.findViewById(R.id.amount);
                     holder.extDesc = (TextView) convertView.findViewById(R.id.ext_des);
+                    holder.amountCalculation = (TextView) convertView.findViewById(R.id.amount_calculation);
                     convertView.setTag(holder);
                 } else {
                     holder = (Holder) convertView.getTag();
@@ -313,7 +314,15 @@ public class CustomAdapter extends BaseAdapter {
                 holder.extDesc.setText((filteredObjects.get(position)[5].equals("null")?"-":filteredObjects.get(position)[5]));
                 holder.curQty.setText((filteredObjects.get(position)[2].equals("null")?"-":adapterContext.getResources().getString(R.string.current_quantity,filteredObjects.get(position)[2])));
                 holder.reqQty.setText((filteredObjects.get(position)[3].equals("null")?"-":adapterContext.getResources().getString(R.string.requested_quantity,filteredObjects.get(position)[3])));
-                holder.amount.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[4])))));
+                holder.amount.setText(adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[6]))));
+                if((filteredObjects.get(position)[3].equals("null"))||(filteredObjects.get(position)[4].equals("null"))){
+                    holder.amountCalculation.setText("");
+                }
+                else {
+                    holder.amountCalculation.setText(filteredObjects.get(position)[3]+
+                            " X "+
+                            String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[4])));
+                }
                 break;
             default:
                 break;

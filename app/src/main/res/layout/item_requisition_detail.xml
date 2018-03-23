@@ -39,7 +39,16 @@
                 android:layout_below="@id/name"
                 android:layout_toLeftOf="@+id/amount"
                 android:layout_toStartOf="@+id/amount"/>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount Calculation"
+                android:textSize="13sp"
+                android:textColor="@color/secondary_text"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:id="@+id/amount_calculation" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

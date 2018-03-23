@@ -89,15 +89,16 @@ public class RequisitionDetails extends AppCompatActivity {
                     JSONArray jsonObject1= records.getJSONArray("RequisitionDetailList");
                     for (int i = 0; i < jsonObject1.length(); i++) {
                         JSONObject jsonObject2 = jsonObject1.getJSONObject(i);
-                        String[] data = new String[6];
+                        String[] data = new String[7];
                         data[0] = jsonObject2.getString("ID");
                         data[1] = jsonObject2.getString("Description");
                         data[2] = jsonObject2.getString("CurrStock");
                         data[3] = jsonObject2.getString("RequestedQty");
                         data[4] = jsonObject2.getString("AppxRate");
                         data[5] = jsonObject2.getString("ExtendedDescription");
+                        total+=(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
+                        data[6] = Double.toString(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
                         dataArrayList.add(data);
-                        total+=Double.parseDouble(data[4]);
                     }
                 } catch (JSONException e) {
                     Toast.makeText(RequisitionDetails.this, "Some error occurred\n"+ e.getMessage(), Toast.LENGTH_SHORT).show();
