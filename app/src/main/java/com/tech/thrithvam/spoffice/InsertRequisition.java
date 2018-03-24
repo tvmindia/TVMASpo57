@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +20,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -85,7 +89,7 @@ public class InsertRequisition extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ((TextView)detailItemView.findViewById(R.id.description)).setText(materialList.get(materialSpinner.getSelectedItemPosition())[2]);
-                ((TextView)detailItemView.findViewById(R.id.amount)).setText(getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(materialList.get(materialSpinner.getSelectedItemPosition())[3]))));
+                amountCalculation(detailItemView);
             }
 
             @Override
@@ -93,6 +97,57 @@ public class InsertRequisition extends AppCompatActivity {
 
             }
         });
+        //calculating quantity
+        final EditText reqQty=((EditText)detailItemView.findViewById(R.id.req_qty));
+        reqQty.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                amountCalculation(detailItemView);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        //cancelling item
+        ImageView closeIcon=(ImageView)detailItemView.findViewById(R.id.close);
+        closeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(detailItemViews.size()==1){
+                    Common.toastMessage(InsertRequisition.this,"At least one item needed");
+                    return;
+                }
+                else {
+                    detailItemViews.remove(detailItemView);
+                    detailItemListView.removeView(detailItemView);
+                    //adding 'add_detail' button to last detail view
+                    (detailItemViews.get(detailItemViews.size() - 1)).findViewById(R.id.add_detail).setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+    void amountCalculation(View detailItemView){
+        final EditText reqQty=((EditText)detailItemView.findViewById(R.id.req_qty));
+        final TextView amountCalc=((TextView)detailItemView.findViewById(R.id.amount_calculation));
+        final TextView amount=((TextView)detailItemView.findViewById(R.id.amount));
+        final Spinner materialSpinner =(Spinner)detailItemView.findViewById(R.id.material_code_value);
+        String amountCalculation;
+        amountCalculation=(reqQty.getText().toString().equals("")?"0":reqQty.getText().toString())
+                +" X "
+                +getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(materialList.get(materialSpinner.getSelectedItemPosition())[3])));
+        amountCalc.setText(amountCalculation);
+
+        Double amountValue=Double.parseDouble(reqQty.getText().toString().equals("")?"0.0":reqQty.getText().toString())
+                * Double.parseDouble(materialList.get(materialSpinner.getSelectedItemPosition())[3]);
+        amount.setText(getResources().getString(R.string.rupees,
+                String.format(Locale.US,"%.2f",amountValue)));
     }
     public void submitRequisition(View view){
         //Validations
