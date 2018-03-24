@@ -191,7 +191,7 @@ public class InsertRequisition extends AppCompatActivity {
                     //",\"Description\":\""+materialList.get(materialSelection.getSelectedItemPosition())[2]+"\"" +
                     ",\"ExtendedDescription\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.ext_des)).getText().toString()
                     +"\",\"CurrStock\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.curr_qty)).getText().toString()
-                    //+"\",\"AppxRate\":\""+materialList.get(materialSelection.getSelectedItemPosition())[3]+"\""
+//                    +"\",\"AppxRate\":\""+materialList.get(materialSelection.getSelectedItemPosition())[3]+"\""
                     +",\"RequestedQty\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.req_qty)).getText().toString()
                     +"\"},";
         }
@@ -225,6 +225,7 @@ public class InsertRequisition extends AppCompatActivity {
                                 Intent intent=new Intent(InsertRequisition.this,RequisitionList.class);
                                 intent.putExtra(Common.REQUISITIONTYPE,"pending");
                                 startActivity(intent);
+                                InsertRequisition.this.finish();
                             }
                         }).setCancelable(false).show();
                 }
