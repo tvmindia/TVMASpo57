@@ -10,7 +10,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="7dp">
-
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="3dp"
+                android:src="@drawable/delete"
+                android:tint="@color/colorPrimary"
+                android:id="@+id/delete"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:onClick="deleteRequisition"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="3dp"
+                android:src="@drawable/edit"
+                android:tint="@color/colorPrimary"
+                android:id="@+id/edit"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/delete"
+                android:layout_toStartOf="@+id/delete" />
             <TextView
                 android:id="@+id/requisition_no"
                 android:layout_width="match_parent"
@@ -19,7 +38,9 @@
                 android:text="RequisitionNo"
                 android:textColor="@color/primary_text"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_toLeftOf="@+id/edit"
+                android:layout_toStartOf="@+id/edit" />
             <TextView
                 android:id="@+id/requisition_title"
                 android:layout_width="match_parent"
@@ -29,7 +50,9 @@
                 android:textColor="@color/primary_text"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_below="@id/requisition_no"/>
+                android:layout_below="@id/requisition_no"
+                android:layout_toLeftOf="@+id/edit"
+                android:layout_toStartOf="@+id/edit" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,5 +127,4 @@
         app:cpb_paddingProgress="5dp"
         android:layout_marginTop="8dp"
         android:visibility="gone"/>
-
 </LinearLayout>

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class RequisitionDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requisition_details);
-        getApprovalDetails();
+        getRequisitionDetails();
         setTitle("Requisition: "+getIntent().getExtras().getString(Common.REQNO));
         LinearLayout headerView=(LinearLayout)findViewById(R.id.header);
         LayoutInflater inflater=getLayoutInflater();
@@ -65,8 +66,17 @@ public class RequisitionDetails extends AppCompatActivity {
         //getting user name
         SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
         userName=sharedpreferences.getString(Common.userName,"");
+        //Edit
+        ((ImageView)findViewById(R.id.edit)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(RequisitionDetails.this,InsertRequisition.class);
+                intent.putExtra(Common.REQID,getIntent().getExtras().getString(Common.REQID));
+                startActivity(intent);
+            }
+        });
     }
-    void getApprovalDetails(){
+    void getRequisitionDetails(){
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
         String webService = "/API/Requisition/GetRequisitionDetailByID";

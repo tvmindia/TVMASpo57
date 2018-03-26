@@ -47,8 +47,8 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return position;
+    public String[] getItem(int position) {
+        return filteredObjects.get(position);
     }
 
     @Override

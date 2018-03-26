@@ -20,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -28,7 +27,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dd.CircularProgressButton;
+import com.wang.avi.AVLoadingIndicatorView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -199,6 +200,7 @@ public class InsertRequisition extends AppCompatActivity {
         detailItemsJSON+="]";
         String postData;
         postData="{\"Title\":\""+title.getText().toString()
+                +(getIntent().hasExtra(Common.REQID)?"\",\"ID\":\""+getIntent().getExtras().getString(Common.REQID):"")//if update
                 +"\",\"ReqDateFormatted\":\""+date.getText().toString()
                 +"\",\"ReqForCompany\":\""+companyList.get(companySpinner.getSelectedItemPosition())[0]//Company code
                 +"\",\"ReqStatus\":\"Open\"" +
@@ -330,9 +332,14 @@ public class InsertRequisition extends AppCompatActivity {
                 for(int i=0;i<materialList.size();i++){
                     materialCodes.add(materialList.get(i)[1]);
                 }
-            addMoreDetail(new View(InsertRequisition.this));//this view is dummy
-                (findViewById(R.id.scrollView)).setVisibility(View.VISIBLE);
-                (findViewById(R.id.loading_indicator)).setVisibility(View.GONE);
+                if(getIntent().hasExtra(Common.REQID)){
+                    getRequisitionDetails();
+                }
+                else {
+                    addMoreDetail(new View(InsertRequisition.this));//this view is dummy
+                    (findViewById(R.id.scrollView)).setVisibility(View.VISIBLE);
+                    (findViewById(R.id.loading_indicator)).setVisibility(View.GONE);
+                }
             }
         };
         Runnable postThreadFailed = new Runnable() {
@@ -350,6 +357,120 @@ public class InsertRequisition extends AppCompatActivity {
                 dataColumns,
                 postThread,
                 postThreadFailed);
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }
+    void getRequisitionDetails(){
+        //Threading------------------------------------------------------------------------------------------------------
+        final Common common = new Common();
+        SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+        String userName=sharedpreferences.getString(Common.userName,"");
+        String webService = "/API/Requisition/GetRequisitionDetailByID";
+        String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.REQID)+"\",\"userObj\":{\"UserName\":\""+userName+"\"}}";
+        AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
+        String[] dataColumns = {};
+        Runnable postThread = new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<String[]> dataArrayList=new ArrayList<>();
+                Double total=0.0;
+                try {
+                    JSONObject records=new JSONObject(common.json);
+                    if(records.length()==0){
+                        Common.toastMessage(InsertRequisition.this,"No details Available");
+                        finish();
+                        return;
+                    }
+                    JSONArray jsonObject1= records.getJSONArray("RequisitionDetailList");
+                    for (int i = 0; i < jsonObject1.length(); i++) {
+                        JSONObject jsonObject2 = jsonObject1.getJSONObject(i);
+                        String[] data = new String[7];
+                        data[0] = jsonObject2.getString("ID");
+                        data[1] = jsonObject2.getString("Description");
+                        data[2] = jsonObject2.getString("CurrStock");
+                        data[3] = jsonObject2.getString("RequestedQty");
+                        data[4] = jsonObject2.getString("AppxRate");
+                        data[5] = jsonObject2.getString("ExtendedDescription");
+                        total+=(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
+                        data[6] = Double.toString(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
+                        dataArrayList.add(data);
+                    }
+                    //Requisition details
+                    ((TextView)findViewById(R.id.requisition_no_value)).setText(records.optString("ReqNo"));
+                    ((EditText)findViewById(R.id.title_value)).setText(records.optString("Title"));
+                    ((TextView)findViewById(R.id.date_value)).setText(records.optString("ReqDateFormatted"));
+                    //finding company index
+                    int index=0;
+                    for(int j=0;j<companyList.size();j++){
+                        if(companyList.get(j)[0].equals(records.optString("ReqForCompany")))
+                            index=j;
+                    }
+                    companySpinner.setSelection(index);
+                } catch (JSONException e) {
+                    Common.toastMessage(InsertRequisition.this, "Some error occurred\n"+ e.getMessage());
+                }
+                for(int i=0;i<dataArrayList.size();i++){
+                    addMoreDetail(new View(InsertRequisition.this));
+                    View view=detailItemViews.get(i);
+                    /*if(!dataArrayList.get(i)[1].equals("null"))
+                        ((TextView)view.findViewById(R.id.description)).setText(dataArrayList.get(i)[1]);*/
+                    if(!dataArrayList.get(i)[2].equals("null"))
+                        ((EditText)view.findViewById(R.id.curr_qty)).setText(dataArrayList.get(i)[2]);
+                    if(!dataArrayList.get(i)[3].equals("null"))
+                        ((EditText)view.findViewById(R.id.req_qty)).setText(dataArrayList.get(i)[3]);
+                    if(!dataArrayList.get(i)[5].equals("null"))
+                        ((EditText)view.findViewById(R.id.ext_des)).setText(dataArrayList.get(i)[5]);
+                    //finding material index
+                    int index=0;
+                    for(int j=0;j<materialList.size();j++){
+                        if(materialList.get(j)[2].equals(dataArrayList.get(i)[1]))//TODO: change to match material id
+                            index=j;
+                    }
+                    if(!dataArrayList.get(i)[0].equals("null"))
+                        ((Spinner)view.findViewById(R.id.material_code_value)).setSelection(index);
+                }
+                 (findViewById(R.id.scrollView)).setVisibility(View.VISIBLE);
+/*                TextView totalTextView=(TextView)headerDetails.findViewById(R.id.total);
+                totalTextView.setText(getResources().getString(R.string.total_label,String.format(Locale.US,"%.2f",total)));
+                totalTextView.setVisibility(View.VISIBLE);
+                (headerDetails.findViewById(R.id.approve_button)).setVisibility(View.VISIBLE);
+                //approve button
+                approveButton = (CircularProgressButton) headerDetails.findViewById(R.id.approve_button);
+                if(getIntent().getExtras().getString(Common.REQUISITIONTYPE).equals("pending")) {
+                    approveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new AlertDialog.Builder(RequisitionDetails.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
+                                    .setMessage(getResources().getString(R.string.approve_q))
+                                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            approve();
+                                        }
+                                    }).setNegativeButton(R.string.cancel, null)
+                                    .setCancelable(true).show();
+                        }
+                    });
+                }
+                else {
+                    approveButton.setVisibility(View.GONE);
+                }*/
+            }
+        };
+        Runnable postThreadFailed = new Runnable() {
+            @Override
+            public void run() {
+                Common.toastMessage(InsertRequisition.this, R.string.failed_server);
+            }
+        };
+
+        common.AsynchronousThread(InsertRequisition.this,
+                webService,
+                postData,
+                loadingIndicator,
+                dataColumns,
+                postThread,
+                postThreadFailed);
+//        asyncTasks.add(common.asyncTask);
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
     @Override

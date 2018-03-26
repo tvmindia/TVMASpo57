@@ -79,15 +79,16 @@ public class RequisitionList extends AppCompatActivity {
                 requisitionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String[] clickedItem=(String[]) parent.getItemAtPosition(position);//Done so for click on searchable list
                         Intent intent=new Intent(RequisitionList.this,RequisitionDetails.class);
-                        intent.putExtra(Common.REQID,common.dataArrayList.get(position)[0]);
-                        intent.putExtra(Common.REQNO,common.dataArrayList.get(position)[1]);
-                        intent.putExtra(Common.REQDATE,common.dataArrayList.get(position)[2]);
-                        intent.putExtra(Common.REQSTATUS,common.dataArrayList.get(position)[3]);
-                        intent.putExtra(Common.REQTITLE,common.dataArrayList.get(position)[6]);
+                        intent.putExtra(Common.REQID,clickedItem[0]);
+                        intent.putExtra(Common.REQNO,clickedItem[1]);
+                        intent.putExtra(Common.REQDATE,clickedItem[2]);
+                        intent.putExtra(Common.REQSTATUS,clickedItem[3]);
+                        intent.putExtra(Common.REQTITLE,clickedItem[6]);
                         String companyName="null";
                         try {
-                            companyName=(new JSONObject(common.dataArrayList.get(position)[4])).getString("Name");
+                            companyName=(new JSONObject(clickedItem[4])).getString("Name");
                         } catch (JSONException e) {
                         }
                         intent.putExtra(Common.REQCCOMP,companyName);
