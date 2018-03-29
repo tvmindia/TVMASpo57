@@ -1,5 +1,6 @@
 package com.tech.thrithvam.spoffice;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -142,6 +143,8 @@ public class RequisitionDetails extends AppCompatActivity {
                 }
                 else {
                     approveButton.setVisibility(View.GONE);
+                    (findViewById(R.id.delete)).setVisibility(View.GONE);
+                    (findViewById(R.id.edit)).setVisibility(View.GONE);
                 }
             }
         };
@@ -196,6 +199,43 @@ public class RequisitionDetails extends AppCompatActivity {
                 Common.toastMessage(RequisitionDetails.this,common.msg);
                 Common.toastMessage(RequisitionDetails.this, R.string.failed_try_again);
                 approveButton.setProgress(-1);
+            }};
+        common.AsynchronousThread(RequisitionDetails.this,
+                webService,
+                postData,
+                null,
+                dataColumns,
+                postThread,
+                postThreadFailed);
+    }
+    public void deleteRequisition(View view){
+        //Threading------------------------------------------------------------------------------------------------------
+        final Common common=new Common();
+        String webService="API/Requisition/DeleteRequisitionDetailByID";
+        final String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.REQID)+"\"}";
+        final ProgressDialog progressDialog=new ProgressDialog(RequisitionDetails.this);
+        progressDialog.setMessage(getResources().getString(R.string.please_wait));
+        progressDialog.show();
+        String[] dataColumns={};
+        Runnable postThread=new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.cancel();
+                        Intent intent = new Intent(RequisitionDetails.this, HomeScreenNormalUser.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+
+                Common.toastMessage(RequisitionDetails.this,common.msg);
+            }
+        };
+        Runnable postThreadFailed=new Runnable() {
+            @Override
+            public void run() {
+                Common.toastMessage(RequisitionDetails.this,common.msg);
+                Common.toastMessage(RequisitionDetails.this, R.string.failed_try_again);
+                progressDialog.cancel();
             }};
         common.AsynchronousThread(RequisitionDetails.this,
                 webService,

@@ -28,6 +28,9 @@
             android:name=".HomeScreenNormalUser"
             android:configChanges="orientation|screenSize" />
         <activity
+            android:name=".HomeScreenManagerUser"
+            android:configChanges="orientation|screenSize" />
+        <activity
             android:name=".Enquiries"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_enquiries"
