@@ -193,7 +193,7 @@ public class InsertRequisition extends AppCompatActivity {
                     ",\"ExtendedDescription\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.ext_des)).getText().toString()
                     +"\",\"CurrStock\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.curr_qty)).getText().toString()
 //                    +"\",\"AppxRate\":\""+materialList.get(materialSelection.getSelectedItemPosition())[3]+"\""
-                    +",\"RequestedQty\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.req_qty)).getText().toString()
+                    +"\",\"RequestedQty\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.req_qty)).getText().toString()
                     +"\"},";
         }
         detailItemsJSON=detailItemsJSON.substring(0, detailItemsJSON.lastIndexOf(","));
