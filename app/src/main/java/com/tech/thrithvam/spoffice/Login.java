@@ -110,7 +110,6 @@ public class Login extends AppCompatActivity {
     void enrouteUser(String RoleCSV,boolean isLogin){
         final Handler handler = new Handler();
         final Intent intent;
-        Common.toastMessage(Login.this,RoleCSV);
         if(RoleCSV.contains("Manager")) {
             intent = new Intent(Login.this, HomeScreenManagerUser.class);
         }
