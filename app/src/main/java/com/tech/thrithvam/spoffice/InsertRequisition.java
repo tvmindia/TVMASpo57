@@ -330,7 +330,7 @@ public class InsertRequisition extends AppCompatActivity {
                     materialList.add(data);
                 }
                 for(int i=0;i<materialList.size();i++){
-                    materialCodes.add(materialList.get(i)[1]);
+                    materialCodes.add(materialList.get(i)[1]+"-"+materialList.get(i)[2]);
                 }
                 if(getIntent().hasExtra(Common.REQID)){
                     getRequisitionDetails();

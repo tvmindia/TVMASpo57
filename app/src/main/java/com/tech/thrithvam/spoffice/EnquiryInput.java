@@ -153,7 +153,7 @@ public class EnquiryInput extends AppCompatActivity {
                             +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
                             +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
                             +"\",\"EnquiryStatus\":\""+status
-                            +"\",\"commonObj\":{\"UpdatedBy\":\""+userName+"\"}"
+                            +"\",\"userObj\":{\"UserName\":\""+userName+"\"}"
                             +"}";
                 }
                 else {//insert
@@ -165,7 +165,7 @@ public class EnquiryInput extends AppCompatActivity {
                             +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
                             +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
                             +"\",\"EnquiryStatus\":\""+status
-                            +"\",\"commonObj\":{\"CreatedBy\":\""+userName+"\"}"
+                            +"\",\"userObj\":{\"UserName\":\""+userName+"\"}"
                             +"}";
                 }
                 String[] dataColumns={};
