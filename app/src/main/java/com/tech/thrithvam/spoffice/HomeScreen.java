@@ -42,6 +42,11 @@ public class HomeScreen extends AppCompatActivity {
             return;
         }
         ((TextView)findViewById(R.id.welcome)).setText(getResources().getString(R.string.welcome,userName));
+        String RoleCSV=sharedpreferences.getString(Common.roleCSV,"");
+        if(!RoleCSV.contains("CEO")){
+            (findViewById(R.id.last_line)).setVisibility(View.GONE);
+            (findViewById(R.id.requisition_button)).setVisibility(View.GONE);
+        }
 
         //Spinner
         ArrayList<String> statisticsDuration = new ArrayList<String>();
@@ -151,6 +156,11 @@ public class HomeScreen extends AppCompatActivity {
     }
     public void supplierOrdersClick(View view){
         startActivity(new Intent(HomeScreen.this,SupplierOrdersList.class));
+    }
+    public void pendingRequisitionsClick(View view){
+        Intent intent=new Intent(HomeScreen.this,RequisitionList.class);
+        intent.putExtra(Common.REQUISITIONTYPE,"pending");
+        startActivity(intent);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

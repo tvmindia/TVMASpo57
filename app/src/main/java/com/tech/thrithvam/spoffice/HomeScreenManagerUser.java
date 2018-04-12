@@ -159,11 +159,11 @@ public class HomeScreenManagerUser extends AppCompatActivity {
         intent.putExtra(Common.REQUISITIONTYPE,"approved");
         startActivity(intent);
     }
-    public void closedRequisitionsClick(View view){
+    /*public void closedRequisitionsClick(View view){
         Intent intent=new Intent(HomeScreenManagerUser.this,RequisitionList.class);
         intent.putExtra(Common.REQUISITIONTYPE,"closed");
         startActivity(intent);
-    }
+    }*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_logout, menu);

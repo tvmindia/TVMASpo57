@@ -395,6 +395,41 @@
                         android:paddingRight="3dp"
                         />
                 </RelativeLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/last_line"/>
+                <RelativeLayout
+                    android:id="@+id/requisition_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="pendingRequisitionsClick">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/requisitions"
+                        android:scaleType="fitCenter"
+                        android:tint="@color/colorAccent"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/requisition_icon"
+                        android:layout_margin="5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/requisitions"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="14sp"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/requisition_icon"
+                        android:gravity="center"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        />
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

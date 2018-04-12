@@ -211,8 +211,8 @@ public class RequisitionDetails extends AppCompatActivity {
     public void deleteRequisition(View view){
         //Threading------------------------------------------------------------------------------------------------------
         final Common common=new Common();
-        String webService="API/Requisition/DeleteRequisitionDetailByID";
-        final String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.REQID)+"\"}";
+        String webService="API/Requisition/DeleteRequisitionByID";
+        String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.REQID)+"\",\"userObj\":{\"UserName\":\""+userName+"\"}}";
         final ProgressDialog progressDialog=new ProgressDialog(RequisitionDetails.this);
         progressDialog.setMessage(getResources().getString(R.string.please_wait));
         progressDialog.show();
@@ -226,8 +226,6 @@ public class RequisitionDetails extends AppCompatActivity {
                                 | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-
-                Common.toastMessage(RequisitionDetails.this,common.msg);
             }
         };
         Runnable postThreadFailed=new Runnable() {
