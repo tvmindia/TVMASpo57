@@ -60,7 +60,7 @@ public class CustomAdapter extends BaseAdapter {
         //Quotations--------------
         TextView quotationNo,date,customerName,amount,status,emailSent;
         //Enquiries---------------
-        TextView enquiryNo,contactTitle,contactPerson,mobile;
+        TextView enquiryNo,contactTitle,contactPerson,mobile,leadOwner;
         LinearLayout followUpIcon;
         //Follow Up-------------
         TextView time,description;
@@ -126,6 +126,7 @@ public class CustomAdapter extends BaseAdapter {
                     holder.mobile = (TextView) convertView.findViewById(R.id.mobile);
                     holder.followUpIcon=(LinearLayout) convertView.findViewById(R.id.follow_up_icon);
                     holder.editIcon=(ImageView) convertView.findViewById(R.id.edit_icon);
+                    holder.leadOwner=(TextView)convertView.findViewById(R.id.lead_owner);
                     convertView.setTag(holder);
                 } else {
                     holder = (Holder) convertView.getTag();
@@ -138,6 +139,9 @@ public class CustomAdapter extends BaseAdapter {
                 holder.customerName.setText((filteredObjects.get(position)[5].equals("null")?"-":filteredObjects.get(position)[5]));
                 holder.mobile.setText((filteredObjects.get(position)[6].equals("null")?"-":filteredObjects.get(position)[6]));
                 holder.mobile.setTag((filteredObjects.get(position)[6].equals("null")?"":filteredObjects.get(position)[6]));
+                holder.leadOwner.setText((filteredObjects.get(position)[11].equals("null")?
+                                            adapterContext.getResources().getString(R.string.lead_owner_label_value,"-")
+                                                :adapterContext.getResources().getString(R.string.lead_owner_label_value,filteredObjects.get(position)[11])));
                 holder.followUpIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -161,6 +165,7 @@ public class CustomAdapter extends BaseAdapter {
                         editIntent.putExtra(Common.ENQUIRY_email,filteredObjects.get(fPos)[7].equals("null")?"":filteredObjects.get(fPos)[7]);
                         editIntent.putExtra(Common.ENQUIRY_notes,filteredObjects.get(fPos)[8].equals("null")?"":filteredObjects.get(fPos)[8]);
                         editIntent.putExtra(Common.ENQUIRY_status,filteredObjects.get(fPos)[9].equals("null")?"":filteredObjects.get(fPos)[9]);
+                        editIntent.putExtra(Common.ENQUIRY_enquiryOwnerID,filteredObjects.get(fPos)[10].equals("null")?"":filteredObjects.get(fPos)[10]);
                         adapterContext.startActivity(editIntent);
                     }
                 });

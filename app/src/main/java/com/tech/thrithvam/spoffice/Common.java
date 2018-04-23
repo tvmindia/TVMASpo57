@@ -55,6 +55,7 @@ public class Common {
                         ENQUIRY_email="enquiryEmail",
                         ENQUIRY_notes="enquiryNotes",
                         ENQUIRY_status="enquiryStatus",
+                        ENQUIRY_enquiryOwnerID="enquiryOwnerID",
 
                         FOLLOWUPID="followupID",
                         FOLLOWUP_date="followupDate",

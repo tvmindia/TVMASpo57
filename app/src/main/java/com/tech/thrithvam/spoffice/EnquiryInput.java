@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dd.CircularProgressButton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,10 +34,13 @@ import java.util.Locale;
 public class EnquiryInput extends AppCompatActivity {
     ArrayList<View> inputFields=new ArrayList<>();
     String enquiryID;
+    Spinner employeeSpinner;
+    ArrayList<String[]> employeeList=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enquiry_input);
+        getEmployees();
 
         //Spinner
         ArrayList<String> statisticsDuration = new ArrayList<String>();
@@ -79,6 +83,13 @@ public class EnquiryInput extends AppCompatActivity {
             ((EditText)findViewById(R.id.mobile)).setText(getIntent().getExtras().getString(Common.ENQUIRY_mobile));
             ((EditText)findViewById(R.id.email)).setText(getIntent().getExtras().getString(Common.ENQUIRY_email));
             ((EditText)findViewById(R.id.notes)).setText(getIntent().getExtras().getString(Common.ENQUIRY_notes));
+            int empPos=0;
+            for(int i=0;i<employeeList.size();i++){
+                if(employeeList.get(i)[0].equals(getIntent().getExtras().getString(Common.ENQUIRY_enquiryOwnerID))){
+                    empPos=i;
+                }
+            }
+            enquiryStatusSpinner.setSelection(empPos);
             String status="";
             if(getIntent().getExtras().getString(Common.ENQUIRY_status).equals("OE")){
                 status=getResources().getString(R.string.open);
@@ -153,6 +164,7 @@ public class EnquiryInput extends AppCompatActivity {
                             +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
                             +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
                             +"\",\"EnquiryStatus\":\""+status
+                            +"\",\"EnquiryOwnerID\":\""+employeeList.get(employeeSpinner.getSelectedItemPosition())[0]
                             +"\",\"userObj\":{\"UserName\":\""+userName+"\"}"
                             +"}";
                 }
@@ -165,6 +177,7 @@ public class EnquiryInput extends AppCompatActivity {
                             +"\",\"Email\":\""+((EditText)findViewById(R.id.email)).getText().toString()
                             +"\",\"GeneralNotes\":\""+((EditText)findViewById(R.id.notes)).getText().toString()
                             +"\",\"EnquiryStatus\":\""+status
+                            +"\",\"EnquiryOwnerID\":\""+employeeList.get(employeeSpinner.getSelectedItemPosition())[0]
                             +"\",\"userObj\":{\"UserName\":\""+userName+"\"}"
                             +"}";
                 }
@@ -282,6 +295,56 @@ public class EnquiryInput extends AppCompatActivity {
             }
         };
         new DatePickerDialog(EnquiryInput.this, dateSetListener, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH)).show();
+    }
+    void getEmployees(){
+        (findViewById(R.id.screen)).setVisibility(View.GONE);
+        //Threading------------------------------------------------------------------------------------------------------
+        final Common common = new Common();
+        String webService = "API/Employee/GetEmployeeListForMobile";
+        AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
+        String postData = "";
+        String[] dataColumns = {"ID",//0
+                "Code",//1
+                "Name" //2
+        };
+        Runnable postThread = new Runnable() {
+            @Override
+            public void run() {
+                //Spinner
+                ArrayList<String> employeeNames = new ArrayList<String>();
+                for (int i=0;i<common.dataArrayList.size();i++){
+                    String[] data=new String[3];
+                    data[0]=common.dataArrayList.get(i)[0];
+                    data[1]=common.dataArrayList.get(i)[1];
+                    data[2]=common.dataArrayList.get(i)[2];
+                    employeeList.add(data);
+                }
+                for(int i=0;i<employeeList.size();i++){
+                    employeeNames.add(employeeList.get(i)[1]+"-"+employeeList.get(i)[2]);
+                }
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(EnquiryInput.this, R.layout.item_spinner_black, employeeNames);
+                dataAdapter.setDropDownViewResource(R.layout.item_spinner);
+                employeeSpinner =(Spinner)findViewById(R.id.lead_owner);
+                employeeSpinner.setAdapter(dataAdapter);
+                (findViewById(R.id.screen)).setVisibility(View.VISIBLE);
+            }
+        };
+        Runnable postThreadFailed = new Runnable() {
+            @Override
+            public void run() {
+                Common.toastMessage(EnquiryInput.this, R.string.failed_server);
+                finish();
+            }
+        };
+
+        common.AsynchronousThread(EnquiryInput.this,
+                webService,
+                postData,
+                loadingIndicator,
+                dataColumns,
+                postThread,
+                postThreadFailed);
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

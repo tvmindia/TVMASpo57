@@ -73,4 +73,7 @@
     <string name="amount_label">Amount:</string>
     <string name="ok">OK</string>
     <string name="please_wait">Please wait...</string>
+    <string name="lead_owner">Lead Owner</string>
+    <string name="delete_q">Delete this?</string>
+    <string name="lead_owner_label_value">Lead Owner: %1$s</string>
 </resources>

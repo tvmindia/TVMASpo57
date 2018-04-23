@@ -209,39 +209,47 @@ public class RequisitionDetails extends AppCompatActivity {
                 postThreadFailed);
     }
     public void deleteRequisition(View view){
-        //Threading------------------------------------------------------------------------------------------------------
-        final Common common=new Common();
-        String webService="API/Requisition/DeleteRequisitionByID";
-        String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.REQID)+"\",\"userObj\":{\"UserName\":\""+userName+"\"}}";
-        final ProgressDialog progressDialog=new ProgressDialog(RequisitionDetails.this);
-        progressDialog.setMessage(getResources().getString(R.string.please_wait));
-        progressDialog.show();
-        String[] dataColumns={};
-        Runnable postThread=new Runnable() {
-            @Override
-            public void run() {
-                progressDialog.cancel();
-                        Intent intent = new Intent(RequisitionDetails.this, HomeScreenNormalUser.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-            }
-        };
-        Runnable postThreadFailed=new Runnable() {
-            @Override
-            public void run() {
-                Common.toastMessage(RequisitionDetails.this,common.msg);
-                Common.toastMessage(RequisitionDetails.this, R.string.failed_try_again);
-                progressDialog.cancel();
-            }};
-        common.AsynchronousThread(RequisitionDetails.this,
-                webService,
-                postData,
-                null,
-                dataColumns,
-                postThread,
-                postThreadFailed);
+        new AlertDialog.Builder(RequisitionDetails.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
+                .setMessage(getResources().getString(R.string.delete_q))
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Threading------------------------------------------------------------------------------------------------------
+                        final Common common=new Common();
+                        String webService="API/Requisition/DeleteRequisitionByID";
+                        String postData = "{\"ID\":\""+getIntent().getExtras().getString(Common.REQID)+"\",\"userObj\":{\"UserName\":\""+userName+"\"}}";
+                        final ProgressDialog progressDialog=new ProgressDialog(RequisitionDetails.this);
+                        progressDialog.setMessage(getResources().getString(R.string.please_wait));
+                        progressDialog.show();
+                        String[] dataColumns={};
+                        Runnable postThread=new Runnable() {
+                            @Override
+                            public void run() {
+                                progressDialog.cancel();
+                                Intent intent = new Intent(RequisitionDetails.this, HomeScreenNormalUser.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                        };
+                        Runnable postThreadFailed=new Runnable() {
+                            @Override
+                            public void run() {
+                                Common.toastMessage(RequisitionDetails.this,common.msg);
+                                Common.toastMessage(RequisitionDetails.this, R.string.failed_try_again);
+                                progressDialog.cancel();
+                            }};
+                        common.AsynchronousThread(RequisitionDetails.this,
+                                webService,
+                                postData,
+                                null,
+                                dataColumns,
+                                postThread,
+                                postThreadFailed);
+                    }
+                }).setNegativeButton(R.string.cancel, null)
+                .setCancelable(true).show();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
