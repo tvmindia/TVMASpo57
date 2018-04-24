@@ -482,7 +482,15 @@ public class InsertRequisition extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_home) {
-            Intent intent=new Intent(this,HomeScreenNormalUser.class);
+            SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+            String RoleCSV=sharedpreferences.getString(Common.roleCSV,"");
+            Intent intent;
+            if(RoleCSV.contains("CEO")){
+                intent= new Intent(InsertRequisition.this, HomeScreen.class);
+            }
+            else {
+                intent= new Intent(InsertRequisition.this, HomeScreenNormalUser.class);
+            }
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                     | Intent.FLAG_ACTIVITY_CLEAR_TOP
                     | Intent.FLAG_ACTIVITY_CLEAR_TASK);

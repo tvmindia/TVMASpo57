@@ -184,7 +184,15 @@ public class RequisitionDetails extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(RequisitionDetails.this, HomeScreenNormalUser.class);
+                        SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+                        String RoleCSV=sharedpreferences.getString(Common.roleCSV,"");
+                        Intent intent;
+                        if(RoleCSV.contains("CEO")){
+                            intent= new Intent(RequisitionDetails.this, HomeScreen.class);
+                        }
+                        else {
+                            intent= new Intent(RequisitionDetails.this, HomeScreenNormalUser.class);
+                        }
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                 | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -226,7 +234,15 @@ public class RequisitionDetails extends AppCompatActivity {
                             @Override
                             public void run() {
                                 progressDialog.cancel();
-                                Intent intent = new Intent(RequisitionDetails.this, HomeScreenNormalUser.class);
+                                SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+                                String RoleCSV=sharedpreferences.getString(Common.roleCSV,"");
+                                Intent intent;
+                                if(RoleCSV.contains("CEO")){
+                                    intent= new Intent(RequisitionDetails.this, HomeScreen.class);
+                                }
+                                else {
+                                    intent= new Intent(RequisitionDetails.this, HomeScreenNormalUser.class);
+                                }
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                         | Intent.FLAG_ACTIVITY_CLEAR_TOP
                                         | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -261,7 +277,15 @@ public class RequisitionDetails extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_home) {
-            Intent intent=new Intent(this,HomeScreenNormalUser.class);
+            SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+            String RoleCSV=sharedpreferences.getString(Common.roleCSV,"");
+            Intent intent;
+            if(RoleCSV.contains("CEO")){
+                intent= new Intent(RequisitionDetails.this, HomeScreen.class);
+            }
+            else {
+                intent= new Intent(RequisitionDetails.this, HomeScreenNormalUser.class);
+            }
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                     | Intent.FLAG_ACTIVITY_CLEAR_TOP
                     | Intent.FLAG_ACTIVITY_CLEAR_TASK);
