@@ -93,7 +93,7 @@
                 android:id="@+id/status"
                 android:layout_below="@+id/company_name"/>
         </RelativeLayout>
-    <TextView
+   <!-- <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/total_label"
@@ -105,7 +105,7 @@
         android:layout_gravity="end"
         android:textStyle="bold"
         android:visibility="gone"
-        />
+        />-->
     <com.dd.CircularProgressButton
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"

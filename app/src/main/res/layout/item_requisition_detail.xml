@@ -39,7 +39,7 @@
                 android:layout_below="@id/name"
                 android:layout_toLeftOf="@+id/amount"
                 android:layout_toStartOf="@+id/amount"/>
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Amount Calculation"
@@ -48,7 +48,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:id="@+id/amount_calculation" />
+                android:id="@+id/amount_calculation" />-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -98,24 +96,6 @@ public class InsertRequisition extends AppCompatActivity {
 
             }
         });
-        //calculating quantity
-        final EditText reqQty=((EditText)detailItemView.findViewById(R.id.req_qty));
-        reqQty.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                amountCalculation(detailItemView);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         //cancelling item
         ImageView closeIcon=(ImageView)detailItemView.findViewById(R.id.close);
         closeIcon.setOnClickListener(new View.OnClickListener() {
@@ -136,19 +116,22 @@ public class InsertRequisition extends AppCompatActivity {
     }
     void amountCalculation(View detailItemView){
         final EditText reqQty=((EditText)detailItemView.findViewById(R.id.req_qty));
-        final TextView amountCalc=((TextView)detailItemView.findViewById(R.id.amount_calculation));
-        final TextView amount=((TextView)detailItemView.findViewById(R.id.amount));
+        //final TextView amountCalc=((TextView)detailItemView.findViewById(R.id.amount_calculation));
+        final EditText amount=((EditText)detailItemView.findViewById(R.id.amount));
         final Spinner materialSpinner =(Spinner)detailItemView.findViewById(R.id.material_code_value);
         String amountCalculation;
-        amountCalculation=(reqQty.getText().toString().equals("")?"0":reqQty.getText().toString())
+        /*amountCalculation=(reqQty.getText().toString().equals("")?"0":reqQty.getText().toString())
                 +" X "
                 +getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(materialList.get(materialSpinner.getSelectedItemPosition())[3])));
-        amountCalc.setText(amountCalculation);
+        amountCalc.setText(amountCalculation);*/
 
-        Double amountValue=Double.parseDouble(reqQty.getText().toString().equals("")?"0.0":reqQty.getText().toString())
+        /*Double amountValue=Double.parseDouble(reqQty.getText().toString().equals("")?"0.0":reqQty.getText().toString())
                 * Double.parseDouble(materialList.get(materialSpinner.getSelectedItemPosition())[3]);
         amount.setText(getResources().getString(R.string.rupees,
-                String.format(Locale.US,"%.2f",amountValue)));
+                String.format(Locale.US,"%.2f",amountValue)));*/
+       // String amountValue=materialList.get(materialSpinner.getSelectedItemPosition())[3];
+        String amountValue= String.format(Locale.US,"%.2f",Double.parseDouble(materialList.get(materialSpinner.getSelectedItemPosition())[3]));
+        amount.setText(amountValue);
     }
     public void submitRequisition(View view){
         //Validations
@@ -164,10 +147,15 @@ public class InsertRequisition extends AppCompatActivity {
         }*/
         TextView date=(TextView)findViewById(R.id.date_value);
         for(int i=0;i<detailItemViews.size();i++){
-            //only requested quantity is mandatory in site, so
+            //only requested quantity and amount are mandatory in site, so
             EditText reqQty=(EditText) detailItemViews.get(i).findViewById(R.id.req_qty);
             if(reqQty.getText().toString().equals("")){
                 reqQty.setError(getResources().getString(R.string.give_valid));
+                return;
+            }
+            EditText amount=(EditText) detailItemViews.get(i).findViewById(R.id.amount);
+            if(amount.getText().toString().equals("")){
+                amount.setError(getResources().getString(R.string.give_valid));
                 return;
             }
         }
@@ -192,7 +180,7 @@ public class InsertRequisition extends AppCompatActivity {
                     //",\"Description\":\""+materialList.get(materialSelection.getSelectedItemPosition())[2]+"\"" +
                     ",\"ExtendedDescription\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.ext_des)).getText().toString()
                     +"\",\"CurrStock\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.curr_qty)).getText().toString()
-//                    +"\",\"AppxRate\":\""+materialList.get(materialSelection.getSelectedItemPosition())[3]+"\""
+                    +"\",\"AppxRate\":\""+((EditText)detailItemViews.get(i).findViewById(R.id.amount)).getText().toString()+"\""
                     +"\",\"RequestedQty\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.req_qty)).getText().toString()
                     +"\"},";
         }
@@ -220,7 +208,9 @@ public class InsertRequisition extends AppCompatActivity {
                 }
                 //Save success
                 new AlertDialog.Builder(InsertRequisition.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
-                        .setMessage(getResources().getString(R.string.req_inserted,reqNo))
+                        .setMessage((getIntent().hasExtra(Common.REQID)?
+                                                getResources().getString(R.string.req_updated,reqNo)//insert
+                                                :getResources().getString(R.string.req_inserted,getIntent().getExtras().getString(Common.REQID))))//update
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

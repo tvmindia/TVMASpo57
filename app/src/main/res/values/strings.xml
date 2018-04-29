@@ -70,6 +70,7 @@
     <string name="current_quantity_label">Current Quantity:</string>
     <string name="requested_quantity_label">Requested Quantity:</string>
     <string name="req_inserted">Requisition added : %1$s</string>
+    <string name="req_updated">Requisition updated : %1$s</string>
     <string name="amount_label">Amount:</string>
     <string name="ok">OK</string>
     <string name="please_wait">Please wait...</string>
