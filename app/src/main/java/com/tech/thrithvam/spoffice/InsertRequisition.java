@@ -45,6 +45,7 @@ public class InsertRequisition extends AppCompatActivity {
     ArrayList<String[]> companyList=new ArrayList<>();
     ArrayList<String[]> materialList=new ArrayList<>();
     ArrayList<String> materialCodes = new ArrayList<String>();
+    String requisitionNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,7 +181,7 @@ public class InsertRequisition extends AppCompatActivity {
                     //",\"Description\":\""+materialList.get(materialSelection.getSelectedItemPosition())[2]+"\"" +
                     ",\"ExtendedDescription\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.ext_des)).getText().toString()
                     +"\",\"CurrStock\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.curr_qty)).getText().toString()
-                    +"\",\"AppxRate\":\""+((EditText)detailItemViews.get(i).findViewById(R.id.amount)).getText().toString()+"\""
+                    +"\",\"AppxRate\":\""+((EditText)detailItemViews.get(i).findViewById(R.id.amount)).getText().toString()
                     +"\",\"RequestedQty\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.req_qty)).getText().toString()
                     +"\"},";
         }
@@ -209,8 +210,8 @@ public class InsertRequisition extends AppCompatActivity {
                 //Save success
                 new AlertDialog.Builder(InsertRequisition.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
                         .setMessage((getIntent().hasExtra(Common.REQID)?
-                                                getResources().getString(R.string.req_updated,reqNo)//insert
-                                                :getResources().getString(R.string.req_inserted,getIntent().getExtras().getString(Common.REQID))))//update
+                                InsertRequisition.this.getResources().getString(R.string.req_updated,requisitionNumber)//insert
+                                                : InsertRequisition.this.getResources().getString(R.string.req_inserted,reqNo)))//update
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -386,6 +387,7 @@ public class InsertRequisition extends AppCompatActivity {
                     }
                     //Requisition details
                     ((TextView)findViewById(R.id.requisition_no_value)).setText(records.optString("ReqNo"));
+                    requisitionNumber=records.optString("ReqNo");
                     ((EditText)findViewById(R.id.title_value)).setText(records.optString("Title"));
                     ((TextView)findViewById(R.id.date_value)).setText(records.optString("ReqDateFormatted"));
                     //finding company index
