@@ -1,6 +1,7 @@
 package com.tech.thrithvam.spoffice;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -107,13 +108,57 @@ public class InsertRequisition extends AppCompatActivity {
                     return;
                 }
                 else {
+                    deleteItem(detailItemView.getTag(),detailItemView);
+
+                }
+            }
+        });
+    }
+    void deleteItem(Object itemID, final View detailItemView){ //from server
+        if(itemID!=null) //item is in server, not just added here
+        {
+            //Threading------------------------------------------------------------------------------------------------------
+            final Common common = new Common();
+            String webService = "API/Requisition/DeleteRequisitionDetailByID";
+            String postData = "{\"ID\":\""+itemID.toString()+"\"}";
+            final ProgressDialog progressDialog=new ProgressDialog(InsertRequisition.this);
+            progressDialog.setMessage(getResources().getString(R.string.please_wait));
+            progressDialog.show();
+            String[] dataColumns = {};
+            Runnable postThread = new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
                     detailItemViews.remove(detailItemView);
                     detailItemListView.removeView(detailItemView);
                     //adding 'add_detail' button to last detail view
                     (detailItemViews.get(detailItemViews.size() - 1)).findViewById(R.id.add_detail).setVisibility(View.VISIBLE);
                 }
-            }
-        });
+            };
+            Runnable postThreadFailed = new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                    Common.toastMessage(InsertRequisition.this, R.string.failed_server);
+                    Common.toastMessage(InsertRequisition.this, common.msg);
+                }
+            };
+
+            common.AsynchronousThread(InsertRequisition.this,
+                    webService,
+                    postData,
+                    null,
+                    dataColumns,
+                    postThread,
+                    postThreadFailed);
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+        else {//no need to delete from server, just delete here
+            detailItemViews.remove(detailItemView);
+            detailItemListView.removeView(detailItemView);
+            //adding 'add_detail' button to last detail view
+            (detailItemViews.get(detailItemViews.size() - 1)).findViewById(R.id.add_detail).setVisibility(View.VISIBLE);
+        }
     }
     void amountCalculation(View detailItemView){
         final EditText reqQty=((EditText)detailItemView.findViewById(R.id.req_qty));
@@ -403,6 +448,8 @@ public class InsertRequisition extends AppCompatActivity {
                 }
                 for(int i=0;i<dataArrayList.size();i++){
                     addMoreDetail(new View(InsertRequisition.this));
+                    if(i!=0) {(detailItemViews.get(i-1).findViewById(R.id.add_detail)).setVisibility(View.GONE);}//remove previous items close button
+                    detailItemViews.get(i).setTag(dataArrayList.get(i)[0]);//id for deleting the detail
                     View view=detailItemViews.get(i);
                     /*if(!dataArrayList.get(i)[1].equals("null"))
                         ((TextView)view.findViewById(R.id.description)).setText(dataArrayList.get(i)[1]);*/
@@ -492,5 +539,15 @@ public class InsertRequisition extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onBackPressed() {
+            Intent intent=new Intent(this,RequisitionList.class);
+            intent.putExtra(Common.REQUISITIONTYPE,"pending");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
     }
 }
