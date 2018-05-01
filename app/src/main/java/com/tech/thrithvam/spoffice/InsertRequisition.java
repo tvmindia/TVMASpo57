@@ -363,7 +363,7 @@ public class InsertRequisition extends AppCompatActivity {
             @Override
             public void run() {
                 ArrayList<String[]> dataArrayList=new ArrayList<>();
-                Double total=0.0;
+                //Double total=0.0;
                 try {
                     JSONObject records=new JSONObject(common.json);
                     if(records.length()==0){
@@ -381,8 +381,9 @@ public class InsertRequisition extends AppCompatActivity {
                         data[3] = jsonObject2.getString("RequestedQty");
                         data[4] = jsonObject2.getString("AppxRate");
                         data[5] = jsonObject2.getString("ExtendedDescription");
-                        total+=(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
-                        data[6] = Double.toString(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
+                        data[6] = jsonObject2.getString("MaterialID");
+                        //total+=(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
+                        //data[6] = Double.toString(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
                         dataArrayList.add(data);
                     }
                     //Requisition details
@@ -414,7 +415,7 @@ public class InsertRequisition extends AppCompatActivity {
                     //finding material index
                     int index=0;
                     for(int j=0;j<materialList.size();j++){
-                        if(materialList.get(j)[2].equals(dataArrayList.get(i)[1]))//TODO: change to match material id
+                        if(materialList.get(j)[0].equals(dataArrayList.get(i)[6]))
                             index=j;
                     }
                     if(!dataArrayList.get(i)[0].equals("null"))
