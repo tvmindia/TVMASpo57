@@ -47,6 +47,7 @@ public class InsertRequisition extends AppCompatActivity {
     ArrayList<String[]> materialList=new ArrayList<>();
     ArrayList<String> materialCodes = new ArrayList<String>();
     String requisitionNumber;
+    ArrayList<String[]> detailsArrayList=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -228,13 +229,14 @@ public class InsertRequisition extends AppCompatActivity {
                     +"\",\"CurrStock\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.curr_qty)).getText().toString()
                     +"\",\"AppxRate\":\""+((EditText)detailItemViews.get(i).findViewById(R.id.amount)).getText().toString()
                     +"\",\"RequestedQty\":\""+((TextView)detailItemViews.get(i).findViewById(R.id.req_qty)).getText().toString()
+                    +(getIntent().hasExtra(Common.REQID)?"\",\"ID\":\""+detailsArrayList.get(i)[0]:"")//checking update or insert
                     +"\"},";
         }
         detailItemsJSON=detailItemsJSON.substring(0, detailItemsJSON.lastIndexOf(","));
         detailItemsJSON+="]";
         String postData;
         postData="{\"Title\":\""+title.getText().toString()
-                +(getIntent().hasExtra(Common.REQID)?"\",\"ID\":\""+getIntent().getExtras().getString(Common.REQID):"")//if update
+                +(getIntent().hasExtra(Common.REQID)?"\",\"ID\":\""+getIntent().getExtras().getString(Common.REQID):"")//checking update or insert
                 +"\",\"ReqDateFormatted\":\""+date.getText().toString()
                 +"\",\"ReqForCompany\":\""+companyList.get(companySpinner.getSelectedItemPosition())[0]//Company code
                 +"\",\"ReqStatus\":\"Open\"" +
@@ -407,7 +409,6 @@ public class InsertRequisition extends AppCompatActivity {
         Runnable postThread = new Runnable() {
             @Override
             public void run() {
-                ArrayList<String[]> dataArrayList=new ArrayList<>();
                 //Double total=0.0;
                 try {
                     JSONObject records=new JSONObject(common.json);
@@ -429,7 +430,7 @@ public class InsertRequisition extends AppCompatActivity {
                         data[6] = jsonObject2.getString("MaterialID");
                         //total+=(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
                         //data[6] = Double.toString(Integer.parseInt(data[3]) * Double.parseDouble(data[4]));
-                        dataArrayList.add(data);
+                        detailsArrayList.add(data);
                     }
                     //Requisition details
                     ((TextView)findViewById(R.id.requisition_no_value)).setText(records.optString("ReqNo"));
@@ -446,26 +447,26 @@ public class InsertRequisition extends AppCompatActivity {
                 } catch (JSONException e) {
                     Common.toastMessage(InsertRequisition.this, "Some error occurred\n"+ e.getMessage());
                 }
-                for(int i=0;i<dataArrayList.size();i++){
+                for(int i=0;i<detailsArrayList.size();i++){
                     addMoreDetail(new View(InsertRequisition.this));
                     if(i!=0) {(detailItemViews.get(i-1).findViewById(R.id.add_detail)).setVisibility(View.GONE);}//remove previous items close button
-                    detailItemViews.get(i).setTag(dataArrayList.get(i)[0]);//id for deleting the detail
+                    detailItemViews.get(i).setTag(detailsArrayList.get(i)[0]);//id for deleting the detail
                     View view=detailItemViews.get(i);
                     /*if(!dataArrayList.get(i)[1].equals("null"))
                         ((TextView)view.findViewById(R.id.description)).setText(dataArrayList.get(i)[1]);*/
-                    if(!dataArrayList.get(i)[2].equals("null"))
-                        ((EditText)view.findViewById(R.id.curr_qty)).setText(dataArrayList.get(i)[2]);
-                    if(!dataArrayList.get(i)[3].equals("null"))
-                        ((EditText)view.findViewById(R.id.req_qty)).setText(dataArrayList.get(i)[3]);
-                    if(!dataArrayList.get(i)[5].equals("null"))
-                        ((EditText)view.findViewById(R.id.ext_des)).setText(dataArrayList.get(i)[5]);
+                    if(!detailsArrayList.get(i)[2].equals("null"))
+                        ((EditText)view.findViewById(R.id.curr_qty)).setText(detailsArrayList.get(i)[2]);
+                    if(!detailsArrayList.get(i)[3].equals("null"))
+                        ((EditText)view.findViewById(R.id.req_qty)).setText(detailsArrayList.get(i)[3]);
+                    if(!detailsArrayList.get(i)[5].equals("null"))
+                        ((EditText)view.findViewById(R.id.ext_des)).setText(detailsArrayList.get(i)[5]);
                     //finding material index
                     int index=0;
                     for(int j=0;j<materialList.size();j++){
-                        if(materialList.get(j)[0].equals(dataArrayList.get(i)[6]))
+                        if(materialList.get(j)[0].equals(detailsArrayList.get(i)[6]))
                             index=j;
                     }
-                    if(!dataArrayList.get(i)[0].equals("null"))
+                    if(!detailsArrayList.get(i)[0].equals("null"))
                         ((Spinner)view.findViewById(R.id.material_code_value)).setSelection(index);
                 }
                  (findViewById(R.id.scrollView)).setVisibility(View.VISIBLE);
