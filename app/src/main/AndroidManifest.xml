@@ -79,10 +79,12 @@
             android:name=".RequisitionDetails"
             android:configChanges="orientation|screenSize"
             android:label="@string/requisitions" />
-        <activity android:name=".InsertRequisition"
+        <activity
+            android:name=".InsertRequisition"
             android:configChanges="orientation|screenSize"
             android:label="@string/requisitions"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".SupplierOrderDetails"></activity>
     </application>
 
 </manifest>

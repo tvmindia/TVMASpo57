@@ -265,11 +265,32 @@ public class CustomAdapter extends BaseAdapter {
                     holder = (Holder) convertView.getTag();
                 }
                 //Label loading--------------------
-                holder.supplierName.setText((filteredObjects.get(position)[1].equals("null")?"-":filteredObjects.get(position)[1]));
+                String supplierNameString;
+                try {
+                    supplierNameString=new JSONObject(filteredObjects.get(position)[1]).optString("CompanyName");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    supplierNameString="-";
+                }
+                final String finalSupplierNameString=supplierNameString;//for on click purpose
+                holder.supplierName.setText(supplierNameString);
                 holder.purchaseOrderNo.setText((filteredObjects.get(position)[2].equals("null")?"-":filteredObjects.get(position)[2]));
                 holder.date.setText((filteredObjects.get(position)[3].equals("null")?"":filteredObjects.get(position)[3]));
                 holder.amount.setText((filteredObjects.get(position)[4].equals("null")?"-":adapterContext.getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(filteredObjects.get(position)[4])))));
                 holder.status.setText((filteredObjects.get(position)[5].equals("null")?"-":adapterContext.getResources().getString(R.string.status_colon,filteredObjects.get(position)[5])));
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent=new Intent(adapterContext, SupplierOrderDetails.class);
+                        intent.putExtra(Common.SUPPLIERNAME,finalSupplierNameString);
+                        intent.putExtra(Common.SUPPLIERORDERID,filteredObjects.get(fPos)[0]);
+                        intent.putExtra(Common.PONUMBER,filteredObjects.get(fPos)[2]);
+                        intent.putExtra(Common.PODATE,filteredObjects.get(fPos)[3]);
+                        intent.putExtra(Common.TOTALAMOUNT,filteredObjects.get(fPos)[4]);
+                        intent.putExtra(Common.POSTATUS,filteredObjects.get(fPos)[5]);
+                        adapterContext.startActivity(intent);
+                    }
+                });
                 break;
             //--------------------------for requisition list items------------------
             case Common.REQUISITIONSLIST:

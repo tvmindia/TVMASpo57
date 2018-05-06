@@ -70,7 +70,14 @@ public class Common {
                         REQDATE="ReqDate",
                         REQSTATUS="ReqStatus",
                         REQCCOMP="reqCom",
-                        REQVALUE="Value"
+                        REQVALUE="Value",
+
+                        SUPPLIERNAME="supplierName",
+                        SUPPLIERORDERID="supplierOrderID",
+                        PONUMBER="PONo",
+                        PODATE="PODate",
+                        TOTALAMOUNT="TotalAmount",
+                        POSTATUS="POStatus"
                                 ;
 
     //To load image from a url------------------------------------------------------

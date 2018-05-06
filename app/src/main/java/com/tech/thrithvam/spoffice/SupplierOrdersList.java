@@ -1,5 +1,8 @@
 package com.tech.thrithvam.spoffice;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +17,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.wang.avi.AVLoadingIndicatorView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,13 +36,13 @@ public class SupplierOrdersList extends AppCompatActivity {
         setSupportActionBar(toolbar);
         supplierOrdersList =(ListView)findViewById(R.id.supplier_orders_list);
         //Spinner
-        ArrayList<String> statisticsDuration = new ArrayList<String>();
+        listDurationSpinner =(Spinner)findViewById(R.id.list_duration);
+        /*ArrayList<String> statisticsDuration = new ArrayList<String>();
         statisticsDuration.add(getResources().getString(R.string.days90));
         statisticsDuration.add(getResources().getString(R.string.days180));
         statisticsDuration.add(getResources().getString(R.string.days365));
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.item_spinner_small_white, statisticsDuration);
         dataAdapter.setDropDownViewResource(R.layout.item_spinner);
-        listDurationSpinner =(Spinner)findViewById(R.id.list_duration);
         listDurationSpinner.setAdapter(dataAdapter);
         listDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -49,12 +54,14 @@ public class SupplierOrdersList extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        });*/
+        listDurationSpinner.setVisibility(View.GONE);//duration spinner is not using here
+        getSupplierOrders();
     }
     void getSupplierOrders(){
         (findViewById(R.id.no_items)).setVisibility(View.GONE);
         supplierOrdersList.setVisibility(View.GONE);
-        int duration=0;
+       /* int duration=0;
         if(listDurationSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.days90))){
             duration = 90;
         }
@@ -63,17 +70,24 @@ public class SupplierOrdersList extends AppCompatActivity {
         }
         else if(listDurationSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.days365))){
             duration=365;
-        }
+        }*/
         //Threading------------------------------------------------------------------------------------------------------
         final Common common = new Common();
-        String webService = "API/Supplier/GetAllSupplierPODetail";
-        String postData = "{\"duration\":\""+duration+"\"}";
+//        String webService = "API/Supplier/GetAllSupplierPODetail";
+        String webService = "API/Supplier/GetAllPendingSupplierPurchaseOrders";
+//        String postData = "{\"duration\":\""+duration+"\"}";
+        //getting user name
+        SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
+        String userName=sharedpreferences.getString(Common.userName,"");
+        String postData = "{\"userObj\":{\"UserName\":\""+userName+"\"}}";
+
+
         AVLoadingIndicatorView loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.loading_indicator);
         String[] dataColumns = {"ID",//0
-                "SupplierName",//1
+                "SuppliersObj",//1
                 "PONo",//2
                 "PODate",//3
-                "Amount",//4
+                "TotalAmount",//4
                 "POStatus"//5
         };
         Runnable postThread = new Runnable() {
@@ -83,14 +97,25 @@ public class SupplierOrdersList extends AppCompatActivity {
                     (findViewById(R.id.no_items)).setVisibility(View.VISIBLE);
                     return;
                 }
-                adapter=new CustomAdapter(SupplierOrdersList.this,common.dataArrayList,Common.CUSTOMERORDERSLIST);
+                adapter=new CustomAdapter(SupplierOrdersList.this,common.dataArrayList,Common.SUPPLIERORDERSLIST);
                 supplierOrdersList.setAdapter(adapter);
                 supplierOrdersList.setVisibility(View.VISIBLE);
+                supplierOrdersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        try {
+
+                        }
+                        catch (Exception e){
+                        }
+                    }
+                });
             }
         };
         Runnable postThreadFailed = new Runnable() {
             @Override
             public void run() {
+                (findViewById(R.id.no_items)).setVisibility(View.VISIBLE);
                 Common.toastMessage(SupplierOrdersList.this, R.string.failed_server);
             }
         };
