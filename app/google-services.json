@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "172810751482",
+    "firebase_url": "https://spoffice-f79e1.firebaseio.com",
+    "project_id": "spoffice-f79e1",
+    "storage_bucket": "spoffice-f79e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172810751482:android:d666c114a6aed459",
+        "android_client_info": {
+          "package_name": "com.tech.thrithvam.spoffice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "172810751482-50sf6b724ad7c4phh0k9bglt7a2q3jhj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tech.thrithvam.spoffice",
+            "certificate_hash": "4aeb5d0a821e28865d61f07017e291e22199cfb9"
+          }
+        },
+        {
+          "client_id": "172810751482-58cbjt4qa5dvpj0q8fg8td2pm3s6b4ff.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6zwBhkBFsq6vhETF1NeRE1Tf9glqXb0E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "172810751482-58cbjt4qa5dvpj0q8fg8td2pm3s6b4ff.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
