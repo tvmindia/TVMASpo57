@@ -52,7 +52,7 @@
     <string name="closed_requisitions">Closed Requisitions</string>
     <string name="approved">Approved</string>
     <string name="pending">Pending</string>
-    <string name="approve_q">Are you sure to approve this requisition?</string>
+    <string name="approve_q">Are you sure to approve this?</string>
     <string name="cancel">Cancel</string>
     <string name="current_quantity">Current Quantity: %1$s</string>
     <string name="requested_quantity">Requested Quantity: %1$s</string>

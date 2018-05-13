@@ -1,35 +1,27 @@
 package com.tech.thrithvam.spoffice;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.dd.CircularProgressButton;
-import com.wang.avi.AVLoadingIndicatorView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.unstoppable.submitbuttonview.SubmitButton;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class SupplierOrderDetails extends AppCompatActivity {
     ArrayList<AsyncTask> asyncTasks=new ArrayList<>();
-    CircularProgressButton approveButton;
+    SubmitButton approveButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +37,25 @@ public class SupplierOrderDetails extends AppCompatActivity {
         date.setText(getIntent().getExtras().getString(Common.PODATE));
         amount.setText((getIntent().getExtras().getString(Common.TOTALAMOUNT).equals("null")?"-":getResources().getString(R.string.rupees,String.format(Locale.US,"%.2f",Double.parseDouble(getIntent().getExtras().getString(Common.TOTALAMOUNT))))));
         status.setText((getIntent().getExtras().getString(Common.POSTATUS).equals("null")?"-":getResources().getString(R.string.status_colon,getIntent().getExtras().getString(Common.POSTATUS))));
-        approveButton=(CircularProgressButton)findViewById(R.id.approve_button);
+        approveButton=(SubmitButton) findViewById(R.id.approve_button);
         approveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                approve();
-            }
+                    new AlertDialog.Builder(SupplierOrderDetails.this).setIcon(android.R.drawable.ic_dialog_alert)//.setTitle(R.string.exit)
+                            .setMessage(getResources().getString(R.string.approve_q))
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    approve();
+                                }
+                            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            approveButton.reset();
+                        }
+                    })
+                            .setCancelable(false).show();
+                }
         });
 }
     /*void getRequisitionDetails(){
@@ -143,9 +148,6 @@ public class SupplierOrderDetails extends AppCompatActivity {
     }*/
     void approve(){
         approveButton.setClickable(false);
-        //Loading
-        approveButton.setIndeterminateProgressMode(true);
-        approveButton.setProgress(50);
         //Threading------------------------------------------------------------------------------------------------------
         final Common common=new Common();
         String webService="API/Supplier/ApproveSupplierOrder";
@@ -156,7 +158,7 @@ public class SupplierOrderDetails extends AppCompatActivity {
         Runnable postThread=new Runnable() {
             @Override
             public void run() {
-                approveButton.setProgress(100);
+                approveButton.doResult(true);
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -179,7 +181,7 @@ public class SupplierOrderDetails extends AppCompatActivity {
             public void run() {
                 Common.toastMessage(SupplierOrderDetails.this, R.string.failed_try_again);
                 Common.toastMessage(SupplierOrderDetails.this,common.msg);
-                approveButton.setProgress(-1);
+                approveButton.doResult(false);
             }};
         common.AsynchronousThread(SupplierOrderDetails.this,
                 webService,

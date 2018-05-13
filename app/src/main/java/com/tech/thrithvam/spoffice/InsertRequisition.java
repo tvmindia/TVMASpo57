@@ -25,7 +25,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.dd.CircularProgressButton;
+import com.unstoppable.submitbuttonview.SubmitButton;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -208,10 +208,8 @@ public class InsertRequisition extends AppCompatActivity {
         }
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         //.setClickable(false);
-        final CircularProgressButton saveButton=(CircularProgressButton)findViewById(R.id.approve_button);
+        final SubmitButton saveButton=(SubmitButton) findViewById(R.id.approve_button);
         //Loading animation
-        saveButton.setIndeterminateProgressMode(true);
-        saveButton.setProgress(50);
         SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
         String userName=sharedpreferences.getString(Common.userName,"<error_in_getting_username_from_mobile>");
 
@@ -246,7 +244,7 @@ public class InsertRequisition extends AppCompatActivity {
         Runnable postThread=new Runnable() {
             @Override
             public void run() {
-                saveButton.setProgress(100);
+                saveButton.doResult(true);
                 String reqNo="";
                 try {
                     JSONObject result=new JSONObject(common.json);
@@ -277,13 +275,13 @@ public class InsertRequisition extends AppCompatActivity {
 
                 Common.toastMessage(InsertRequisition.this,common.msg);
                 Common.toastMessage(InsertRequisition.this, R.string.failed_try_again);
-                saveButton.setProgress(-1);
+                saveButton.doResult(false);
                 //Change button after a while
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        saveButton.setProgress(0);
+                        saveButton.reset();
                         saveButton.setClickable(true);
                     }
                 }, 1500);

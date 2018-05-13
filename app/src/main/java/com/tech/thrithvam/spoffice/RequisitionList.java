@@ -47,13 +47,28 @@ public class RequisitionList extends AppCompatActivity {
         String webService = "/API/Requisition/GetUserRequisitionList";
         switch (getIntent().getExtras().getString(Common.REQUISITIONTYPE)){// for different screens
             case "pending":
-                postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"ReqStatus\":\"ALL\"}}";
+                String RoleCSV=sharedpreferences.getString(Common.roleCSV,"");
+                //taking list according to user
+                if(RoleCSV.contains("CEO")) {
+                    postData = "{\"userObj\":{\"UserName\":\"" + userName + "\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}}," +
+                            "\"ReqAdvSearchObj\":{\"FinalApproved\":\"True\"}}";
+                }
+                else if (RoleCSV.contains("Approver")) {
+                    postData = "{\"userObj\":{\"UserName\":\"" + userName + "\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}}," +
+                            "\"ReqAdvSearchObj\":{\"ManagerApproved\":\"True\"}}";
+                }
+                else  {
+                postData = "{\"userObj\":{\"UserName\":\"" + userName + "\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}}," +
+                        "\"ReqAdvSearchObj\":{\"ReqStatus\":\"ALL\"}}";
+                }
                 break;
             case "approved":
-                postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"FinalApproved\":\"True\"}}";
+                postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}}," +
+                        "\"ReqAdvSearchObj\":{\"FinalApproved\":\"True\"}}";
                 break;
             case "closed":
-                postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}},\"ReqAdvSearchObj\":{\"ReqStatus\":\"Closed\"}}";
+                postData = "{\"userObj\":{\"UserName\":\""+userName+"\",\"RoleObj\":{\"AppID\":\"a8503173-99f9-45cc-be2a-81340bd13e26\"}}," +
+                        "\"ReqAdvSearchObj\":{\"ReqStatus\":\"Closed\"}}";
                 break;
             default:
         }

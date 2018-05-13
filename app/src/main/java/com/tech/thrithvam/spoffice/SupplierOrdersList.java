@@ -1,7 +1,6 @@
 package com.tech.thrithvam.spoffice;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,13 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -3,31 +3,32 @@ package com.tech.thrithvam.spoffice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.dd.CircularProgressButton;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.unstoppable.submitbuttonview.SubmitButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Login extends AppCompatActivity {
-    CircularProgressButton loginButton;
+    SubmitButton loginButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        FirebaseMessaging.getInstance().subscribeToTopic("common");
         final SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
         if(!sharedpreferences.getString(Common.userName,"").equals("")){//If already login
             enrouteUser(sharedpreferences.getString(Common.roleCSV,""),false);
             return;
         }
 
-        loginButton=(CircularProgressButton)findViewById(R.id.login_button);
+        loginButton=(SubmitButton)findViewById(R.id.login_button);
         final EditText usernameInput=(EditText)findViewById(R.id.input_username);
         final EditText passwordInput=(EditText)findViewById(R.id.input_password);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -35,12 +36,10 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 usernameInput.clearFocus();
                 passwordInput.clearFocus();
+                if(usernameInput.getText().toString().equals("")||passwordInput.getText().toString().equals("")) {loginButton.reset();return;}
                 usernameInput.setEnabled(false);
                 passwordInput.setEnabled(false);
                 loginButton.setClickable(false);
-                //Loading
-                loginButton.setIndeterminateProgressMode(true);
-                loginButton.setProgress(50);
 
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
@@ -51,7 +50,7 @@ public class Login extends AppCompatActivity {
                 Runnable postThread=new Runnable() {
                     @Override
                     public void run() {
-                        loginButton.setProgress(100);
+                        loginButton.doResult(true);
                         JSONObject jsonObject= null;
                         try {
                             jsonObject = new JSONObject(common.json);
@@ -76,7 +75,7 @@ public class Login extends AppCompatActivity {
                     public void run() {
                         Common.toastMessage(Login.this,common.msg);
                         Common.toastMessage(Login.this, R.string.failed_try_again);
-                        loginButton.setProgress(-1);
+                        loginButton.doResult(false);
                         //Setting button to refresh when password/email change
                         usernameInput.setEnabled(true);
                         passwordInput.setEnabled(true);
@@ -84,13 +83,13 @@ public class Login extends AppCompatActivity {
                         usernameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                             @Override
                             public void onFocusChange(View v, boolean hasFocus) {
-                                loginButton.setProgress(0);
+                                loginButton.reset();
                             }
                         });
                         passwordInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                             @Override
                             public void onFocusChange(View v, boolean hasFocus) {
-                                loginButton.setProgress(0);
+                                loginButton.reset();
                             }
                         });
 

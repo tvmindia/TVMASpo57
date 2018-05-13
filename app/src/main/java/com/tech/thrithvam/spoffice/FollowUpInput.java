@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.dd.CircularProgressButton;
+import com.unstoppable.submitbuttonview.SubmitButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class FollowUpInput extends AppCompatActivity {
             enquiryID=getIntent().getExtras().getString(Common.ENQUIRYID);
         }
         //Saving follow up
-        final CircularProgressButton saveButton=(CircularProgressButton)findViewById(R.id.save_button);
+        final SubmitButton saveButton=(SubmitButton) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,9 +107,7 @@ public class FollowUpInput extends AppCompatActivity {
                     inputFields.get(i).setEnabled(false);
                 }
                 saveButton.setClickable(false);
-                //Loading animation
-                saveButton.setIndeterminateProgressMode(true);
-                saveButton.setProgress(50);
+
                 String userName=sharedpreferences.getString(Common.userName,"<error_in_getting_username_from_mobile");
                 //Threading------------------------------------------------------------------------------------------------------
                 final Common common=new Common();
@@ -138,7 +136,7 @@ public class FollowUpInput extends AppCompatActivity {
                 Runnable postThread=new Runnable() {
                     @Override
                     public void run() {
-                        saveButton.setProgress(100);
+                        saveButton.doResult(true);
                         //Save success
                         if(followUpID!=null) {//edit
                             final Handler handler = new Handler();
@@ -189,13 +187,13 @@ public class FollowUpInput extends AppCompatActivity {
                         }
                         Common.toastMessage(FollowUpInput.this,common.msg);
                         Common.toastMessage(FollowUpInput.this, R.string.failed_try_again);
-                        saveButton.setProgress(-1);
+                        saveButton.doResult(false);
                         //Change button after a while
                         final Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                saveButton.setProgress(0);
+                                saveButton.reset();
                                 saveButton.setClickable(true);
                             }
                         }, 1500);

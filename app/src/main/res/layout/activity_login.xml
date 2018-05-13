@@ -11,7 +11,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#425bc0de"
+        android:background="#935bc0de"
         />
     <ImageView
         android:layout_width="200dp"
@@ -76,24 +76,17 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <com.dd.CircularProgressButton
+    <com.unstoppable.submitbuttonview.SubmitButton
         android:id="@+id/login_button"
         android:layout_width="150dp"
         android:layout_height="48dp"
         android:layout_below="@+id/input_layout_password"
         android:layout_centerHorizontal="true"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        app:cpb_selectorIdle="@drawable/button_colors"
-        app:cpb_colorIndicator="@color/colorPrimary"
-        app:cpb_colorProgress="@android:color/transparent"
-        app:cpb_colorIndicatorBackground="@color/cpb_grey"
-        app:cpb_textComplete="Logged in"
-        app:cpb_textError="Error Occurred"
-        app:cpb_textIdle="Sign in"
         android:padding="5dp"
-        app:cpb_cornerRadius="4dp"
-        app:cpb_paddingProgress="5dp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        app:buttonColor="@android:color/white"
+        app:buttonText="Log in"
+        app:buttonTextSize="17sp"
+        />
 
 </RelativeLayout>

@@ -20,7 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dd.CircularProgressButton;
+import com.unstoppable.submitbuttonview.SubmitButton;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -28,11 +28,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class RequisitionDetails extends AppCompatActivity {
     ArrayList<AsyncTask> asyncTasks=new ArrayList<>();
-    CircularProgressButton approveButton;
+    SubmitButton approveButton;
     View headerDetails;
     String userName;
     @Override
@@ -124,7 +123,7 @@ public class RequisitionDetails extends AppCompatActivity {
                 totalTextView.setVisibility(View.VISIBLE);*/
                 (headerDetails.findViewById(R.id.approve_button)).setVisibility(View.VISIBLE);
                 //approve button
-                approveButton = (CircularProgressButton) headerDetails.findViewById(R.id.approve_button);
+                approveButton = (SubmitButton) headerDetails.findViewById(R.id.approve_button);
                 if(getIntent().getExtras().getString(Common.REQUISITIONTYPE).equals("pending")) {
                     approveButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -136,8 +135,13 @@ public class RequisitionDetails extends AppCompatActivity {
                                         public void onClick(DialogInterface dialog, int which) {
                                             approve();
                                         }
-                                    }).setNegativeButton(R.string.cancel, null)
-                                    .setCancelable(true).show();
+                                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    approveButton.reset();
+                                }
+                            })
+                                    .setCancelable(false).show();
                         }
                     });
                 }
@@ -167,9 +171,6 @@ public class RequisitionDetails extends AppCompatActivity {
     }
     void approve(){
         approveButton.setClickable(false);
-        //Loading
-        approveButton.setIndeterminateProgressMode(true);
-        approveButton.setProgress(50);
         //Threading------------------------------------------------------------------------------------------------------
         final Common common=new Common();
         String webService="/API/Requisition/ApproveRequisition";
@@ -178,7 +179,7 @@ public class RequisitionDetails extends AppCompatActivity {
         Runnable postThread=new Runnable() {
             @Override
             public void run() {
-                approveButton.setProgress(100);
+                approveButton.doResult(true);
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -206,7 +207,7 @@ public class RequisitionDetails extends AppCompatActivity {
             public void run() {
                 Common.toastMessage(RequisitionDetails.this,common.msg);
                 Common.toastMessage(RequisitionDetails.this, R.string.failed_try_again);
-                approveButton.setProgress(-1);
+                approveButton.doResult(false);
             }};
         common.AsynchronousThread(RequisitionDetails.this,
                 webService,

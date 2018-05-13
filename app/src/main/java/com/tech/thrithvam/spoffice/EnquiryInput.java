@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.dd.CircularProgressButton;
+import com.unstoppable.submitbuttonview.SubmitButton;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
@@ -106,7 +106,7 @@ public class EnquiryInput extends AppCompatActivity {
         }
 
         //Save enquiry
-        final CircularProgressButton saveButton=(CircularProgressButton)findViewById(R.id.save_button);
+        final SubmitButton saveButton=(SubmitButton) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,9 +132,6 @@ public class EnquiryInput extends AppCompatActivity {
                     inputFields.get(i).setEnabled(false);
                 }
                 saveButton.setClickable(false);
-                //Loading animation
-                saveButton.setIndeterminateProgressMode(true);
-                saveButton.setProgress(50);
                 SharedPreferences sharedpreferences = getSharedPreferences(Common.preferenceName, Context.MODE_PRIVATE);
                 String userName=sharedpreferences.getString(Common.userName,"<error_in_getting_username_from_mobile>");
 
@@ -185,7 +182,7 @@ public class EnquiryInput extends AppCompatActivity {
                 Runnable postThread=new Runnable() {
                     @Override
                     public void run() {
-                        saveButton.setProgress(100);
+                        saveButton.doResult(true);
                         //Save success
                         if(enquiryID!=null){//updated enquiry
                             final Handler handler = new Handler();
@@ -254,13 +251,13 @@ public class EnquiryInput extends AppCompatActivity {
                         }
                         Common.toastMessage(EnquiryInput.this,common.msg);
                         Common.toastMessage(EnquiryInput.this, R.string.failed_try_again);
-                        saveButton.setProgress(-1);
+                        saveButton.doResult(false);
                         //Change button after a while
                         final Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                saveButton.setProgress(0);
+                                saveButton.reset();
                                 saveButton.setClickable(true);
                             }
                         }, 1500);
